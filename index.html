@@ -32,17 +32,21 @@
     --tile-filter: none;
   }
   [data-theme="dark"] {
-    --bg: #1a1a1e;
-    --bg2: #242428;
-    --panel: rgba(30,30,34,0.94);
-    --border: rgba(255,255,255,0.08);
-    --text: #e8e8e8;
-    --text2: #aaa;
-    --text3: #666;
-    --header-bg: rgba(26,26,30,0.95);
-    --timeline-bg: rgba(26,26,30,0.95);
-    --loading-bg: #1a1a1e;
+    --bg: #0a0f0a;
+    --bg2: #111611;
+    --panel: rgba(10,16,10,0.94);
+    --border: rgba(60,200,80,0.1);
+    --text: #c8e6c0;
+    --text2: #7aad70;
+    --text3: #3d6636;
+    --header-bg: rgba(8,14,8,0.96);
+    --timeline-bg: rgba(8,14,8,0.96);
+    --loading-bg: #0a0f0a;
     --tile-filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+    --nv-glow: 0 0 6px rgba(60,200,80,0.15);
+    --red: #e04040;
+    --blue: #4090e0;
+    --gold: #b8a030;
   }
   .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
@@ -59,7 +63,7 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  #map { width: 100%; height: calc(100vh - 132px); z-index: 1; }
+  #map { width: 100%; height: calc(100vh - 132px); z-index: 1; position: relative; }
 
   /* === Loading === */
   #loading {
@@ -106,16 +110,44 @@
     transition: all 0.2s; flex-shrink: 0;
   }
   #dark-toggle:hover { border-color: var(--text3); color: var(--text); }
-  /* Dark mode tile filter */
-  [data-theme="dark"] .base-tiles { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
-  [data-theme="dark"] .label-tiles { filter: invert(1) hue-rotate(180deg) brightness(1.8) contrast(1.2); }
+  /* Dark mode tile filter — night vision green tint */
+  [data-theme="dark"] .base-tiles { filter: invert(1) hue-rotate(60deg) brightness(0.35) contrast(1.1) saturate(0.6) sepia(0.3); }
+  [data-theme="dark"] .label-tiles { filter: invert(1) hue-rotate(60deg) brightness(1.2) contrast(1.3) saturate(0.4); }
   [data-theme="dark"] #loading { background: var(--loading-bg); }
-  [data-theme="dark"] #loading h2 { color: var(--text); }
-  [data-theme="dark"] .ev-item:hover { background: rgba(255,255,255,0.04); }
+  [data-theme="dark"] #loading h2 { color: var(--text); text-shadow: var(--nv-glow); }
+  [data-theme="dark"] .ev-item:hover { background: rgba(60,200,80,0.05); }
   [data-theme="dark"] .phase-btn { border-color: var(--border); color: var(--text2); }
-  [data-theme="dark"] .phase-btn.active { background: var(--text); color: #1a1a1e; }
-  [data-theme="dark"] #play-btn { background: var(--text); color: #1a1a1e; }
+  [data-theme="dark"] .phase-btn.active { background: rgba(60,200,80,0.2); color: #c8e6c0; border-color: rgba(60,200,80,0.3); }
+  [data-theme="dark"] #play-btn { background: rgba(60,200,80,0.2); color: #c8e6c0; border: 1px solid rgba(60,200,80,0.25); }
+  [data-theme="dark"] #play-btn:hover { background: rgba(60,200,80,0.35); }
   [data-theme="dark"] #speed-select { background: var(--bg2); color: var(--text2); border-color: var(--border); }
+  [data-theme="dark"] #header h1 { text-shadow: var(--nv-glow); }
+  [data-theme="dark"] #date-display { text-shadow: 0 0 8px rgba(60,200,80,0.3); }
+  [data-theme="dark"] .live-badge { background: #2d8a3e; box-shadow: 0 0 8px rgba(60,200,80,0.3); }
+  [data-theme="dark"] .stat-val { text-shadow: var(--nv-glow); }
+  [data-theme="dark"] .ev-badge { opacity: 0.85; }
+  [data-theme="dark"] .glass-panel { box-shadow: 0 2px 20px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(60,200,80,0.06); }
+  [data-theme="dark"] .glass-panel::before { background: rgba(60,200,80,0.4); }
+  [data-theme="dark"] #dark-toggle { color: #7aad70; border-color: rgba(60,200,80,0.2); }
+  [data-theme="dark"] .counter-badge { color: #7aad70; text-shadow: var(--nv-glow); }
+  /* Scanline texture overlay on map in dark mode */
+  [data-theme="dark"] #map::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none; z-index: 999; mix-blend-mode: multiply;
+  }
+  /* Subtle vignette on map edges */
+  [data-theme="dark"] #map::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+    pointer-events: none; z-index: 998;
+  }
 
   /* === Density bar tooltip === */
   .density-tick {
@@ -1458,9 +1490,15 @@ function buildTickMarks() {
 function toggleDark() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? '' : 'dark');
-  document.getElementById('dark-toggle').innerHTML = isDark ? '&#9790;' : '&#9788;';
-  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    document.getElementById('dark-toggle').innerHTML = '&#9790;';
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    document.getElementById('dark-toggle').innerHTML = '&#9788;';
+    localStorage.setItem('theme', 'dark');
+  }
 }
 // Restore saved theme
 if (localStorage.getItem('theme') === 'dark') {
