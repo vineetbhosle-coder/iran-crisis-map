@@ -156,6 +156,20 @@
   [data-theme="dark"] #date-markers span { color: #3d6636; }
   [data-theme="dark"] #date-markers span:hover { color: #7aad70; }
   [data-theme="dark"] #date-markers .month-lbl { color: #5a9a5a; }
+  /* Dark mode escalation index */
+  [data-theme="dark"] #esc-us { background: #4090e0 !important; box-shadow: 0 0 6px rgba(64,144,224,0.4); }
+  [data-theme="dark"] #esc-ir { background: #e05050 !important; box-shadow: 0 0 6px rgba(224,80,80,0.4); }
+  [data-theme="dark"] #esc-us-val { color: #64b5f6 !important; text-shadow: 0 0 4px rgba(64,144,224,0.3); }
+  [data-theme="dark"] #esc-ir-val { color: #ef9a9a !important; text-shadow: 0 0 4px rgba(224,80,80,0.3); }
+  /* Escalation bar tracks and labels */
+  [data-theme="dark"] .esc-track { background: rgba(60,200,80,0.1) !important; }
+  [data-theme="dark"] .esc-label { text-shadow: var(--nv-glow); }
+  /* Global subtle glow on all text in dark mode */
+  [data-theme="dark"] body { text-shadow: 0 0 3px rgba(60,200,80,0.08); }
+  [data-theme="dark"] .stat-label { text-shadow: var(--nv-glow); }
+  [data-theme="dark"] .ev-title { text-shadow: 0 0 4px rgba(60,200,80,0.15); }
+  [data-theme="dark"] #phase-label { text-shadow: var(--nv-glow); }
+  [data-theme="dark"] h3, [data-theme="dark"] h4 { text-shadow: var(--nv-glow); }
   /* Scanline texture overlay on map in dark mode */
   [data-theme="dark"] #map::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -689,15 +703,15 @@
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-      <span style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:28px;text-align:right;">US/IL</span>
-      <div style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
+      <span class="esc-label" style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:28px;text-align:right;">US/IL</span>
+      <div class="esc-track" style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
         <div id="esc-us" style="height:100%;background:#1565c0;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
       </div>
       <span id="esc-us-val" style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:16px;">0</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
-      <span style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:28px;text-align:right;">IRAN</span>
-      <div style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
+      <span class="esc-label" style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:28px;text-align:right;">IRAN</span>
+      <div class="esc-track" style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
         <div id="esc-ir" style="height:100%;background:#c62828;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
       </div>
       <span id="esc-ir-val" style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:16px;">0</span>
@@ -833,11 +847,15 @@ const typeColors = {
 };
 
 // Icon rendering — uses Material Symbols for naval/nuclear, SVG for rest
+function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
 function makeIconHtml(type, color, size) {
   const dim = size === 'large' ? 28 : size === 'small' ? 16 : 22;
   const fs = size === 'large' ? 18 : size === 'small' ? 10 : 14;
   const pad = Math.floor((dim - fs) / 2);
-  const base = `width:${dim}px;height:${dim}px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:1.5px solid ${color};background:white;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));`;
+  const dk = isDark();
+  const bg = dk ? 'rgba(10,16,10,0.9)' : 'white';
+  const shadow = dk ? `drop-shadow(0 0 4px ${color}40)` : 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))';
+  const base = `width:${dim}px;height:${dim}px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:1.5px solid ${color};background:${bg};filter:${shadow};`;
   const icon = (name) => `<div style="${base}"><span class="material-symbols-outlined" style="font-size:${fs}px;color:${color};font-variation-settings:'FILL' 1,'wght' 600;">${name}</span></div>`;
   const svg = (inner) => `<div style="${base}"><svg width="${fs}" height="${fs}" viewBox="0 0 24 24">${inner}</svg></div>`;
 
@@ -857,7 +875,8 @@ function makeIconHtml(type, color, size) {
       // Simple O / circle
       return svg(`<circle cx="12" cy="12" r="7" fill="none" stroke="${color}" stroke-width="3"/>`);
     case 'hezbollah':
-      return `<div style="${base.replace(color,'#78909c')}"><div style="width:${Math.round(fs*0.6)}px;height:${Math.round(fs*0.6)}px;border-radius:50%;background:#78909c;opacity:0.7;"></div></div>`;
+      const hezBase = base.replace(color,'#78909c');
+      return `<div style="${hezBase}"><div style="width:${Math.round(fs*0.6)}px;height:${Math.round(fs*0.6)}px;border-radius:50%;background:#78909c;opacity:0.7;"></div></div>`;
     case 'humanitarian':
       return svg(`<rect x="9" y="3" width="6" height="18" rx="1" fill="${color}"/><rect x="3" y="9" width="18" height="6" rx="1" fill="${color}"/>`);
     default:
