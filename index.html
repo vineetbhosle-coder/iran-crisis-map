@@ -329,32 +329,36 @@
   #crosshair::before { width: 1px; height: 40px; left: 50%; top: -20px; }
   #crosshair::after { width: 40px; height: 1px; top: 50%; left: -20px; }
 
-  /* Spy movie region tooltip — bracket corners */
-  #region-overlay {
+  /* Spy movie region bracket frame */
+  #region-frame {
     position: absolute; z-index: 800; pointer-events: none;
-    display: none;
+    display: none; border: 1.5px solid transparent;
+    transition: all 0.25s ease;
   }
-  #region-overlay .ro-inner {
-    position: relative; padding: 8px 14px;
-    font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
-    color: var(--text); letter-spacing: 1px; text-transform: uppercase;
-    white-space: nowrap;
-  }
+  #region-frame.visible { display: block; animation: frameFadeIn 0.2s ease; }
+  @keyframes frameFadeIn { from { opacity: 0; } to { opacity: 1; } }
   /* Corner brackets */
-  #region-overlay .corner {
-    position: absolute; width: 12px; height: 12px;
+  #region-frame .corner {
+    position: absolute; width: 16px; height: 16px;
     border-color: var(--red); border-style: solid; border-width: 0;
   }
-  #region-overlay .corner.tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
-  #region-overlay .corner.tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
-  #region-overlay .corner.bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
-  #region-overlay .corner.br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
-  #region-overlay .ro-coords {
-    font-size: 0.5rem; color: var(--text3); letter-spacing: 0.5px;
-    margin-top: 2px; text-transform: none;
+  #region-frame .corner.tl { top: -1px; left: -1px; border-top-width: 2px; border-left-width: 2px; }
+  #region-frame .corner.tr { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
+  #region-frame .corner.bl { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
+  #region-frame .corner.br { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
+  /* Label */
+  #region-frame .rf-label {
+    position: absolute; top: -18px; left: 0;
+    font-family: var(--mono); font-size: 0.6rem; font-weight: 700;
+    color: var(--red); letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap; background: rgba(255,255,252,0.85); padding: 1px 6px;
   }
-  @keyframes regionFadeIn { from { opacity: 0; } to { opacity: 1; } }
-  #region-overlay.visible { display: block; animation: regionFadeIn 0.2s ease; }
+  #region-frame .rf-coords {
+    position: absolute; bottom: -16px; right: 0;
+    font-family: var(--mono); font-size: 0.48rem; color: var(--text3);
+    letter-spacing: 0.5px; white-space: nowrap;
+    background: rgba(255,255,252,0.85); padding: 1px 4px;
+  }
 
   /* Scrollbar */
   #event-panel::-webkit-scrollbar { width: 3px; }
@@ -428,13 +432,11 @@
 
 <div id="map">
   <div id="crosshair"></div>
-  <div id="region-overlay">
-    <div class="ro-inner">
-      <div class="corner tl"></div><div class="corner tr"></div>
-      <div class="corner bl"></div><div class="corner br"></div>
-      <div id="ro-name"></div>
-      <div class="ro-coords" id="ro-coords"></div>
-    </div>
+  <div id="region-frame">
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+    <div class="rf-label" id="rf-label"></div>
+    <div class="rf-coords" id="rf-coords"></div>
   </div>
 </div>
 
@@ -467,6 +469,23 @@
   <div class="stat-row">
     <span class="stat-label"><span class="stat-indicator" style="background:var(--text2)"></span>Day of Crisis</span>
     <span class="stat-val" id="s-day" style="color:var(--text);">1</span>
+  </div>
+  <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
+    <div style="font-family:var(--mono);font-size:0.55rem;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:6px;">Escalation Index</div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+      <span style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:28px;text-align:right;">US/IL</span>
+      <div style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
+        <div id="esc-us" style="height:100%;background:#1565c0;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
+      </div>
+      <span id="esc-us-val" style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:16px;">0</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:28px;text-align:right;">IRAN</span>
+      <div style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
+        <div id="esc-ir" style="height:100%;background:#c62828;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
+      </div>
+      <span id="esc-ir-val" style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:16px;">0</span>
+    </div>
   </div>
 </div>
 
@@ -803,17 +822,30 @@ function updateBorderWeights() {
   }
 }
 
-// Spy movie bracket overlay
-function showRegionOverlay(name, latlng, extra) {
-  const overlay = document.getElementById('region-overlay');
-  const nameEl = document.getElementById('ro-name');
-  const coordsEl = document.getElementById('ro-coords');
-  nameEl.textContent = extra ? `[ ${name} ] — ${extra}` : `[ ${name} ]`;
-  coordsEl.textContent = `${latlng.lat.toFixed(4)}°N  ${latlng.lng.toFixed(4)}°E`;
-  overlay.className = 'visible';
+// Spy movie bracket frame — positions at region's screen bounding box
+function showRegionFrame(layer, name, extra) {
+  const frame = document.getElementById('region-frame');
+  const bounds = layer.getBounds();
+  const container = map.getContainer().getBoundingClientRect();
+  const nw = map.latLngToContainerPoint(bounds.getNorthWest());
+  const se = map.latLngToContainerPoint(bounds.getSouthEast());
+  // Clamp to visible area
+  const pad = 4;
+  const left = Math.max(pad, nw.x);
+  const top = Math.max(pad, nw.y);
+  const right = Math.min(container.width - pad, se.x);
+  const bottom = Math.min(container.height - pad, se.y);
+  frame.style.left = left + 'px';
+  frame.style.top = top + 'px';
+  frame.style.width = Math.max(40, right - left) + 'px';
+  frame.style.height = Math.max(20, bottom - top) + 'px';
+  document.getElementById('rf-label').textContent = extra ? `${name} — ${extra}` : name;
+  const center = bounds.getCenter();
+  document.getElementById('rf-coords').textContent = `${center.lat.toFixed(3)}°N ${center.lng.toFixed(3)}°E`;
+  frame.className = 'visible';
 }
-function hideRegionOverlay() {
-  document.getElementById('region-overlay').className = '';
+function hideRegionFrame() {
+  document.getElementById('region-frame').className = '';
 }
 
 function renderGeo() {
@@ -829,17 +861,11 @@ function renderGeo() {
           const z = map.getZoom();
           this.setStyle({ weight: z <= 4 ? 1.5 : 2.5, opacity: 0.7 });
           const status = getCountryStatus(name);
-          showRegionOverlay(name, e.latlng, status);
-        });
-        layer.on('mousemove', function(e) {
-          const overlay = document.getElementById('region-overlay');
-          const container = map.getContainer().getBoundingClientRect();
-          overlay.style.left = (e.originalEvent.clientX - container.left + 16) + 'px';
-          overlay.style.top = (e.originalEvent.clientY - container.top - 16) + 'px';
+          showRegionFrame(this, name, status);
         });
         layer.on('mouseout', function() {
           this.setStyle(styleCountry(this.feature));
-          hideRegionOverlay();
+          hideRegionFrame();
         });
       }
     }
@@ -867,17 +893,11 @@ function renderProvinces() {
       if (isIran && name) {
         layer.on('mouseover', function(e) {
           this.setStyle({ opacity: 0.5, weight: 1.5, color: '#666' });
-          showRegionOverlay(name + ' Province', e.latlng, 'IRAN');
-        });
-        layer.on('mousemove', function(e) {
-          const overlay = document.getElementById('region-overlay');
-          const container = map.getContainer().getBoundingClientRect();
-          overlay.style.left = (e.originalEvent.clientX - container.left + 16) + 'px';
-          overlay.style.top = (e.originalEvent.clientY - container.top - 16) + 'px';
+          showRegionFrame(this, name + " Province", "IRAN");
         });
         layer.on('mouseout', function() {
           this.setStyle(styleProvince(this.feature));
-          hideRegionOverlay();
+          hideRegionFrame();
         });
       }
     }
@@ -1199,6 +1219,28 @@ function renderDay(day) {
   oilEl.textContent = '$' + s.oil;
   oilEl.style.color = s.oil >= 100 ? 'var(--red)' : s.oil >= 85 ? 'var(--orange)' : 'var(--text)';
   document.getElementById('s-day').textContent = s.dayNum;
+
+  // Escalation index — score events by side and intensity
+  const weights = { strike: 3, nuclear: 5, naval: 2, retaliation: 3, hezbollah: 2, humanitarian: 1, protest: 1, political: 0.5 };
+  const usTypes = new Set(['strike', 'nuclear']);
+  const irTypes = new Set(['retaliation', 'hezbollah']);
+  // Look at events in a 3-day window for smoothing
+  const window = events.filter(e => e.day >= Math.max(0, day-2) && e.day <= day);
+  let usScore = 0, irScore = 0;
+  window.forEach(e => {
+    const w = weights[e.type] || 1;
+    const mult = e.size === 'large' ? 2 : 1;
+    if (usTypes.has(e.type)) usScore += w * mult;
+    else if (irTypes.has(e.type)) irScore += w * mult;
+    else if (e.type === 'naval') { usScore += w * 0.5; irScore += w * 0.5; }
+  });
+  const maxEsc = 50; // normalize to percentage
+  const usPct = Math.min(100, (usScore / maxEsc) * 100);
+  const irPct = Math.min(100, (irScore / maxEsc) * 100);
+  document.getElementById('esc-us').style.width = usPct + '%';
+  document.getElementById('esc-ir').style.width = irPct + '%';
+  document.getElementById('esc-us-val').textContent = Math.round(usScore);
+  document.getElementById('esc-ir-val').textContent = Math.round(irScore);
 
   document.getElementById('date-display').textContent = formatDate(day);
   document.getElementById('phase-label').textContent = getPhaseLabel(day);
