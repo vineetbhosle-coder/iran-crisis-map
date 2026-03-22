@@ -1234,32 +1234,8 @@ function animateNum(elId, target, fmt) {
 }
 
 // Crossfade layer for smooth transitions
-let prevMarkerLayer = null;
-let fadeTimeout = null;
-
 function renderDay(day) {
-  // Crossfade: fade out old, fade in new simultaneously
-  if (fadeTimeout) clearTimeout(fadeTimeout);
-  const oldLayer = prevMarkerLayer;
-  if (oldLayer && oldLayer._container) {
-    oldLayer._container.style.transition = 'opacity 0.5s ease-out';
-    oldLayer._container.style.opacity = '0';
-    fadeTimeout = setTimeout(() => { try { map.removeLayer(oldLayer); } catch(e) {} }, 500);
-  } else if (oldLayer) {
-    try { map.removeLayer(oldLayer); } catch(e) {}
-  }
-  prevMarkerLayer = markerLayer;
-  // New layer fades in
-  markerLayer = L.layerGroup().addTo(map);
-  if (markerLayer._container) {
-    markerLayer._container.style.opacity = '0';
-    markerLayer._container.style.transition = 'opacity 0.4s ease-in';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (markerLayer._container) markerLayer._container.style.opacity = '1';
-      });
-    });
-  }
+  markerLayer.clearLayers();
 
   const pf = activePhase === 'all' ? null : activePhase;
   const current = events.filter(e => e.day === day && (!pf || e.phase === pf));
@@ -1296,24 +1272,20 @@ function renderDay(day) {
   renderArcs(day);
   renderBlasts(day);
 
-  // Panel — smooth fade
+  // Panel update
   const el = document.getElementById('event-list');
-  el.style.opacity = '0';
   document.getElementById('ev-count').textContent = current.length;
-  setTimeout(() => {
-    if (!current.length) {
-      el.innerHTML = '<div style="color:var(--text3);font-size:0.78rem;padding:12px 0;">No major events this day.<br><span style="color:#bbb">Use arrow keys or slider to advance.</span></div>';
-    } else {
-      el.innerHTML = current.map(e => `
-        <div class="ev-item" onclick="map.setView([${e.lat},${e.lng}],8)">
-          <span class="ev-badge badge-${e.type}">${e.type}</span>
-          <div class="ev-title">${e.title}</div>
-          <div class="ev-desc">${e.desc}</div>
-          <div class="ev-coords">${e.lat.toFixed(3)}°N  ${e.lng.toFixed(3)}°E</div>
-        </div>`).join('');
-    }
-    el.style.opacity = '1';
-  }, 150);
+  if (!current.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:0.78rem;padding:12px 0;">No major events this day.<br><span style="color:#bbb">Use arrow keys or slider to advance.</span></div>';
+  } else {
+    el.innerHTML = current.map(e => `
+      <div class="ev-item" onclick="map.setView([${e.lat},${e.lng}],8)">
+        <span class="ev-badge badge-${e.type}">${e.type}</span>
+        <div class="ev-title">${e.title}</div>
+        <div class="ev-desc">${e.desc}</div>
+        <div class="ev-coords">${e.lat.toFixed(3)}°N  ${e.lng.toFixed(3)}°E</div>
+      </div>`).join('');
+  }
 
   // Stats — animated counters
   const s = getStats(day);
