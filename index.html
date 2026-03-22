@@ -1235,23 +1235,30 @@ function animateNum(elId, target, fmt) {
 
 // Crossfade layer for smooth transitions
 let prevMarkerLayer = null;
+let fadeTimeout = null;
 
 function renderDay(day) {
-  // Crossfade: keep old markers briefly, fade them out
-  if (prevMarkerLayer) { map.removeLayer(prevMarkerLayer); }
-  prevMarkerLayer = markerLayer;
-  // Fade out old layer
-  if (prevMarkerLayer._container) {
-    prevMarkerLayer._container.style.transition = 'opacity 0.3s ease';
-    prevMarkerLayer._container.style.opacity = '0';
-    setTimeout(() => { if (prevMarkerLayer) map.removeLayer(prevMarkerLayer); }, 350);
+  // Crossfade: fade out old, fade in new simultaneously
+  if (fadeTimeout) clearTimeout(fadeTimeout);
+  const oldLayer = prevMarkerLayer;
+  if (oldLayer && oldLayer._container) {
+    oldLayer._container.style.transition = 'opacity 0.5s ease-out';
+    oldLayer._container.style.opacity = '0';
+    fadeTimeout = setTimeout(() => { try { map.removeLayer(oldLayer); } catch(e) {} }, 500);
+  } else if (oldLayer) {
+    try { map.removeLayer(oldLayer); } catch(e) {}
   }
+  prevMarkerLayer = markerLayer;
   // New layer fades in
   markerLayer = L.layerGroup().addTo(map);
   if (markerLayer._container) {
     markerLayer._container.style.opacity = '0';
-    markerLayer._container.style.transition = 'opacity 0.3s ease';
-    requestAnimationFrame(() => { if (markerLayer._container) markerLayer._container.style.opacity = '1'; });
+    markerLayer._container.style.transition = 'opacity 0.4s ease-in';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (markerLayer._container) markerLayer._container.style.opacity = '1';
+      });
+    });
   }
 
   const pf = activePhase === 'all' ? null : activePhase;
@@ -1388,12 +1395,15 @@ function buildTickMarks() {
 
 // ─── Controls ───────────────────────────────────────────────────────
 let lastTickTime = 0;
+let smoothDay = 0; // fractional day for smooth slider movement
+
 function togglePlay() {
   playing = !playing;
   const btn = document.getElementById('play-btn');
   if (playing) {
     btn.innerHTML = '&#9646;&#9646; PAUSE';
-    if (currentDay >= 83) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    if (currentDay >= 83) { currentDay = 0; smoothDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    smoothDay = currentDay;
     lastTickTime = performance.now();
     requestAnimationFrame(playTick);
   } else {
@@ -1402,13 +1412,25 @@ function togglePlay() {
 }
 function playTick(now) {
   if (!playing) return;
-  if (now - lastTickTime >= speed) {
-    lastTickTime = now;
-    if (currentDay >= 83) { togglePlay(); return; }
-    currentDay++;
-    document.getElementById('timeline-slider').value = currentDay;
+  const elapsed = now - lastTickTime;
+  lastTickTime = now;
+
+  // Advance fractional day based on speed
+  const increment = elapsed / speed;
+  smoothDay += increment;
+
+  // Smoothly move the slider
+  const slider = document.getElementById('timeline-slider');
+  slider.value = Math.min(83, smoothDay);
+
+  // Only re-render when we cross an integer day boundary
+  const newDay = Math.floor(smoothDay);
+  if (newDay !== currentDay && newDay <= 83) {
+    currentDay = newDay;
     renderDay(currentDay);
   }
+
+  if (smoothDay >= 83) { currentDay = 83; togglePlay(); return; }
   requestAnimationFrame(playTick);
 }
 function changeSpeed() {
