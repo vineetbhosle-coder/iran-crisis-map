@@ -369,90 +369,128 @@
   #event-panel::-webkit-scrollbar-track { background: transparent; }
 
   /* === Mobile Responsive === */
+  /*
+   * MOBILE LAYOUT — clear stacking, no overlaps
+   * ┌─────────────────────────┐
+   * │ HEADER         32px     │ position: fixed, top: 0
+   * ├─────────────────────────┤
+   * │ KPI STRIP      54px     │ position: fixed, top: 32px
+   * ├─────────────────────────┤
+   * │                         │
+   * │ MAP        remaining    │ position: fixed, top: 86px, bottom: 72px
+   * │                         │
+   * ├─────────────────────────┤
+   * │ EVENTS     collapsible  │ position: fixed, above timeline
+   * ├─────────────────────────┤
+   * │ PLAY + SLIDER   40px    │ position: fixed, bottom: 20px
+   * ├─────────────────────────┤
+   * │ DATES + SOURCES 20px    │ position: fixed, bottom: 0
+   * └─────────────────────────┘
+   */
   @media (max-width: 768px) {
-    /* Header: title + date only, no filters/ongoing */
-    #header { padding: 0 10px; height: 32px; }
-    #header h1 { font-size: 0.7rem; letter-spacing: 1.5px; }
+    body { overflow: hidden; }
+
+    /* === HEADER: 32px === */
+    #header { position: fixed; top: 0; left: 0; right: 0; z-index: 1001; padding: 0 10px; height: 32px; }
+    #header h1 { font-size: 0.72rem; letter-spacing: 1.5px; }
     .live-badge { display: none; }
     #phase-filters { display: none; }
-    #date-display { font-size: 0.75rem; }
+    #date-display { font-size: 0.78rem; color: var(--red); }
     .header-coord { display: none; }
 
-    /* KPI strip: taller, labels above values */
+    /* === KPI STRIP: 54px === */
     #stats-panel {
-      position: fixed; top: 32px; left: 0; right: 0; z-index: 1000;
-      border-radius: 0; padding: 8px 4px;
+      position: fixed !important; top: 32px; left: 0; right: 0; z-index: 1001;
+      border-radius: 0 !important; padding: 6px 2px;
       display: flex; flex-wrap: nowrap; gap: 0;
       justify-content: space-between; align-items: stretch; min-width: auto;
       background: rgba(255,255,252,0.97); backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border); border-top: none;
+      border-bottom: 1px solid var(--border);
+      box-shadow: none !important;
     }
-    #stats-panel::before { display: none; }
+    #stats-panel::before { display: none !important; }
     #stats-panel h4 { display: none; }
     .stat-row {
-      flex: 1; padding: 3px 0; border: none; gap: 2px;
+      flex: 1; padding: 2px 1px; border: none; gap: 1px;
       flex-direction: column; align-items: center; text-align: center;
-      border-right: 1px solid rgba(0,0,0,0.06);
+      border-right: 1px solid rgba(0,0,0,0.05);
     }
     .stat-row:last-child { border-right: none; }
     .stat-label {
-      font-size: 0.4rem; letter-spacing: 0.2px; white-space: nowrap;
-      line-height: 1.3; display: block; color: var(--text3);
+      font-size: 0.36rem; letter-spacing: 0.1px; white-space: nowrap;
+      line-height: 1.2; display: block; color: var(--text3);
     }
     .stat-label .stat-indicator { display: none; }
-    .stat-val { font-size: 0.75rem; line-height: 1.2; font-weight: 700; }
+    .stat-val { font-size: 0.72rem; line-height: 1.3; font-weight: 700; }
+    /* Hide escalation on mobile */
     #stats-panel > div:last-child { display: none; }
 
-    /* Map fills between KPI strip (top ~80px) and timeline (bottom 64px) */
-    #map { height: calc(100vh - 144px); margin-top: 48px; }
-
-    /* Events: collapsible bottom sheet */
-    #event-panel {
-      position: fixed; bottom: 64px; right: 0; left: 0;
-      width: 100%; max-height: 30vh; padding: 0;
-      border-radius: 10px 10px 0 0; overflow: hidden;
-      z-index: 999; transition: max-height 0.3s ease;
+    /* === MAP: fills remaining space === */
+    #map {
+      position: fixed !important; top: 86px; left: 0; right: 0; bottom: 72px;
+      height: auto !important; margin: 0 !important;
     }
-    #event-panel.collapsed { max-height: 32px; }
+
+    /* === EVENTS: collapsible sheet above timeline === */
+    #event-panel {
+      position: fixed !important; bottom: 72px; left: 0; right: 0;
+      width: 100%; max-height: 25vh; padding: 0;
+      border-radius: 8px 8px 0 0 !important; overflow: hidden;
+      z-index: 999; transition: max-height 0.3s ease;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.08) !important;
+    }
+    #event-panel.collapsed { max-height: 30px; }
     #event-panel h3 {
-      font-size: 0.55rem; margin: 0; padding: 8px 12px;
-      cursor: pointer; background: rgba(255,255,252,0.97);
+      font-size: 0.55rem; margin: 0; padding: 7px 12px;
+      cursor: pointer; background: rgba(255,255,252,0.98);
       border-bottom: 1px solid var(--border);
     }
-    #event-list { max-height: calc(30vh - 32px); overflow-y: auto; padding: 4px 10px; }
-    .ev-item { padding: 5px 6px; margin: 2px 0; }
+    #event-list {
+      max-height: calc(25vh - 30px); overflow-y: auto;
+      padding: 2px 10px 6px; background: rgba(255,255,252,0.97);
+    }
+    .ev-item { padding: 5px 6px; margin: 2px 0; border-radius: 6px; }
     .ev-item .ev-badge { font-size: 0.42rem; padding: 1px 4px; }
     .ev-item .ev-title { font-size: 0.68rem; }
-    .ev-item .ev-desc { font-size: 0.58rem; }
+    .ev-item .ev-desc { font-size: 0.55rem; }
     .ev-item .ev-coords { display: none; }
 
     #legend { display: none; }
 
-    /* Timeline: fixed at bottom */
-    #timeline-container { height: 64px; padding: 3px 8px 2px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; }
-    #timeline-controls { margin-bottom: 2px; }
-    #play-btn { padding: 2px 10px; font-size: 0.5rem; }
-    #speed-select { font-size: 0.5rem; padding: 1px 3px; }
+    /* === TIMELINE: fixed at bottom, 72px total === */
+    #timeline-container {
+      position: fixed !important; bottom: 0; left: 0; right: 0;
+      height: 72px !important; padding: 4px 10px 2px;
+      z-index: 1001; background: rgba(255,255,252,0.98);
+    }
+    #timeline-controls { margin-bottom: 2px; gap: 6px; }
+    #play-btn { padding: 3px 12px; font-size: 0.52rem; }
+    #speed-select { font-size: 0.5rem; padding: 2px 4px; }
     #phase-label { display: none; }
-    #slider-wrap { height: 22px; }
-    #timeline-slider { margin-top: 1px; }
+    #slider-wrap { height: 20px; }
+    #timeline-slider { margin-top: 1px; height: 4px; }
+    #timeline-slider::-webkit-slider-thumb { width: 12px; height: 12px; }
     #tick-marks { height: 3px; }
+    #phase-bar { height: 3px; }
+    #density-bar { height: 6px; }
+    #date-markers { margin-top: 0; }
     #date-markers span { font-size: 0.36rem; }
-    #date-markers .month-lbl { font-size: 0.4rem; }
+    #date-markers .month-lbl { font-size: 0.42rem; }
     #date-markers span:not(.month-lbl) { display: none; }
-    #source-bar { font-size: 0.32rem; margin-top: 2px; letter-spacing: 0; }
+    #source-bar { font-size: 0.32rem; margin-top: 1px; padding: 0 10px; color: #bbb; }
 
+    /* Hide decorative elements */
     #region-frame { display: none !important; }
     #crosshair { display: none; }
     .leaflet-control-zoom { margin-top: 4px !important; margin-left: 4px !important; }
-    .leaflet-control-zoom a { width: 28px !important; height: 28px !important; line-height: 28px !important; font-size: 14px !important; }
+    .leaflet-control-zoom a { width: 26px !important; height: 26px !important; line-height: 26px !important; font-size: 13px !important; }
   }
 
   @media (max-width: 380px) {
     #header h1 { font-size: 0.6rem; }
     #date-display { font-size: 0.65rem; }
     .stat-val { font-size: 0.6rem; }
-    .stat-label { font-size: 0.33rem; }
+    .stat-label { font-size: 0.32rem; }
   }
 </style>
 </head>
