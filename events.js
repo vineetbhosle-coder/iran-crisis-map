@@ -133,11 +133,19 @@ const events = [
   { day: 22, lat: 54.6872, lng: 25.2797, title: "Vilnius Solidarity Rally", desc: "Solidarity protests in Vilnius, Lithuania.", type: "political", phase: "protests" },
   { day: 22, lat: 51.5074, lng: -0.1278, title: "London Solidarity Rally", desc: "Demonstrators in London rally for Iranian protesters and urge Western support.", type: "political", phase: "protests" },
 
+  // ── Day 23: Jan 20 — Executions Begin ──
+  { day: 23, lat: 35.69, lng: 51.42, title: "First Protest-Related Executions", desc: "Iran carries out first executions of detained protesters charged with 'moharebeh' (war against God). At least 3 hanged in Evin Prison.", type: "humanitarian", phase: "protests" },
+  { day: 23, lat: 52.52, lng: 13.41, title: "Germany Recalls Ambassador", desc: "Germany recalls ambassador from Tehran and expels Iranian diplomats in response to execution of protesters.", type: "political", phase: "protests" },
+
   // ── Day 24: Jan 21 — Official Death Toll ──
   { day: 24, lat: 35.660, lng: 51.455, title: "Iran's Supreme Council: 3,117 Killed", desc: "Supreme Council of National Security officially states 3,117 killed. HRANA's documented count: 7,007. Iran International's leaked documents: 36,500+.", type: "political", size: "large", phase: "protests" },
 
   // ── Day 25: Jan 22 — US Additional Sanctions ──
   { day: 25, lat: 38.9072, lng: -77.0369, title: "US Announces Additional Sanctions", desc: "Second round of US sanctions on Jan 23 targeting additional Iranian security officials responsible for protest crackdown.", type: "political", phase: "protests" },
+
+  // ── Day 26: Jan 23 — Amnesty Report ──
+  { day: 26, lat: 51.53, lng: -0.10, title: "Amnesty: 'Shoot to Kill' Orders Confirmed", desc: "Amnesty International publishes evidence of 'shoot to kill' orders issued to IRGC commanders. Documents show coordinated lethal force authorized at highest levels.", type: "humanitarian", phase: "protests" },
+  { day: 26, lat: 35.74, lng: 51.50, title: "Evin Prison Hunger Strike", desc: "Political prisoners in Evin Prison Ward 209 begin hunger strike protesting mass executions and torture of newly detained protesters.", type: "protest", phase: "protests" },
 
   // ── Day 27: Jan 24 — Internet Briefly Returns ──
   { day: 27, lat: 35.660, lng: 51.460, title: "Internet Connections Briefly Detected", desc: "First internet connections from Iran briefly detected on Jan 24. Full blackout had lasted 16 days.", type: "political", phase: "protests" },
@@ -148,11 +156,19 @@ const events = [
   // ── Day 29: Jan 26 — UN Fact-Finding Mission ──
   { day: 29, lat: 46.2044, lng: 6.1432, title: "UN Fact-Finding Mission Statement", desc: "UN Fact-Finding Mission calls for immediate restoration of internet and adherence to international human rights law.", type: "political", phase: "protests" },
 
+  // ── Day 30: Jan 27 — Medical Workers Arrested ──
+  { day: 30, lat: 35.70, lng: 51.38, title: "Doctors Arrested for Treating Protesters", desc: "At least 14 medical workers arrested across Tehran, Isfahan, and Shiraz for providing medical care to injured protesters. WHO condemns attacks on healthcare.", type: "humanitarian", phase: "protests" },
+  { day: 30, lat: 38.90, lng: -77.04, title: "Bipartisan Congressional Statement", desc: "Bipartisan group of 74 senators signs letter demanding administration take stronger action including secondary sanctions on Iranian oil buyers.", type: "political", phase: "protests" },
+
   // ── Day 31: Jan 28 — Internet Blackout Relaxed ──
   { day: 31, lat: 35.660, lng: 51.470, title: "Internet Blackout Partially Relaxed", desc: "Blackout relaxed on Jan 28 after 20 days. Severe restrictions remain — whitelist system only allows pre-approved websites. Cost to economy: $35.7M/day.", type: "political", phase: "protests" },
 
   // ── Day 32: Jan 29 — EU Proscribes IRGC ──
   { day: 32, lat: 50.8503, lng: 4.3517, title: "EU Proscribes IRGC", desc: "EU announces proscription of the Islamic Revolutionary Guard Corps. EU also sanctions 15 top officials and 6 organizations for 'serious human rights violations'.", type: "political", size: "large", phase: "protests" },
+
+  // ── Day 34: Jan 31 — Khamenei Acknowledges ──
+  { day: 34, lat: 35.80, lng: 51.41, title: "Khamenei Acknowledges 'Thousands Killed'", desc: "In first public statement since massacres, Khamenei claims deaths were caused by 'foreign agents' and 'armed rioters' but acknowledges 'many thousands' were killed.", type: "political", phase: "protests" },
+  { day: 34, lat: 40.75, lng: -73.97, title: "ICC Prosecutor Opens Preliminary Inquiry", desc: "International Criminal Court prosecutor announces preliminary examination into potential crimes against humanity during Iranian protest crackdown.", type: "political", phase: "protests" },
 
   // ── Day 33+: Jan 30-Feb — HRANA Final Report ──
   { day: 33, lat: 35.660, lng: 51.475, title: "HRANA: 51,790 Arrested Total", desc: "HRANA reports 51,790 total arrests. 7,007 deaths confirmed by name (6,488 adult protesters, 236 minors, 207 security, 76 bystanders). 11,744 additional cases under review.", type: "humanitarian", size: "large", phase: "protests" },

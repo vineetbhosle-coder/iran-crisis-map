@@ -26,6 +26,23 @@
     --text2: #555;
     --text3: #999;
     --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+    --header-bg: rgba(255,255,252,0.95);
+    --timeline-bg: rgba(255,255,252,0.95);
+    --loading-bg: white;
+    --tile-filter: none;
+  }
+  [data-theme="dark"] {
+    --bg: #1a1a1e;
+    --bg2: #242428;
+    --panel: rgba(30,30,34,0.94);
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8e8;
+    --text2: #aaa;
+    --text3: #666;
+    --header-bg: rgba(26,26,30,0.95);
+    --timeline-bg: rgba(26,26,30,0.95);
+    --loading-bg: #1a1a1e;
+    --tile-filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
   }
   .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
@@ -60,7 +77,7 @@
 
   /* === Header === */
   #header {
-    background: rgba(255,255,252,0.95);
+    background: var(--header-bg);
     padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
     border-bottom: 1px solid var(--border); height: 48px; z-index: 1000;
     backdrop-filter: blur(12px);
@@ -81,6 +98,43 @@
     letter-spacing: 0.5px;
   }
 
+  /* === Dark mode toggle === */
+  #dark-toggle {
+    background: transparent; border: 1px solid var(--border); color: var(--text2);
+    width: 28px; height: 28px; border-radius: 4px; cursor: pointer;
+    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  #dark-toggle:hover { border-color: var(--text3); color: var(--text); }
+  /* Dark mode tile filter */
+  [data-theme="dark"] .leaflet-tile-pane { filter: var(--tile-filter); }
+  [data-theme="dark"] #loading { background: var(--loading-bg); }
+  [data-theme="dark"] #loading h2 { color: var(--text); }
+  [data-theme="dark"] .ev-item:hover { background: rgba(255,255,255,0.04); }
+  [data-theme="dark"] .phase-btn { border-color: var(--border); color: var(--text2); }
+  [data-theme="dark"] .phase-btn.active { background: var(--text); color: #1a1a1e; }
+  [data-theme="dark"] #play-btn { background: var(--text); color: #1a1a1e; }
+  [data-theme="dark"] #speed-select { background: var(--bg2); color: var(--text2); border-color: var(--border); }
+
+  /* === Density bar tooltip === */
+  .density-tick {
+    flex: 1; position: relative; cursor: pointer; pointer-events: auto;
+  }
+  .density-tick:hover::after {
+    content: attr(data-tip);
+    position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
+    background: var(--text); color: var(--bg); padding: 3px 8px; border-radius: 3px;
+    font-family: var(--mono); font-size: 0.55rem; white-space: nowrap;
+    z-index: 10; pointer-events: none; letter-spacing: 0.3px;
+  }
+
+  /* === Animated counter === */
+  .counter-badge {
+    font-family: var(--mono); font-size: 0.55rem; font-weight: 700;
+    color: var(--text3); letter-spacing: 0.5px;
+    transition: color 0.3s;
+  }
+
   #phase-filters { display: flex; gap: 4px; }
   .phase-btn {
     background: transparent; color: var(--text2); border: 1px solid var(--border);
@@ -98,7 +152,7 @@
 
   /* === Timeline === */
   #timeline-container {
-    background: rgba(255,255,252,0.95); padding: 6px 24px 3px;
+    background: var(--timeline-bg); padding: 6px 24px 3px;
     border-top: 1px solid var(--border); height: 84px;
     backdrop-filter: blur(12px);
   }
@@ -136,9 +190,8 @@
 
   #density-bar {
     position: absolute; top: 0; left: 0; right: 0; height: 8px;
-    display: flex; z-index: 2; pointer-events: none;
+    display: flex; z-index: 2;
   }
-  .density-tick { flex: 1; }
 
   #timeline-slider {
     -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
@@ -517,8 +570,10 @@
     <button class="phase-btn" onclick="setPhase('regional',this)">Regional</button>
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
+    <span class="counter-badge" id="total-counter">0 EVENTS</span>
     <span class="header-coord" id="cursor-coord">35.6895°N 51.3890°E</span>
     <div id="date-display">28 DEC 2025</div>
+    <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">&#9790;</button>
   </div>
 </div>
 
@@ -1322,6 +1377,10 @@ function renderDay(day) {
   oilEl.style.color = s.oil >= 100 ? 'var(--red)' : s.oil >= 85 ? 'var(--orange)' : 'var(--text)';
   document.getElementById('s-day').textContent = s.dayNum;
 
+  // Animated total counter in header
+  const totalSoFar = events.filter(e => e.day <= day && (!pf || e.phase === pf)).length;
+  animateCounter(totalSoFar);
+
   // Escalation index — score events by side and intensity
   const weights = { strike: 3, nuclear: 5, naval: 2, retaliation: 3, hezbollah: 2, humanitarian: 1, protest: 1, political: 0.5 };
   const usTypes = new Set(['strike', 'nuclear']);
@@ -1373,7 +1432,7 @@ function buildDensity() {
   bar.innerHTML = counts.map((c, i) => {
     const int = c / mx;
     const col = i < 25 ? '230,81,0' : i < 61 ? '21,101,192' : '198,40,40';
-    return `<div class="density-tick" style="background:rgba(${col},${0.02+int*0.3})" title="${formatDate(i)}: ${c}"></div>`;
+    return `<div class="density-tick" data-tip="${formatDate(i)} — ${c} event${c!==1?'s':''}" style="background:rgba(${col},${0.02+int*0.3})" onclick="jumpTo(${i})"></div>`;
   }).join('');
 }
 
@@ -1384,6 +1443,40 @@ function buildTickMarks() {
     const isMajor = i % 7 === 0;
     return `<div class="tick"><div class="tick-line ${isMajor ? 'major' : 'minor'}"></div></div>`;
   }).join('');
+}
+
+// ─── Dark mode ──────────────────────────────────────────────────────
+function toggleDark() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? '' : 'dark');
+  document.getElementById('dark-toggle').innerHTML = isDark ? '&#9790;' : '&#9788;';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+// Restore saved theme
+if (localStorage.getItem('theme') === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark');
+  document.getElementById('dark-toggle').innerHTML = '&#9788;';
+}
+
+// ─── Animated counter ───────────────────────────────────────────────
+let counterTarget = 0, counterCurrent = 0, counterAnim = null;
+function animateCounter(target) {
+  counterTarget = target;
+  if (counterAnim) cancelAnimationFrame(counterAnim);
+  const el = document.getElementById('total-counter');
+  const start = counterCurrent;
+  const diff = target - start;
+  const duration = 400;
+  const t0 = performance.now();
+  function step(now) {
+    const p = Math.min((now - t0) / duration, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    counterCurrent = Math.round(start + diff * ease);
+    el.textContent = `${counterCurrent} EVENTS`;
+    if (p < 1) counterAnim = requestAnimationFrame(step);
+  }
+  counterAnim = requestAnimationFrame(step);
 }
 
 // ─── Controls ───────────────────────────────────────────────────────
