@@ -107,7 +107,8 @@
   }
   #dark-toggle:hover { border-color: var(--text3); color: var(--text); }
   /* Dark mode tile filter */
-  [data-theme="dark"] .leaflet-tile-pane { filter: var(--tile-filter); }
+  [data-theme="dark"] .base-tiles { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+  [data-theme="dark"] .label-tiles { filter: invert(1) hue-rotate(180deg) brightness(1.8) contrast(1.2); }
   [data-theme="dark"] #loading { background: var(--loading-bg); }
   [data-theme="dark"] #loading h2 { color: var(--text); }
   [data-theme="dark"] .ev-item:hover { background: rgba(255,255,255,0.04); }
@@ -708,11 +709,19 @@ const map = L.map('map', {
 });
 L.control.zoom({ position: 'topleft' }).addTo(map);
 
+// Custom panes for dark mode filtering
+map.createPane('baseTiles');
+map.getPane('baseTiles').style.zIndex = 200;
+map.getPane('baseTiles').classList.add('base-tiles');
+map.createPane('labelTiles');
+map.getPane('labelTiles').style.zIndex = 650;
+map.getPane('labelTiles').classList.add('label-tiles');
+
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-  attribution: '&copy; OSM &copy; CARTO', subdomains: 'abcd'
+  attribution: '&copy; OSM &copy; CARTO', subdomains: 'abcd', pane: 'baseTiles'
 }).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd', pane: 'shadowPane'
+  subdomains: 'abcd', pane: 'labelTiles'
 }).addTo(map);
 
 let markerLayer = L.layerGroup().addTo(map);
