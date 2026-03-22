@@ -617,4 +617,14 @@ const events = [
   { day: 79, lat: 31.85, lng: 34.85, title: "Moshav Adanim — Thai Worker Killed", desc: "Cluster bomb struck agricultural shed. Chaiwat Waewnil (30) killed. Wife and child survive.", type: "retaliation", phase: "war" },
   { day: 79, lat: 31.48, lng: 34.95, title: "Beit Awwa — 4 Women Killed", desc: "Missile fragments hit beauty salon near Hebron. 4 Palestinian women killed, 13 wounded.", type: "retaliation", phase: "war" },
   { day: 79, lat: 32.33, lng: 34.86, title: "Cluster Missile Barrage Over Netanya", desc: "Multiple cluster warhead missile trails visible over coastal city. Shrapnel injuries across Tel Aviv metro.", type: "retaliation", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 22 (Day 84)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 84, lat: 35.72, lng: 51.55, title: "Israeli Jets Strike Eastern Tehran", desc: "Explosions reported across eastern districts of Tehran. Israel defense minister threatens to 'set Iran back decades' after Dimona-area strikes.", type: "strike", size: "large", phase: "war" },
+  { day: 84, lat: 35.70, lng: 51.42, title: "IRGC Shoots Down US-Israeli Drone Over Tehran", desc: "Iran's armed forces intercept armed US-Israeli drone before it could conduct combat operations over Tehran, per Tasnim news agency.", type: "retaliation", phase: "war" },
+  { day: 84, lat: 35.68, lng: 51.40, title: "Iran: Hormuz Closed Indefinitely", desc: "Tehran responds to Trump's 48-hour ultimatum by threatening indefinite closure of Strait of Hormuz and attacks on all US- and Israel-linked energy infrastructure across the Middle East if power plants are struck.", type: "political", size: "large", phase: "war" },
+  { day: 84, lat: 31.78, lng: 35.22, title: "Israel Defense Minister: 'Set Iran Back Decades'", desc: "Israeli defense minister vows to set Iran back decades following Iran's first-ever strikes on the area around the Negev Nuclear Research Center at Dimona.", type: "political", phase: "war" },
+  { day: 84, lat: 15.35, lng: 44.21, title: "Houthis Weigh Joining War Against Israel & US", desc: "Al Jazeera reports Houthi politburo in active discussions on whether to formally join the war. Iranian resupply of advanced drones and anti-ship missiles confirmed.", type: "political", phase: "regional" },
+  { day: 84, lat: 35.73, lng: 51.41, title: "Iran Death Toll: 1,444+ Including 204 Children", desc: "Confirmed toll stands at 1,444 killed. At least 204 children among the dead. Strikes have hit 178 cities across 25 provinces.", type: "humanitarian", size: "large", phase: "war" },
 ];

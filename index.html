@@ -751,7 +751,7 @@
     <div id="tick-marks"></div>
     <div id="phase-bar"></div>
     <div id="density-bar"></div>
-    <input type="range" id="timeline-slider" min="0" max="83" value="0" oninput="onSliderChange(+this.value)">
+    <input type="range" id="timeline-slider" min="0" max="84" value="0" oninput="onSliderChange(+this.value)">
     <div id="date-markers">
       <span class="month-lbl" onclick="jumpTo(0)">DEC 28</span>
       <span onclick="jumpTo(4)">JAN 1</span>
@@ -1002,6 +1002,9 @@ const missileArcs = [
   { day: 83, from: [35.69, 51.42], to: [31.07, 35.03], color: '#c62828', label: 'Iran → Dimona' },
   { day: 83, from: [35.69, 51.42], to: [31.26, 35.21], color: '#c62828', label: 'Iran → Arad' },
   { day: 83, from: [35.69, 51.42], to: [-7.32, 72.42], color: '#c62828', label: 'Iran → Diego Garcia' },
+
+  // ═══ DAY 84 (Mar 22) ═══
+  { day: 84, from: [31.78, 35.22], to: [35.72, 51.55], color: '#1565c0', label: 'Israel → Eastern Tehran' },
 ];
 
 function drawBezierArc(from, to, color, label) {
@@ -1400,6 +1403,11 @@ function renderProvinces() {
   { day: 83, lat: 33.73, lng: 51.73, title: "Natanz Struck Again", desc: "Second major attack on Natanz as campaign enters 4th week.", type: "nuclear", size: "large", phase: "war" },
   { day: 83, lat: 38.90, lng: -77.04, title: "Trump: 48-Hour Ultimatum", desc: "Threatens to 'obliterate' Iran's power plants if Hormuz not reopened.", type: "political", phase: "regional" },
   { day: 83, lat: -7.32, lng: 72.41, title: "Diego Garcia Fired Upon", desc: "Iranian missile reaches Diego Garcia, demonstrating intercontinental range.", type: "retaliation", phase: "regional" },
+
+  { day: 84, lat: 35.72, lng: 51.55, title: "Israeli Jets Strike Eastern Tehran", desc: "Explosions reported across eastern districts. Defense minister threatens to 'set Iran back decades'.", type: "strike", size: "large", phase: "war" },
+  { day: 84, lat: 35.70, lng: 51.42, title: "IRGC Shoots Down US-Israeli Drone", desc: "Armed drone intercepted over Tehran before conducting combat operations.", type: "retaliation", phase: "war" },
+  { day: 84, lat: 35.68, lng: 51.40, title: "Iran: Hormuz Closed Indefinitely", desc: "Tehran threatens permanent Hormuz closure + strikes on all US/Israeli energy infrastructure if power plants hit.", type: "political", size: "large", phase: "war" },
+  { day: 84, lat: 15.35, lng: 44.21, title: "Houthis Consider Joining War", desc: "Houthi politburo in active discussions. Iran confirms resupply of advanced drones and anti-ship missiles.", type: "political", phase: "regional" },
 PLACEHOLDER END */
 
 // ─── Stats ──────────────────────────────────────────────────────────
@@ -1424,6 +1432,7 @@ function getStats(day) {
   if (day >= 80) oil = 112; // South Pars
   if (day >= 82) oil = 126; // peak
   if (day >= 83) oil = 120;
+  if (day >= 84) oil = 128; // Trump ultimatum + Hormuz standoff
   return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1 };
 }
 function fmtN(n) { return n >= 1000 ? (n/1000).toFixed(n>=10000?0:1)+'K' : n.toString(); }
@@ -1599,8 +1608,8 @@ function buildPhaseBar() {
 
 function buildDensity() {
   const bar = document.getElementById('density-bar');
-  const counts = new Array(84).fill(0);
-  events.forEach(e => { if (e.day >= 0 && e.day <= 83) counts[e.day]++; });
+  const counts = new Array(85).fill(0);
+  events.forEach(e => { if (e.day >= 0 && e.day <= 84) counts[e.day]++; });
   const mx = Math.max(...counts, 1);
   bar.innerHTML = counts.map((c, i) => {
     const int = c / mx;
@@ -1668,7 +1677,7 @@ function togglePlay() {
   const btn = document.getElementById('play-btn');
   if (playing) {
     btn.innerHTML = '&#9646;&#9646; PAUSE';
-    if (currentDay >= 83) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    if (currentDay >= 84) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
     lastTickTime = performance.now();
     requestAnimationFrame(playTick);
   } else {
@@ -1679,7 +1688,7 @@ function playTick(now) {
   if (!playing) return;
   if (now - lastTickTime >= speed) {
     lastTickTime = now;
-    if (currentDay >= 83) { togglePlay(); return; }
+    if (currentDay >= 84) { togglePlay(); return; }
     currentDay++;
     document.getElementById('timeline-slider').value = currentDay;
     renderDay(currentDay);
@@ -1705,7 +1714,7 @@ function setPhase(phase, btn) {
 
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-  if (e.key === 'ArrowRight' && currentDay < 83) { currentDay++; document.getElementById('timeline-slider').value = currentDay; renderDay(currentDay); }
+  if (e.key === 'ArrowRight' && currentDay < 84) { currentDay++; document.getElementById('timeline-slider').value = currentDay; renderDay(currentDay); }
   else if (e.key === 'ArrowLeft' && currentDay > 0) { currentDay--; document.getElementById('timeline-slider').value = currentDay; renderDay(currentDay); }
   else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
 });
