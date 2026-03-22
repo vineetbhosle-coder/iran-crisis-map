@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iran Crisis 2025-2026 — Day by Day</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=anchor,orbit,person,flag,warning,add,change_history,close,radio_button_checked" />
+<style>
+  :root {
+    --bg: #f5f5f0;
+    --bg2: #eceee8;
+    --panel: rgba(250,250,245,0.92);
+    --border: rgba(0,0,0,0.07);
+    --red: #c41e1e;
+    --red-glow: rgba(196,30,30,0.2);
+    --gold: #9a7b1a;
+    --blue: #1565c0;
+    --cyan: #00838f;
+    --purple: #6a1b9a;
+    --green: #2e7d32;
+    --orange: #d84315;
+    --gray: #607d8b;
+    --text: #1c1c1c;
+    --text2: #555;
+    --text3: #999;
+    --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+  }
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal; font-style: normal;
+    display: inline-block; line-height: 1;
+    text-transform: none; letter-spacing: normal;
+    word-wrap: normal; white-space: nowrap;
+    direction: ltr; -webkit-font-smoothing: antialiased;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--mono);
+    background: var(--bg); color: var(--text); overflow: hidden; height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #map { width: 100%; height: calc(100vh - 108px); z-index: 1; }
+
+  /* === Loading === */
+  #loading {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: white; z-index: 9999; display: flex;
+    align-items: center; justify-content: center; flex-direction: column; gap: 24px;
+  }
+  #loading h2 {
+    color: var(--text); letter-spacing: 6px; font-size: 0.8rem; font-weight: 600;
+    text-transform: uppercase;
+  }
+  .ld-bar { width: 160px; height: 2px; background: #e0e0e0; border-radius: 1px; overflow: hidden; }
+  .ld-fill { width: 30%; height: 100%; background: var(--text); border-radius: 1px; animation: ldAnim 1.5s ease-in-out infinite; }
+  @keyframes ldAnim { 0% { width: 10%; margin-left: 0; } 50% { width: 50%; margin-left: 25%; } 100% { width: 10%; margin-left: 90%; } }
+
+  /* === Header === */
+  #header {
+    background: rgba(255,255,252,0.95);
+    padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border); height: 48px; z-index: 1000;
+    backdrop-filter: blur(12px);
+  }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  #header h1 {
+    font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 2px; color: var(--text); text-transform: uppercase;
+  }
+  .live-badge {
+    font-family: var(--mono); font-size: 0.52rem; font-weight: 700; color: white;
+    background: var(--red); padding: 2px 8px; border-radius: 3px; letter-spacing: 1px;
+    animation: livePulse 1.5s infinite;
+  }
+  @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .header-coord {
+    font-family: var(--mono); font-size: 0.6rem; color: var(--text3);
+    letter-spacing: 0.5px;
+  }
+
+  #phase-filters { display: flex; gap: 4px; }
+  .phase-btn {
+    background: transparent; color: var(--text2); border: 1px solid var(--border);
+    padding: 4px 14px; border-radius: 3px; cursor: pointer;
+    font-family: var(--mono); font-size: 0.6rem; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase; transition: all 0.2s;
+  }
+  .phase-btn.active { background: var(--text); color: white; border-color: var(--text); }
+  .phase-btn:hover:not(.active) { border-color: #bbb; color: var(--text); }
+
+  #date-display {
+    font-family: var(--mono); font-size: 0.85rem; font-weight: 700;
+    color: var(--red); letter-spacing: 1px;
+  }
+
+  /* === Timeline === */
+  #timeline-container {
+    background: rgba(255,255,252,0.95); padding: 8px 24px 8px;
+    border-top: 1px solid var(--border); height: 60px;
+    backdrop-filter: blur(12px);
+  }
+  #timeline-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  #play-btn {
+    background: var(--text); color: white; border: none; padding: 4px 18px;
+    border-radius: 3px; cursor: pointer; font-size: 0.65rem; font-weight: 700;
+    font-family: var(--mono); letter-spacing: 1px; transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  #play-btn:hover { background: var(--red); }
+  #speed-select {
+    background: var(--bg); color: var(--text2); border: 1px solid var(--border);
+    padding: 3px 8px; border-radius: 3px; font-size: 0.62rem; font-family: var(--mono);
+  }
+  #phase-label { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); font-weight: 500; margin-left: 8px; letter-spacing: 0.5px; }
+
+  #slider-wrap { position: relative; width: 100%; height: 28px; }
+
+  #phase-bar {
+    position: absolute; top: 2px; left: 0; right: 0; height: 4px;
+    display: flex; z-index: 1; border-radius: 2px; overflow: hidden;
+  }
+  .phase-seg { height: 100%; }
+
+  #density-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 8px;
+    display: flex; z-index: 2; pointer-events: none;
+  }
+  .density-tick { flex: 1; }
+
+  #timeline-slider {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    background: transparent; outline: none; margin-top: 2px;
+    position: relative; z-index: 3;
+  }
+  #timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    background: var(--text); border-radius: 50%; cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+  }
+  #timeline-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  #date-markers { display: flex; justify-content: space-between; margin-top: 0; }
+  #date-markers span {
+    font-size: 0.55rem; color: var(--text3); font-weight: 500; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; transition: color 0.2s;
+  }
+  #date-markers span:hover { color: var(--text); }
+
+  /* === Panels (glassmorphism + intel dossier) === */
+  .glass-panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 4px; backdrop-filter: blur(20px) saturate(1.6);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    z-index: 1000; position: absolute;
+  }
+  .glass-panel::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--red); border-radius: 4px 4px 0 0; opacity: 0.6;
+  }
+
+  /* === Event Panel === */
+  #event-panel {
+    position: absolute; top: 56px; right: 12px; width: 320px; max-height: calc(100vh - 190px);
+    overflow-y: auto; padding: 16px;
+  }
+  #event-panel h3 {
+    font-family: var(--mono); color: var(--text2); font-size: 0.6rem; margin-bottom: 12px;
+    text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border); padding-bottom: 8px;
+  }
+  #event-panel h3 .ev-count {
+    background: var(--red); color: white; font-size: 0.55rem;
+    padding: 1px 7px; border-radius: 2px; font-weight: 700;
+    font-family: var(--mono);
+  }
+  #event-list { transition: opacity 0.25s ease; }
+  .stat-val { transition: color 0.3s ease; }
+  #date-display { transition: color 0.2s ease; }
+  #phase-label { transition: opacity 0.3s ease; }
+  .ev-item {
+    padding: 10px 12px; margin: 4px 0; border-radius: 10px;
+    font-size: 0.78rem; line-height: 1.45; cursor: pointer;
+    transition: background 0.2s; animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+  .ev-item:hover { background: rgba(0,0,0,0.03); }
+  .ev-item .ev-badge {
+    font-family: var(--mono); font-size: 0.48rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px; padding: 2px 6px;
+    border-radius: 2px; display: inline-block; margin-bottom: 3px;
+  }
+  .ev-item .ev-title { color: var(--text); font-weight: 700; font-size: 0.78rem; letter-spacing: -0.01em; }
+  .ev-item .ev-desc { color: var(--text2); margin-top: 3px; font-size: 0.7rem; line-height: 1.4; }
+  .ev-item .ev-coords {
+    font-family: var(--mono); font-size: 0.55rem; color: var(--text3);
+    margin-top: 2px; letter-spacing: 0.5px;
+  }
+  .badge-strike { background: #e3f2fd; color: #1565c0; }
+  .badge-retaliation { background: #ffebee; color: #c62828; }
+  .badge-protest { background: #fff3e0; color: #e65100; }
+  .badge-political { background: #eceff1; color: #455a64; }
+  .badge-nuclear { background: #f3e5f5; color: #6a1b9a; }
+  .badge-naval { background: #e1f5fe; color: #0277bd; }
+  .badge-hezbollah { background: #e8f5e9; color: #2e7d32; }
+  .badge-humanitarian { background: #ffebee; color: #b71c1c; }
+
+  /* === Stats Panel === */
+  #stats-panel {
+    position: absolute; top: 56px; left: 12px;
+    padding: 14px 18px; min-width: 210px;
+  }
+  #stats-panel h4 {
+    font-family: var(--mono); color: var(--text2); margin-bottom: 10px; font-size: 0.58rem;
+    text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
+    border-bottom: 1px solid var(--border); padding-bottom: 8px;
+  }
+  .stat-row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 14px; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-label { color: var(--text2); font-size: 0.68rem; font-weight: 400; }
+  .stat-val {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.82rem;
+    transition: color 0.3s;
+  }
+  .stat-indicator {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    margin-right: 6px;
+  }
+
+  /* === Legend === */
+  #legend {
+    position: absolute; bottom: 70px; left: 12px;
+    padding: 10px 14px; font-size: 0.66rem;
+  }
+  #legend h4 {
+    font-family: var(--mono); color: var(--text2); margin-bottom: 6px; font-size: 0.55rem;
+    text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin: 3px 0; color: var(--text2); font-size: 0.64rem; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* === Source === */
+  #source-bar {
+    position: absolute; bottom: 70px; right: 12px;
+    padding: 8px 12px; font-size: 0.55rem; color: var(--text3);
+    max-width: 260px; line-height: 1.5;
+  }
+  #source-bar a { color: var(--text2); text-decoration: none; }
+  #source-bar a:hover { color: var(--text); }
+
+  /* === Leaflet Overrides === */
+  .leaflet-popup-content-wrapper {
+    background: rgba(255,255,255,0.95) !important; color: var(--text) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important; border-radius: 14px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+    backdrop-filter: blur(20px) !important;
+  }
+  .leaflet-popup-tip { background: rgba(255,255,255,0.95) !important; }
+  .leaflet-popup-content { font-size: 0.8rem !important; line-height: 1.45 !important; font-family: 'Inter', sans-serif !important; }
+  .popup-badge {
+    font-family: var(--mono); font-size: 0.5rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    padding: 2px 6px; border-radius: 2px; display: inline-block; margin-bottom: 4px;
+  }
+  .popup-title { color: var(--text); font-weight: 800; font-size: 0.88rem; margin-bottom: 4px; letter-spacing: -0.01em; }
+  .popup-date { color: var(--text3); font-size: 0.6rem; margin-top: 4px; font-family: var(--mono); letter-spacing: 0.5px; }
+  .popup-coords { color: var(--text3); font-size: 0.55rem; font-family: var(--mono); margin-top: 2px; }
+
+  /* Leaflet controls */
+  .leaflet-control-zoom a {
+    background: white !important; color: var(--text) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important; border-radius: 10px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  }
+  .leaflet-control-attribution { background: rgba(255,255,255,0.7) !important; font-size: 0.55rem !important; }
+
+  /* Province tooltip */
+  .country-tip, .province-tip {
+    background: rgba(255,255,255,0.92) !important; color: var(--text) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important; border-radius: 8px !important;
+    padding: 4px 10px !important; font-size: 0.72rem !important; font-weight: 500 !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important;
+  }
+
+  /* === Animations === */
+  @keyframes markerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  .marker-pulse { animation: markerPulse 2s ease-in-out infinite; }
+
+  /* Smooth day-to-day transitions */
+  .leaflet-marker-icon { transition: opacity 0.4s ease; }
+  .leaflet-overlay-pane path { transition: opacity 0.4s ease, stroke-opacity 0.4s ease, fill-opacity 0.4s ease; }
+  @keyframes markerFadeIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+  .marker-new { animation: markerFadeIn 0.4s ease-out; }
+
+  .missile-path { stroke-dasharray: 10 5; animation: missileFlow 1.2s linear infinite; }
+  @keyframes missileFlow { to { stroke-dashoffset: -15; } }
+
+  /* Crosshair overlay */
+  #crosshair {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none; z-index: 500; opacity: 0.12;
+  }
+  #crosshair::before, #crosshair::after {
+    content: ''; position: absolute; background: var(--red);
+  }
+  #crosshair::before { width: 1px; height: 40px; left: 50%; top: -20px; }
+  #crosshair::after { width: 40px; height: 1px; top: 50%; left: -20px; }
+
+  /* Scrollbar */
+  #event-panel::-webkit-scrollbar { width: 3px; }
+  #event-panel::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+  #event-panel::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <h2>Iran Crisis Map</h2>
+  <div class="ld-bar"><div class="ld-fill"></div></div>
+  <p style="color:#bbb;font-size:0.65rem;letter-spacing:1.5px;font-weight:500;">LOADING GEOPOLITICAL DATA</p>
+</div>
+
+<div id="header">
+  <div class="header-left">
+    <h1>Iran Crisis</h1>
+    <span class="live-badge">ONGOING</span>
+  </div>
+  <div id="phase-filters">
+    <button class="phase-btn active" onclick="setPhase('all',this)">All</button>
+    <button class="phase-btn" onclick="setPhase('protests',this)">Protests</button>
+    <button class="phase-btn" onclick="setPhase('war',this)">War</button>
+    <button class="phase-btn" onclick="setPhase('regional',this)">Regional</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <span class="header-coord" id="cursor-coord">35.6895°N 51.3890°E</span>
+    <div id="date-display">28 DEC 2025</div>
+  </div>
+</div>
+
+<div id="map"><div id="crosshair"></div></div>
+
+<div id="stats-panel" class="glass-panel">
+  <h4>Crisis Dashboard</h4>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--gold)"></span>Protest Deaths</span>
+    <span class="stat-val" id="s-protest" style="color:var(--orange)">0</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--red)"></span>Strike Deaths (Iran)</span>
+    <span class="stat-val" id="s-strike" style="color:var(--red)">0</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--orange)"></span>Israeli Casualties</span>
+    <span class="stat-val" id="s-israel" style="color:var(--orange)">0</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--cyan)"></span>Strait of Hormuz</span>
+    <span class="stat-val" id="s-hormuz" style="color:var(--green)">OPEN</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--green)"></span>Internet (Iran)</span>
+    <span class="stat-val" id="s-internet" style="color:var(--green)">ONLINE</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--text2)"></span>Day of Crisis</span>
+    <span class="stat-val" id="s-day" style="color:var(--text);">1</span>
+  </div>
+</div>
+
+<div id="event-panel" class="glass-panel">
+  <h3>Events <span class="ev-count" id="ev-count">0</span></h3>
+  <div id="event-list"></div>
+</div>
+
+<div id="legend" class="glass-panel">
+  <h4>Event Types</h4>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #1565c0;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="20" stroke="#1565c0" stroke-width="4"/><line x1="4" y1="12" x2="20" y2="12" stroke="#1565c0" stroke-width="4"/></svg></div> US/Israeli Strike</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #c62828;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><path d="M12 3l10 18H2z" fill="#c62828"/></svg></div> Iranian Retaliation</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #e65100;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4" fill="#e65100"/><path d="M5 22v-4a7 7 0 0114 0v4" fill="#e65100" opacity="0.5"/></svg></div> Protest</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #455a64;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><line x1="5" y1="2" x2="5" y2="22" stroke="#455a64" stroke-width="2"/><path d="M5 2h14l-5 5 5 5H5" fill="#455a64" opacity="0.4"/></svg></div> Political</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #6a1b9a;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z" fill="#6a1b9a" opacity="0.85"/></svg></div> Nuclear</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #0277bd;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="#0277bd" stroke-width="3.5"/></svg></div> Naval</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #78909c;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><div style="width:7px;height:7px;border-radius:50%;background:#78909c;opacity:0.7;"></div></div> Hezbollah</div>
+  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #b71c1c;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="18" rx="1" fill="#b71c1c"/><rect x="3" y="9" width="18" height="6" rx="1" fill="#b71c1c"/></svg></div> Humanitarian</div>
+</div>
+
+<div id="source-bar" class="glass-panel">
+  Data compiled from:
+  <a href="https://www.aljazeera.com/where/iran/" target="_blank">Al Jazeera</a> |
+  <a href="https://www.britannica.com/event/2026-Iranian-Protests" target="_blank">Britannica</a> |
+  <a href="https://www.amnesty.org" target="_blank">Amnesty</a> |
+  <a href="https://commonslibrary.parliament.uk" target="_blank">UK Parliament</a> |
+  <a href="https://www.criticalthreats.org" target="_blank">Critical Threats</a>
+</div>
+
+<div id="timeline-container">
+  <div id="timeline-controls">
+    <button id="play-btn" onclick="togglePlay()">&#9654; PLAY</button>
+    <select id="speed-select" onchange="changeSpeed()">
+      <option value="1500">Slow</option>
+      <option value="700" selected>Normal</option>
+      <option value="350">Fast</option>
+      <option value="150">Rush</option>
+    </select>
+    <span id="phase-label">Protests Erupt Across Iran</span>
+  </div>
+  <div id="slider-wrap">
+    <div id="phase-bar"></div>
+    <div id="density-bar"></div>
+    <input type="range" id="timeline-slider" min="0" max="83" value="0" oninput="onSliderChange(+this.value)">
+    <div id="date-markers">
+      <span onclick="jumpTo(0)">DEC 28</span>
+      <span onclick="jumpTo(11)">JAN 8</span>
+      <span onclick="jumpTo(24)">JAN 21</span>
+      <span onclick="jumpTo(40)">FEB 6</span>
+      <span onclick="jumpTo(62)">FEB 28</span>
+      <span onclick="jumpTo(72)">MAR 9</span>
+      <span onclick="jumpTo(83)">MAR 21</span>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="events.js"></script>
+<script>
+// ─── Map ────────────────────────────────────────────────────────────
+const map = L.map('map', {
+  center: [31, 51], zoom: 5, minZoom: 3, maxZoom: 12, zoomControl: false
+});
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OSM &copy; CARTO', subdomains: 'abcd'
+}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd', pane: 'shadowPane'
+}).addTo(map);
+
+let markerLayer = L.layerGroup().addTo(map);
+let arcLayer = L.layerGroup().addTo(map);
+let blastLayer = L.layerGroup().addTo(map);
+let geoLayer = null, geoData = null;
+let provinceLayer = null, provinceData = null;
+let currentDay = 0, playing = false, playInterval = null, speed = 700;
+let activePhase = 'all';
+
+// Zoom-dependent styling
+map.on('zoomend', () => { updateBorderWeights(); });
+// Live cursor coordinates
+map.on('mousemove', (e) => {
+  const el = document.getElementById('cursor-coord');
+  if (el) el.textContent = `${e.latlng.lat.toFixed(4)}°N  ${e.latlng.lng.toFixed(4)}°E`;
+});
+
+// ─── Date helpers ───────────────────────────────────────────────────
+const startDate = new Date(2025, 11, 28);
+function dayToDate(d) { const dt = new Date(startDate); dt.setDate(dt.getDate() + d); return dt; }
+function formatDate(d) {
+  const dt = dayToDate(d);
+  const m = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  return `${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()}`;
+}
+
+// ─── Phases ─────────────────────────────────────────────────────────
+const phases = [
+  { start: 0, end: 10, label: "Protests Erupt Across Iran", color: 'var(--gold)' },
+  { start: 11, end: 13, label: "January 8–9 Massacres", color: '#991b1b' },
+  { start: 14, end: 24, label: "Internet Blackout & Crackdown", color: 'var(--gray)' },
+  { start: 25, end: 60, label: "Diplomatic Escalation", color: 'var(--blue)' },
+  { start: 61, end: 61, label: "Operation Epic Fury Begins", color: 'var(--red)' },
+  { start: 62, end: 72, label: "War — Active Combat", color: 'var(--red)' },
+  { start: 73, end: 83, label: "Ongoing Escalation", color: 'var(--orange)' },
+];
+function getPhaseLabel(d) { const p = phases.find(p => d >= p.start && d <= p.end); return p ? p.label : ''; }
+
+// ─── Custom SVG Icons ───────────────────────────────────────────────
+// Color logic: Blue = US/Israel actions, Red = Iran actions, distinct per type
+const typeColors = {
+  strike: '#1565c0',       // US/Israeli strike — BLUE
+  retaliation: '#c62828',  // Iranian retaliation — RED
+  protest: '#e65100',      // Protest — ORANGE
+  political: '#455a64',    // Political — DARK GRAY
+  nuclear: '#6a1b9a',      // Nuclear target — PURPLE
+  naval: '#0277bd',        // Naval (US) — BLUE-TEAL
+  hezbollah: '#2e7d32',    // Hezbollah/proxy — GREEN
+  humanitarian: '#b71c1c', // Humanitarian/civilian — DARK RED
+};
+
+// Icon rendering — uses Material Symbols for naval/nuclear, SVG for rest
+function makeIconHtml(type, color, size) {
+  const dim = size === 'large' ? 28 : size === 'small' ? 16 : 22;
+  const fs = size === 'large' ? 18 : size === 'small' ? 10 : 14;
+  const pad = Math.floor((dim - fs) / 2);
+  const base = `width:${dim}px;height:${dim}px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:1.5px solid ${color};background:white;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15));`;
+  const icon = (name) => `<div style="${base}"><span class="material-symbols-outlined" style="font-size:${fs}px;color:${color};font-variation-settings:'FILL' 1,'wght' 600;">${name}</span></div>`;
+  const svg = (inner) => `<div style="${base}"><svg width="${fs}" height="${fs}" viewBox="0 0 24 24">${inner}</svg></div>`;
+
+  switch(type) {
+    case 'strike':
+      return svg(`<line x1="12" y1="4" x2="12" y2="20" stroke="${color}" stroke-width="3"/><line x1="4" y1="12" x2="20" y2="12" stroke="${color}" stroke-width="3"/>`);
+    case 'retaliation':
+      return svg(`<path d="M12 4l8 16H4z" fill="${color}" opacity="0.85"/>`);
+    case 'protest':
+      return svg(`<circle cx="12" cy="7" r="3" fill="${color}"/><path d="M6 22v-5a6 6 0 0112 0v5" fill="${color}" opacity="0.55"/>`);
+    case 'political':
+      return svg(`<line x1="6" y1="3" x2="6" y2="21" stroke="${color}" stroke-width="2"/><path d="M6 3h12l-4 4.5 4 4.5H6" fill="${color}" opacity="0.45"/>`);
+    case 'nuclear':
+      // Star icon
+      return svg(`<path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z" fill="${color}" opacity="0.85"/>`);
+    case 'naval':
+      // Simple O / circle
+      return svg(`<circle cx="12" cy="12" r="7" fill="none" stroke="${color}" stroke-width="3"/>`);
+    case 'hezbollah':
+      return `<div style="${base.replace(color,'#78909c')}"><div style="width:${Math.round(fs*0.6)}px;height:${Math.round(fs*0.6)}px;border-radius:50%;background:#78909c;opacity:0.7;"></div></div>`;
+    case 'humanitarian':
+      return svg(`<rect x="9" y="3" width="6" height="18" rx="1" fill="${color}"/><rect x="3" y="9" width="18" height="6" rx="1" fill="${color}"/>`);
+    default:
+      return svg(`<circle cx="12" cy="12" r="6" fill="${color}"/>`);
+  }
+}
+
+function makeIcon(type, size) {
+  const c = typeColors[type] || '#c62828';
+  const dim = size === 'large' ? 28 : size === 'small' ? 16 : 22;
+  return L.divIcon({
+    className: size === 'large' ? 'marker-pulse' : '',
+    html: makeIconHtml(type, c, size),
+    iconSize: [dim, dim], iconAnchor: [dim/2, dim/2]
+  });
+}
+
+// ─── Missile Arcs ───────────────────────────────────────────────────
+const missileArcs = [
+  // US/Israel → Iran (BLUE)
+  { day: 62, from: [31.77, 35.23], to: [35.69, 51.42], color: '#1565c0', label: 'IAF → Tehran' },
+  { day: 62, from: [38.90, -77.04], to: [33.73, 51.73], color: '#1565c0', label: 'B-2 → Natanz' },
+  { day: 62, from: [38.90, -77.04], to: [34.89, 51.99], color: '#1565c0', label: 'B-2 → Fordow' },
+  { day: 62, from: [31.77, 35.23], to: [32.65, 51.68], color: '#1565c0', label: 'Tomahawk → Isfahan' },
+  // Iran → Israel (RED)
+  { day: 62, from: [35.69, 51.42], to: [32.10, 34.79], color: '#c62828', label: 'Iran → Tel Aviv' },
+  { day: 63, from: [35.69, 51.42], to: [31.73, 35.00], color: '#c62828', label: 'Iran → Beit Shemesh' },
+  { day: 63, from: [35.69, 51.42], to: [31.77, 35.23], color: '#c62828', label: 'Iran → Jerusalem' },
+  // Iran → Bahrain (RED)
+  { day: 62, from: [35.69, 51.42], to: [26.23, 50.59], color: '#c62828', label: 'Iran → Bahrain' },
+  { day: 62, from: [35.69, 51.42], to: [25.12, 56.34], color: '#c62828', label: 'Iran → Fujairah' },
+  // Hezbollah (GREEN)
+  { day: 64, from: [33.89, 35.50], to: [33.10, 35.20], color: '#2e7d32', label: 'Hezbollah → N. Israel' },
+  { day: 65, from: [33.89, 35.50], to: [32.79, 34.99], color: '#2e7d32', label: 'Hezbollah → Haifa' },
+  // Week 3 escalation (RED)
+  { day: 76, from: [35.69, 51.42], to: [25.29, 51.53], color: '#c62828', label: 'Iran → Qatar' },
+  { day: 82, from: [35.69, 51.42], to: [31.25, 34.79], color: '#c62828', label: 'Iran → Dimona' },
+  { day: 83, from: [35.69, 51.42], to: [-7.32, 72.41], color: '#c62828', label: 'Iran → Diego Garcia' },
+];
+
+function drawBezierArc(from, to, color, label) {
+  const midLat = (from[0] + to[0]) / 2;
+  const midLng = (from[1] + to[1]) / 2;
+  const dist = Math.sqrt((to[0]-from[0])**2 + (to[1]-from[1])**2);
+  // Arc curves upward proportional to distance
+  const offsetLat = midLat + dist * 0.18;
+  const offsetLng = midLng;
+
+  // Generate smooth bezier points, ensuring start and end connect exactly
+  const points = [from];
+  for (let t = 0.02; t < 1; t += 0.02) {
+    const lat = (1-t)**2 * from[0] + 2*(1-t)*t * offsetLat + t**2 * to[0];
+    const lng = (1-t)**2 * from[1] + 2*(1-t)*t * offsetLng + t**2 * to[1];
+    points.push([lat, lng]);
+  }
+  points.push(to); // ensure exact endpoint connection
+
+  const line = L.polyline(points, {
+    color, weight: 1.5, opacity: 0.55, dashArray: '6 4', className: 'missile-path'
+  }).addTo(arcLayer);
+  line.bindTooltip(label, { sticky: true, opacity: 0.9 });
+}
+
+function renderArcs(day) {
+  arcLayer.clearLayers();
+  missileArcs.filter(a => a.day === day).forEach(a => drawBezierArc(a.from, a.to, a.color, a.label));
+}
+
+// ─── Blast Radius ───────────────────────────────────────────────────
+function renderBlasts(day) {
+  blastLayer.clearLayers();
+  // Past blast scars (persistent, faded)
+  const pastBlasts = events.filter(e => e.day < day && (e.type === 'strike' || e.type === 'nuclear' || e.type === 'retaliation') && e.size === 'large');
+  pastBlasts.forEach(e => {
+    const c = typeColors[e.type];
+    L.circle([e.lat, e.lng], {
+      radius: 20000, color: c, fillColor: c,
+      fillOpacity: 0.04, weight: 0.5, opacity: 0.15,
+      dashArray: '3 3'
+    }).addTo(blastLayer);
+  });
+  // Current-day blasts (bright)
+  const blastEvents = events.filter(e => e.day === day && (e.type === 'strike' || e.type === 'nuclear' || e.type === 'retaliation') && e.size === 'large');
+  blastEvents.forEach(e => {
+    const c = typeColors[e.type];
+    L.circle([e.lat, e.lng], {
+      radius: 30000, color: c, fillColor: c,
+      fillOpacity: 0.08, weight: 1, opacity: 0.3,
+      dashArray: '4 4'
+    }).addTo(blastLayer);
+    L.circle([e.lat, e.lng], {
+      radius: 12000, color: c, fillColor: c,
+      fillOpacity: 0.15, weight: 0
+    }).addTo(blastLayer);
+  });
+}
+
+// ─── Country GeoJSON ────────────────────────────────────────────────
+const countryRoles = {
+  'Iran': { color: '#c62828', opacity: 0.12 },
+  'Israel': { color: '#1565c0', opacity: 0.15 },
+  'United States of America': { color: '#1565c0', opacity: 0.04 },
+  'Lebanon': { color: '#2e7d32', opacity: 0.1 },
+  'Iraq': { color: '#e65100', opacity: 0.06 },
+  'Syria': { color: '#e65100', opacity: 0.06 },
+  'Yemen': { color: '#e65100', opacity: 0.06 },
+  'Bahrain': { color: '#e65100', opacity: 0.08 },
+  'Qatar': { color: '#f57f17', opacity: 0.07 },
+  'Saudi Arabia': { color: '#78909c', opacity: 0.04 },
+  'Turkey': { color: '#78909c', opacity: 0.04 },
+  'Jordan': { color: '#78909c', opacity: 0.04 },
+  'Oman': { color: '#78909c', opacity: 0.04 },
+  'United Arab Emirates': { color: '#78909c', opacity: 0.04 },
+  'Kuwait': { color: '#78909c', opacity: 0.04 },
+  'Pakistan': { color: '#78909c', opacity: 0.03 },
+  'Afghanistan': { color: '#78909c', opacity: 0.03 },
+};
+
+// Countries whose provinces we want to highlight at higher zoom
+const focusCountries = new Set(['Iran', 'IRN', 'Israel', 'ISR', 'Iraq', 'IRQ', 'Syria', 'SYR', 'Lebanon', 'LBN', 'Yemen', 'YEM']);
+// Known province names in Iran for tooltip display
+const iranProvinces = new Set([
+  'Tehran','Isfahan','Fars','Razavi Khorasan','East Azerbaijan','West Azerbaijan',
+  'Kerman','Khuzestan','Mazandaran','Gilan','Lorestan','Kermanshah','Hamadan',
+  'Hormozgan','Bushehr','Ilam','Kurdistan','Yazd','Qom','Markazi','Semnan',
+  'Golestan','Zanjan','Ardabil','Chahar Mahall and Bakhtiari','Kohgiluyeh and Buyer Ahmad',
+  'South Khorasan','North Khorasan','Sistan and Baluchestan','Alborz','Qazvin'
+]);
+
+function getZoomWeights() {
+  const z = map.getZoom();
+  return {
+    countryBorder: z <= 4 ? 0.8 : z <= 6 ? 1.2 : z <= 8 ? 1.5 : 2,
+    countryBorderInactive: z <= 4 ? 0.3 : z <= 6 ? 0.5 : 0.8,
+    countryOpacity: z <= 4 ? 0.3 : z <= 6 ? 0.4 : 0.5,
+    provinceBorder: z <= 5 ? 0.3 : z <= 7 ? 0.6 : z <= 9 ? 1 : 1.5,
+    provinceOpacity: z <= 5 ? 0.1 : z <= 7 ? 0.2 : z <= 9 ? 0.3 : 0.4,
+    provinceFill: z <= 6 ? 0.0 : 0.02,
+  };
+}
+
+function styleCountry(feature) {
+  const name = feature.properties.ADMIN || feature.properties.NAME || feature.properties.name || '';
+  const role = countryRoles[name];
+  const w = getZoomWeights();
+  if (!role) return {
+    fillColor: '#111', fillOpacity: 0.02,
+    color: '#222', weight: w.countryBorderInactive, opacity: 0.2
+  };
+  return {
+    fillColor: role.color, fillOpacity: role.opacity,
+    color: role.color, weight: w.countryBorder, opacity: w.countryOpacity
+  };
+}
+
+function styleProvince(feature) {
+  const w = getZoomWeights();
+  const admin = feature.properties.admin || feature.properties.ADMIN || '';
+  const iso = feature.properties.iso_a2 || feature.properties.ISO_A2 || '';
+  const name = feature.properties.name || feature.properties.NAME || '';
+
+  // Check if this province belongs to a focus country
+  const isFocus = focusCountries.has(admin) || focusCountries.has(iso);
+  const isIran = admin === 'Iran' || iso === 'IR' || iso === 'IRN';
+
+  if (!isFocus) return { fill: false, stroke: false }; // hide non-focus provinces
+
+  const role = countryRoles[admin] || countryRoles['Iran'];
+  const baseColor = role ? role.color : '#666';
+
+  return {
+    fillColor: isIran ? baseColor : 'transparent',
+    fillOpacity: isIran ? w.provinceFill : 0,
+    color: isIran ? '#ffffff' : baseColor,
+    weight: isIran ? w.provinceBorder * 1.2 : w.provinceBorder * 0.7,
+    opacity: isIran ? w.provinceOpacity * 1.5 : w.provinceOpacity,
+    dashArray: isIran ? null : '3 3'
+  };
+}
+
+function updateBorderWeights() {
+  if (geoLayer) {
+    geoLayer.eachLayer(layer => {
+      if (layer.feature) layer.setStyle(styleCountry(layer.feature));
+    });
+  }
+  if (provinceLayer) {
+    provinceLayer.eachLayer(layer => {
+      if (layer.feature) layer.setStyle(styleProvince(layer.feature));
+    });
+  }
+}
+
+function renderGeo() {
+  if (!geoData) return;
+  if (geoLayer) map.removeLayer(geoLayer);
+  geoLayer = L.geoJSON(geoData, {
+    style: styleCountry,
+    onEachFeature: (feature, layer) => {
+      const name = feature.properties.ADMIN || feature.properties.NAME || '';
+      const role = countryRoles[name];
+      if (role) {
+        layer.bindTooltip(name, { sticky: true, className: 'country-tip' });
+        layer.on('mouseover', function() {
+          const z = map.getZoom();
+          this.setStyle({ weight: z <= 4 ? 1.5 : 2.5, opacity: 0.7 });
+        });
+        layer.on('mouseout', function() {
+          this.setStyle(styleCountry(this.feature));
+        });
+      }
+    }
+  }).addTo(map);
+  geoLayer.bringToBack();
+}
+
+function renderProvinces() {
+  if (!provinceData) return;
+  if (provinceLayer) map.removeLayer(provinceLayer);
+  provinceLayer = L.geoJSON(provinceData, {
+    style: styleProvince,
+    onEachFeature: (feature, layer) => {
+      const admin = feature.properties.admin || '';
+      const name = feature.properties.name || feature.properties.NAME || '';
+      const isIran = admin === 'Iran';
+      if (isIran && name) {
+        layer.bindTooltip(name + ' Province', { sticky: true, className: 'province-tip' });
+      }
+    }
+  }).addTo(map);
+  // Provinces above country fills but below markers
+  if (geoLayer) geoLayer.bringToBack();
+}
+
+// ─── Events (loaded from events.js) ───────────────────────────────
+// const events is defined in events.js, loaded via script tag
+/* Original inline events removed — now in events.js */
+/* PLACEHOLDER START
+  { day: 0, lat: 35.69, lng: 51.39, title: "Tehran Grand Bazaar Strike", desc: "Shopkeepers close shops over currency collapse and soaring inflation.", type: "protest", size: "large", phase: "protests" },
+  { day: 0, lat: 35.72, lng: 51.44, title: "Nationwide Protests Erupt", desc: "Demonstrations break out across Iran. Largest unrest since 1979 revolution.", type: "protest", size: "large", phase: "protests" },
+  { day: 1, lat: 32.65, lng: 51.68, title: "Isfahan Protests", desc: "Large demonstrations over economic conditions and food shortages.", type: "protest", phase: "protests" },
+  { day: 1, lat: 29.59, lng: 52.58, title: "Shiraz Protests", desc: "Protesters demand economic relief in Shiraz.", type: "protest", phase: "protests" },
+  { day: 1, lat: 34.31, lng: 47.06, title: "Kermanshah Clashes", desc: "Security forces clash with protesters in Kermanshah province.", type: "protest", phase: "protests" },
+  { day: 2, lat: 33.49, lng: 48.35, title: "Khorramabad Uprising", desc: "Major protests in Lorestan capital. Tear gas deployed.", type: "protest", phase: "protests" },
+  { day: 2, lat: 34.80, lng: 48.51, title: "Hamadan — Shots Fired", desc: "Security forces fire on protesters. First reported casualties.", type: "protest", phase: "protests" },
+  { day: 2, lat: 35.84, lng: 50.97, title: "Karaj Unrest", desc: "Tear gas in Shahin Villa district as protests spread to satellite cities.", type: "protest", phase: "protests" },
+  { day: 3, lat: 33.64, lng: 46.42, title: "Ilam: 5 Killed", desc: "Deadly clashes in Ilam. Security forces kill at least 5 protesters.", type: "humanitarian", phase: "protests" },
+  { day: 3, lat: 30.28, lng: 57.08, title: "Kerman Joins", desc: "Chants shift from economic grievances to demands for regime change.", type: "protest", phase: "protests" },
+  { day: 4, lat: 36.27, lng: 59.62, title: "Mashhad Erupts", desc: "Iran's second-largest city sees massive demonstrations.", type: "protest", size: "large", phase: "protests" },
+  { day: 4, lat: 38.08, lng: 46.29, title: "Tabriz Protests", desc: "Protests erupt despite heavy security presence in Tabriz.", type: "protest", phase: "protests" },
+  { day: 5, lat: 33.49, lng: 48.35, title: "Lorestan: 8 Dead", desc: "At least 8 killed in Lorestan. Deadliest provincial crackdown.", type: "humanitarian", phase: "protests" },
+  { day: 6, lat: 31.90, lng: 54.37, title: "Yazd Joins", desc: "Over 200 cities now protesting. Movement becomes truly nationwide.", type: "protest", phase: "protests" },
+
+  // === JANUARY 8-9 MASSACRES ===
+  { day: 11, lat: 35.69, lng: 51.39, title: "January 8 Massacre — Tehran", desc: "Security forces open fire with live ammunition across Tehran. Thousands killed in deadliest day since 1979.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 11, lat: 32.65, lng: 51.68, title: "Isfahan Massacre", desc: "Mass killings as security forces unleash lethal force. Hospitals overwhelmed.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 11, lat: 29.59, lng: 52.58, title: "Shiraz Killings", desc: "Deadly crackdown across Shiraz. Reports of indiscriminate shooting.", type: "humanitarian", phase: "protests" },
+  { day: 11, lat: 34.31, lng: 47.06, title: "Kermanshah Massacre", desc: "Live fire and communications cut in Kermanshah.", type: "humanitarian", phase: "protests" },
+  { day: 11, lat: 33.49, lng: 48.35, title: "Khorramabad Under Fire", desc: "Security forces shoot indiscriminately in Khorramabad streets.", type: "humanitarian", phase: "protests" },
+  { day: 12, lat: 35.69, lng: 51.39, title: "Total Internet Blackout", desc: "All internet and phone service cut nationwide to conceal massacre scale.", type: "political", size: "large", phase: "protests" },
+  { day: 12, lat: 36.27, lng: 59.62, title: "Mashhad Crackdown", desc: "Lethal force continues. Health workers report overwhelming casualties.", type: "humanitarian", phase: "protests" },
+  { day: 13, lat: 35.69, lng: 51.39, title: "Death Toll: 30,000–36,500", desc: "Health officials report 30,000–36,500 killed in Jan 8–9 massacres alone.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 20, lat: 35.69, lng: 51.39, title: "Mass Arrests", desc: "Thousands detained. Reports of systematic torture in detention centers.", type: "humanitarian", phase: "protests" },
+  { day: 24, lat: 35.69, lng: 51.39, title: "Regime: 'Protests Suppressed'", desc: "Authorities declare protests crushed after unprecedented violence.", type: "political", phase: "protests" },
+
+  // === DIPLOMATIC ESCALATION ===
+  { day: 40, lat: 23.61, lng: 58.59, title: "Iran-US Talks in Oman", desc: "Indirect nuclear negotiations held in Muscat.", type: "political", phase: "regional" },
+  { day: 55, lat: 38.90, lng: -77.04, title: "Trump: Iran Building Nukes", desc: "State of the Union speech accuses Iran of reviving weapons program.", type: "political", size: "large", phase: "regional" },
+  { day: 57, lat: 48.22, lng: 16.37, title: "IAEA: 90% Enriched Uranium", desc: "55kg of weapons-grade uranium confirmed. International alarm grows.", type: "nuclear", size: "large", phase: "regional" },
+
+  // === OPERATION EPIC FURY — FEB 28 ===
+  { day: 62, lat: 35.69, lng: 51.42, title: "Khamenei Killed — Tehran", desc: "IAF decapitation strike destroys Supreme Leader's compound. Khamenei and senior aides killed.", type: "strike", size: "large", phase: "war" },
+  { day: 62, lat: 35.70, lng: 51.38, title: "Basij HQ Destroyed", desc: "Basij paramilitary headquarters leveled in eastern Tehran.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.72, lng: 51.44, title: "IRGC Command Center Hit", desc: "IRGC Malek-Ashtar building destroyed by cruise missiles.", type: "strike", phase: "war" },
+  { day: 62, lat: 33.73, lng: 51.73, title: "Natanz Struck", desc: "B-2 Spirit bombers drop GBU-57 bunker busters on primary enrichment site.", type: "nuclear", size: "large", phase: "war" },
+  { day: 62, lat: 34.89, lng: 51.99, title: "Fordow Struck", desc: "12 Massive Ordnance Penetrators dropped on deeply buried facility.", type: "nuclear", size: "large", phase: "war" },
+  { day: 62, lat: 32.65, lng: 51.68, title: "Isfahan Nuclear Center", desc: "Tomahawks destroy Isfahan Nuclear Technology Center.", type: "nuclear", size: "large", phase: "war" },
+  { day: 62, lat: 34.38, lng: 49.24, title: "Arak Reactor", desc: "Heavy water reactor facility struck.", type: "nuclear", phase: "war" },
+  { day: 62, lat: 35.52, lng: 51.77, title: "Parchin Complex", desc: "IAF hits nuclear weapons research facility at Parchin-Taleghan.", type: "nuclear", phase: "war" },
+  { day: 62, lat: 28.97, lng: 50.84, title: "Bushehr Naval Base", desc: "Naval infrastructure and vessels destroyed at Bushehr.", type: "strike", phase: "war" },
+  { day: 62, lat: 27.15, lng: 56.28, title: "Bandar Abbas Struck", desc: "IRGC Navy facilities at major port targeted.", type: "strike", phase: "war" },
+  { day: 62, lat: 32.10, lng: 34.79, title: "Tel Aviv Hit", desc: "Iranian retaliatory missile strikes Tel Aviv. 1 killed, 22 injured.", type: "retaliation", phase: "war" },
+  { day: 62, lat: 6.03, lng: 80.22, title: "IRIS Dena Sunk", desc: "US submarine sinks Iranian warship off Sri Lanka. 87 crew killed.", type: "naval", phase: "war" },
+  { day: 62, lat: 26.23, lng: 50.59, title: "Bahrain Under Fire", desc: "Missiles at US Fifth Fleet HQ. Drone hits Crowne Plaza hotel.", type: "retaliation", phase: "regional" },
+
+  // Feb 28 — Tehran government & intelligence targets
+  { day: 62, lat: 35.80, lng: 51.43, title: "Leadership House — Khamenei", desc: "Opening decapitation strike on Supreme Leader's compound in north Tehran.", type: "strike", size: "large", phase: "war" },
+  { day: 62, lat: 35.70, lng: 51.41, title: "Ministry of Intelligence", desc: "MOIS headquarters struck by cruise missiles.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.72, lng: 51.39, title: "Ministry of Defence", desc: "Defence ministry complex destroyed.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.69, lng: 51.64, title: "Khojir Missile Center", desc: "Surface-to-surface and SAM component production facility east of Tehran.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.69, lng: 51.42, title: "IRGC Solid-Fuel Plant", desc: "Main solid-fuel missile production facility destroyed.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.76, lng: 51.49, title: "Malek Ashtar University", desc: "IRGC ballistic missile and nuclear component R&D center leveled.", type: "nuclear", phase: "war" },
+  { day: 62, lat: 35.70, lng: 51.40, title: "AEOI Headquarters", desc: "Atomic Energy Organization of Iran headquarters struck.", type: "nuclear", phase: "war" },
+  { day: 62, lat: 34.31, lng: 47.07, title: "Kermanshah Missile Base", desc: "Panj Pelleh underground base storing Qiam-1 and Fateh-110 missiles.", type: "strike", phase: "war" },
+  { day: 62, lat: 37.55, lng: 45.08, title: "Urmia Military Targets", desc: "Military installations in West Azerbaijan province struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 34.64, lng: 50.88, title: "Qom Military Sites", desc: "Explosions reported near military installations in Qom.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.71, lng: 52.05, title: "Damavand Facility", desc: "Military targets near Damavand struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 26.53, lng: 54.88, title: "Bandar Lengeh Port", desc: "IRGC naval forward port on Strait of Hormuz destroyed.", type: "naval", phase: "war" },
+  // Feb 28 — Gulf state retaliation
+  { day: 62, lat: 25.12, lng: 56.34, title: "Fujairah Port — UAE", desc: "IRGC ballistic missiles hit Fujairah port. Oil tanks burning.", type: "retaliation", phase: "regional" },
+
+  // Feb 28 — Additional military targets
+  { day: 62, lat: 32.62, lng: 51.69, title: "Isfahan: 8th TAB Airbase", desc: "12+ munitions dropped on Artesh Air Force 8th Tactical Airbase.", type: "strike", phase: "war" },
+  { day: 62, lat: 32.66, lng: 51.72, title: "Isfahan: IRGC Badr Base", desc: "IRGC Aerospace Force base at Isfahan Airport — runway and buildings destroyed.", type: "strike", phase: "war" },
+  { day: 62, lat: 29.62, lng: 52.53, title: "Shiraz: Fajr Division Base", desc: "Airstrike on IRGC Fajr Division base in Shiraz city.", type: "strike", phase: "war" },
+  { day: 62, lat: 38.07, lng: 46.30, title: "Tabriz Military Base", desc: "IRGC and Basij facilities in Tabriz struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 36.67, lng: 48.49, title: "Zanjan Base", desc: "Military installations in Zanjan targeted.", type: "strike", phase: "war" },
+  { day: 62, lat: 34.80, lng: 48.52, title: "Hamadan Airbase", desc: "Strikes on military airbase near Hamadan.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.84, lng: 50.94, title: "Karaj IRGC Facility", desc: "IRGC facility near Karaj destroyed.", type: "strike", phase: "war" },
+  { day: 62, lat: 31.32, lng: 48.67, title: "Ahvaz Military Complex", desc: "IRGC and police installations in Ahvaz struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 33.64, lng: 46.42, title: "Ilam Military Base", desc: "IRGC base in Ilam province targeted.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.32, lng: 46.99, title: "Sanandaj Base", desc: "Military and security installations in Kurdistan province capital struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 29.50, lng: 60.86, title: "Zahedan IRGC Base", desc: "IRGC facility in Zahedan, Sistan-Baluchestan province.", type: "strike", phase: "war" },
+  { day: 62, lat: 31.90, lng: 54.37, title: "Yazd Military Site", desc: "Basij and IRGC installations in Yazd struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 35.59, lng: 53.40, title: "Semnan Missile Base", desc: "Missile production/storage facility near Semnan targeted.", type: "strike", phase: "war" },
+  { day: 62, lat: 36.27, lng: 59.62, title: "Mashhad IRGC Facility", desc: "IRGC headquarters and Basij base in Iran's second city struck.", type: "strike", phase: "war" },
+  { day: 62, lat: 25.29, lng: 60.64, title: "Chabahar Naval Base", desc: "IRGC Imam Ali Naval Base destroyed. Iran's only deep-water Indian Ocean port.", type: "naval", phase: "war" },
+  { day: 62, lat: 25.35, lng: 57.78, title: "Jask Naval Facility", desc: "IRGC Navy forward base at Jask on the Gulf of Oman struck.", type: "naval", phase: "war" },
+  { day: 62, lat: 25.65, lng: 57.08, title: "Konarak Naval Base", desc: "IRIN 3rd Naval District HQ at Konarak destroyed.", type: "naval", phase: "war" },
+
+  // === MARCH ===
+  // Mar 1 — Saadabad + additional Tehran
+  { day: 63, lat: 35.82, lng: 51.42, title: "Saadabad Palace Area", desc: "Large explosions reported near Saadabad Palace complex, north Tehran.", type: "strike", phase: "war" },
+
+  // Mar 2 — Bandar Abbas + naval
+  { day: 64, lat: 27.15, lng: 56.28, title: "Bandar Abbas — 2nd Wave", desc: "Second strike on IRGC Navy HQ. Kilo-class submarine likely sunk at dock.", type: "naval", phase: "war" },
+  { day: 64, lat: 27.00, lng: 56.00, title: "IRIS Shahid Bagheri Sinking", desc: "Iranian drone carrier reported sinking after Feb 28 strike.", type: "naval", phase: "war" },
+
+  // Mar 3 — Parliament + Assembly + IRGC ships
+  { day: 65, lat: 35.69, lng: 51.42, title: "Parliament (Majlis) Bombed", desc: "Iranian parliament building targeted by airstrikes.", type: "strike", phase: "war" },
+  { day: 65, lat: 35.69, lng: 51.42, title: "Assembly of Experts Hit", desc: "Bombed during meeting to elect next Supreme Leader.", type: "strike", phase: "war" },
+  { day: 65, lat: 27.00, lng: 55.00, title: "IRIS Soleimani Catamaran", desc: "IRGC Soleimani-class catamaran struck. Still burning as of Mar 4.", type: "naval", phase: "war" },
+
+  // Mar 4 — IRIS Dena
+  { day: 66, lat: 5.00, lng: 79.00, title: "IRIS Dena Torpedoed", desc: "US submarine torpedoes Moudge-class frigate in Indian Ocean south of Sri Lanka.", type: "naval", phase: "war" },
+
+  // Mar 5 — Continued strikes
+  { day: 67, lat: 27.15, lng: 56.28, title: "Bandar Abbas — 3rd Strike", desc: "Third round of strikes on naval port. Satellite shows extensive damage.", type: "naval", phase: "war" },
+
+  // Israeli strikes — additional locations
+  { day: 65, lat: 32.09, lng: 34.84, title: "Bnei Brak Shrapnel", desc: "Iranian missile fragments injure 7 in residential area.", type: "retaliation", phase: "war" },
+  { day: 65, lat: 32.10, lng: 34.96, title: "Rosh HaAyin Hit", desc: "Iranian strikes cause injuries in Rosh HaAyin.", type: "retaliation", phase: "war" },
+  { day: 66, lat: 32.01, lng: 34.89, title: "Ben Gurion Airport Struck", desc: "3 private planes damaged by missile strike near airport.", type: "retaliation", phase: "war" },
+  { day: 67, lat: 31.50, lng: 35.00, title: "Moshav Adanim Casualty", desc: "Thai foreign worker killed by shrapnel near Hebron area.", type: "retaliation", phase: "war" },
+
+  // Gulf retaliation — additional
+  { day: 65, lat: 25.25, lng: 55.37, title: "Dubai Airport Briefly Closed", desc: "Airport closed after intercept attempt. Smoke visible over city.", type: "retaliation", phase: "regional" },
+  { day: 65, lat: 26.16, lng: 50.61, title: "Sitra Drone Attack — Bahrain", desc: "32 Bahraini citizens injured including children in IRGC drone strike.", type: "retaliation", phase: "regional" },
+  { day: 67, lat: 29.35, lng: 47.52, title: "Ali al-Salem Air Base — Kuwait", desc: "Ballistic missiles fired at US air base. All intercepted.", type: "retaliation", phase: "regional" },
+  { day: 68, lat: 34.60, lng: 32.90, title: "Cyprus RAF Base — Drone Hit", desc: "Iranian drone strikes UK RAF Akrotiri runway in Cyprus.", type: "retaliation", phase: "regional" },
+
+  // Hezbollah — additional detail
+  { day: 65, lat: 32.79, lng: 34.99, title: "100+ Missiles at Haifa", desc: "Hezbollah fires ~100 missiles and drone swarm at Israeli military base near Haifa.", type: "hezbollah", phase: "regional" },
+  { day: 66, lat: 33.85, lng: 35.49, title: "Dahiyeh — Beirut Strikes", desc: "Heavy Israeli strikes on Hezbollah's Dahiyeh stronghold in southern Beirut.", type: "strike", phase: "regional" },
+  { day: 68, lat: 33.85, lng: 36.00, title: "Beqaa Valley Strikes", desc: "Israeli jets hit Hezbollah weapons depots in the Beqaa Valley.", type: "strike", phase: "regional" },
+  { day: 70, lat: 33.20, lng: 35.40, title: "50 S. Lebanon Villages", desc: "Israel issues evacuation orders and strikes 50 villages in southern Lebanon.", type: "strike", phase: "regional" },
+
+  // Mar 9 — Kerman + Minab + civilian
+  { day: 72, lat: 30.28, lng: 57.08, title: "Kerman Province Base", desc: "13 Iranian soldiers killed in US-Israeli strike on military base.", type: "strike", phase: "war" },
+  { day: 72, lat: 27.11, lng: 57.08, title: "Minab School Disaster", desc: "Israeli strike hits IRGC base next to school. 170+ killed, mostly schoolgirls.", type: "humanitarian", size: "large", phase: "war" },
+  { day: 72, lat: 27.34, lng: 53.19, title: "Lamerd Sports Hall", desc: "Airstrike on sports hall during girls' practice. 18+ civilians killed.", type: "humanitarian", phase: "war" },
+  { day: 72, lat: 31.50, lng: 34.97, title: "Beit Awwa — W. Bank", desc: "3 women killed in beauty salon by Iranian cluster munition debris.", type: "retaliation", phase: "war" },
+
+  // Mar 16 — CENTCOM update
+  { day: 78, lat: 27.15, lng: 56.28, title: "100+ Naval Vessels Destroyed", desc: "CENTCOM confirms over 100 Iranian naval vessels destroyed. Navy effectively eliminated.", type: "naval", size: "large", phase: "war" },
+  { day: 78, lat: 35.69, lng: 51.39, title: "1,250+ Targets Hit", desc: "CENTCOM claims US forces have struck more than 1,250 targets across Iran.", type: "strike", size: "large", phase: "war" },
+  { day: 78, lat: 35.69, lng: 51.39, title: "6,000+ Combat Sorties", desc: "US military surpasses 6,000 combat sorties in Operation Epic Fury.", type: "strike", phase: "war" },
+
+  // Mar 20-21 — South Pars + energy escalation
+  { day: 82, lat: 27.50, lng: 52.60, title: "South Pars Gas Field Hit", desc: "Israel strikes South Pars — world's largest natural gas field. Iran threatens 'zero restraint.'", type: "strike", size: "large", phase: "war" },
+  { day: 63, lat: 31.73, lng: 35.00, title: "Beit Shemesh — 9 Dead", desc: "Missile hits synagogue and homes. 9 killed, 49 injured.", type: "retaliation", size: "large", phase: "war" },
+  { day: 63, lat: 35.69, lng: 51.42, title: "Top Officials Confirmed Dead", desc: "Chief of Staff Mousavi, ex-president Ahmadinejad killed in strikes.", type: "strike", phase: "war" },
+  { day: 63, lat: 31.77, lng: 35.23, title: "Jerusalem Struck", desc: "Ballistic missile hits Jerusalem area. 6 wounded.", type: "retaliation", phase: "war" },
+  { day: 63, lat: 26.56, lng: 56.25, title: "Hormuz Closure Begins", desc: "IRGC warns all vessels against Strait passage. Maritime traffic plummets.", type: "naval", size: "large", phase: "regional" },
+
+  { day: 64, lat: 35.70, lng: 51.40, title: "IRGC Building Flattened", desc: "Video confirms total destruction of IRGC compound in Tehran.", type: "strike", phase: "war" },
+  { day: 64, lat: 33.89, lng: 35.50, title: "Hezbollah Opens Front", desc: "Hezbollah launches missiles/drones at Israel. Israel strikes Beirut.", type: "hezbollah", size: "large", phase: "regional" },
+
+  { day: 65, lat: 35.71, lng: 51.41, title: "State TV HQ Hit", desc: "IRIB state broadcaster headquarters struck by Israeli air operation.", type: "strike", phase: "war" },
+
+  { day: 66, lat: 26.56, lng: 56.25, title: "21 Ships Attacked", desc: "Iran has attacked 21 merchant ships. Tanker traffic down 70%.", type: "naval", size: "large", phase: "regional" },
+  { day: 67, lat: 26.23, lng: 50.59, title: "Stena Imperative Hit", desc: "US-flagged tanker struck twice in Bahrain port. 1 worker killed.", type: "naval", phase: "regional" },
+
+  { day: 72, lat: 32.01, lng: 34.88, title: "Yehud Cluster Bomb", desc: "2 construction workers killed by Iranian cluster munition submunitions.", type: "retaliation", phase: "war" },
+
+  { day: 76, lat: 25.29, lng: 51.53, title: "Qatar LNG Facility Hit", desc: "Iran strikes Qatar's LNG facility. 17% of output lost. Global energy shock.", type: "retaliation", size: "large", phase: "regional" },
+  { day: 77, lat: 33.89, lng: 35.50, title: "Hezbollah Escalation", desc: "Hezbollah fires missiles at Israeli forces in southern Lebanon.", type: "hezbollah", phase: "regional" },
+
+  { day: 79, lat: 32.08, lng: 34.81, title: "Ramat Gan — 2 Killed", desc: "Cluster munition hits apartment building. Two elderly residents killed.", type: "retaliation", phase: "war" },
+
+  { day: 82, lat: 35.69, lng: 51.39, title: "200+ Targets Hit", desc: "Simultaneous wide-scale strikes on Iran and Hezbollah over the weekend.", type: "strike", size: "large", phase: "war" },
+  { day: 82, lat: 33.89, lng: 35.50, title: "Beirut Centers Hit", desc: "Israel strikes key Hezbollah command centers in Beirut.", type: "strike", phase: "regional" },
+  { day: 82, lat: 31.25, lng: 34.79, title: "Dimona Struck", desc: "Iranian missile hits near Israel's nuclear site at Dimona.", type: "retaliation", phase: "war" },
+  { day: 82, lat: 31.26, lng: 35.21, title: "Arad Mass Casualty", desc: "Missiles hit Arad. Mass casualty event declared in southern Israel.", type: "retaliation", size: "large", phase: "war" },
+
+  { day: 83, lat: 33.73, lng: 51.73, title: "Natanz Struck Again", desc: "Second major attack on Natanz as campaign enters 4th week.", type: "nuclear", size: "large", phase: "war" },
+  { day: 83, lat: 38.90, lng: -77.04, title: "Trump: 48-Hour Ultimatum", desc: "Threatens to 'obliterate' Iran's power plants if Hormuz not reopened.", type: "political", phase: "regional" },
+  { day: 83, lat: -7.32, lng: 72.41, title: "Diego Garcia Fired Upon", desc: "Iranian missile reaches Diego Garcia, demonstrating intercontinental range.", type: "retaliation", phase: "regional" },
+PLACEHOLDER END */
+
+// ─── Stats ──────────────────────────────────────────────────────────
+function getStats(day) {
+  let pd = 0, sd = 0, ic = 0, hormuz = 'OPEN', internet = 'ONLINE';
+  if (day >= 3) pd = 28; if (day >= 5) pd = 50; if (day >= 11) pd = 30000; if (day >= 13) pd = 36500;
+  if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444;
+  if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118;
+  if (day >= 12) internet = 'BLACKOUT'; if (day >= 62) internet = 'PARTIAL';
+  if (day >= 63) hormuz = 'DISRUPTED'; if (day >= 66) hormuz = 'BLOCKED';
+  return { pd, sd, ic, hormuz, internet, dayNum: day + 1 };
+}
+function fmtN(n) { return n >= 1000 ? (n/1000).toFixed(n>=10000?0:1)+'K' : n.toString(); }
+
+// ─── Render ─────────────────────────────────────────────────────────
+// Types whose markers persist as "scars" on the map after they happen
+const persistTypes = new Set(['strike', 'nuclear', 'retaliation', 'naval', 'hezbollah']);
+
+function makeScarIcon(type) {
+  const c = typeColors[type] || '#c62828';
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:8px;height:8px;border-radius:2px;background:${c};opacity:0.25;border:1px solid ${c};"></div>`,
+    iconSize: [8, 8], iconAnchor: [4, 4]
+  });
+}
+
+// Animated number counter for stats
+let animatingStats = {};
+function animateNum(elId, target, fmt) {
+  const el = document.getElementById(elId);
+  const current = animatingStats[elId] || 0;
+  if (current === target) { el.textContent = fmt ? fmt(target) : target; return; }
+  const diff = target - current;
+  const steps = 12;
+  let step = 0;
+  const inc = diff / steps;
+  function tick() {
+    step++;
+    const val = step >= steps ? target : Math.round(current + inc * step);
+    animatingStats[elId] = val;
+    el.textContent = fmt ? fmt(val) : val;
+    if (step < steps) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Crossfade layer for smooth transitions
+let prevMarkerLayer = null;
+
+function renderDay(day) {
+  // Crossfade: keep old markers briefly, fade them out
+  if (prevMarkerLayer) { map.removeLayer(prevMarkerLayer); }
+  prevMarkerLayer = markerLayer;
+  // Fade out old layer
+  if (prevMarkerLayer._container) {
+    prevMarkerLayer._container.style.transition = 'opacity 0.3s ease';
+    prevMarkerLayer._container.style.opacity = '0';
+    setTimeout(() => { if (prevMarkerLayer) map.removeLayer(prevMarkerLayer); }, 350);
+  }
+  // New layer fades in
+  markerLayer = L.layerGroup().addTo(map);
+  if (markerLayer._container) {
+    markerLayer._container.style.opacity = '0';
+    markerLayer._container.style.transition = 'opacity 0.3s ease';
+    requestAnimationFrame(() => { if (markerLayer._container) markerLayer._container.style.opacity = '1'; });
+  }
+
+  const pf = activePhase === 'all' ? null : activePhase;
+  const current = events.filter(e => e.day === day && (!pf || e.phase === pf));
+  const recent = events.filter(e => e.day >= day-3 && e.day < day && (!pf || e.phase === pf));
+
+  // Persistent "scar" markers
+  const past = events.filter(e => e.day < day && persistTypes.has(e.type) && (!pf || e.phase === pf));
+  const scarMap = new Map();
+  past.forEach(e => {
+    const key = `${e.lat.toFixed(2)},${e.lng.toFixed(2)}`;
+    if (!scarMap.has(key) || e.day > scarMap.get(key).day) scarMap.set(key, e);
+  });
+  scarMap.forEach(e => {
+    const hasActive = current.concat(recent).some(a => Math.abs(a.lat-e.lat)<0.05 && Math.abs(a.lng-e.lng)<0.05);
+    if (!hasActive) {
+      const m = L.marker([e.lat, e.lng], { icon: makeScarIcon(e.type), opacity: 1, interactive: true }).addTo(markerLayer);
+      m.bindPopup(popupHtml(e));
+    }
+  });
+
+  // Recent (faded)
+  recent.forEach(e => {
+    const m = L.marker([e.lat, e.lng], { icon: makeIcon(e.type, 'small'), opacity: 0.35 }).addTo(markerLayer);
+    m.bindPopup(popupHtml(e));
+  });
+  // Current (with fade-in class)
+  current.forEach(e => {
+    const icon = makeIcon(e.type, e.size||'normal');
+    icon.options.className = (icon.options.className || '') + ' marker-new';
+    const m = L.marker([e.lat, e.lng], { icon, opacity: 1 }).addTo(markerLayer);
+    m.bindPopup(popupHtml(e));
+  });
+
+  renderArcs(day);
+  renderBlasts(day);
+
+  // Panel — smooth fade
+  const el = document.getElementById('event-list');
+  el.style.opacity = '0';
+  document.getElementById('ev-count').textContent = current.length;
+  setTimeout(() => {
+    if (!current.length) {
+      el.innerHTML = '<div style="color:var(--text3);font-size:0.78rem;padding:12px 0;">No major events this day.<br><span style="color:#bbb">Use arrow keys or slider to advance.</span></div>';
+    } else {
+      el.innerHTML = current.map(e => `
+        <div class="ev-item" onclick="map.setView([${e.lat},${e.lng}],8)">
+          <span class="ev-badge badge-${e.type}">${e.type}</span>
+          <div class="ev-title">${e.title}</div>
+          <div class="ev-desc">${e.desc}</div>
+          <div class="ev-coords">${e.lat.toFixed(3)}°N  ${e.lng.toFixed(3)}°E</div>
+        </div>`).join('');
+    }
+    el.style.opacity = '1';
+  }, 150);
+
+  // Stats — animated counters
+  const s = getStats(day);
+  animateNum('s-protest', s.pd, fmtN);
+  animateNum('s-strike', s.sd, fmtN);
+  animateNum('s-israel', s.ic, (n) => n.toString());
+  document.getElementById('s-hormuz').textContent = s.hormuz;
+  document.getElementById('s-hormuz').style.color = s.hormuz==='OPEN'?'var(--green)':s.hormuz==='BLOCKED'?'var(--red)':'var(--orange)';
+  document.getElementById('s-internet').textContent = s.internet;
+  document.getElementById('s-internet').style.color = s.internet==='ONLINE'?'var(--green)':s.internet==='BLACKOUT'?'var(--red)':'var(--orange)';
+  document.getElementById('s-day').textContent = s.dayNum;
+
+  document.getElementById('date-display').textContent = formatDate(day);
+  document.getElementById('phase-label').textContent = getPhaseLabel(day);
+}
+
+function popupHtml(e) {
+  return `<span class="popup-badge badge-${e.type}" style="background:${typeColors[e.type]}18;color:${typeColors[e.type]}">${e.type}</span>
+    <div class="popup-title">${e.title}</div><div style="font-size:0.78rem;color:#555;">${e.desc}</div>
+    <div class="popup-date">${formatDate(e.day)}</div>
+    <div class="popup-coords">${e.lat.toFixed(4)}°N ${e.lng.toFixed(4)}°E</div>`;
+}
+
+// ─── Phase Bar & Density ────────────────────────────────────────────
+function buildPhaseBar() {
+  const bar = document.getElementById('phase-bar');
+  const total = 84;
+  bar.innerHTML = phases.map(p => {
+    const w = ((p.end - p.start + 1) / total * 100);
+    return `<div class="phase-seg" style="width:${w}%;background:${p.color};opacity:0.2;" title="${p.label}"></div>`;
+  }).join('');
+}
+
+function buildDensity() {
+  const bar = document.getElementById('density-bar');
+  const counts = new Array(84).fill(0);
+  events.forEach(e => { if (e.day >= 0 && e.day <= 83) counts[e.day]++; });
+  const mx = Math.max(...counts, 1);
+  bar.innerHTML = counts.map((c, i) => {
+    const int = c / mx;
+    const col = i < 25 ? '230,81,0' : i < 61 ? '21,101,192' : '198,40,40';
+    return `<div class="density-tick" style="background:rgba(${col},${0.02+int*0.3})" title="${formatDate(i)}: ${c}"></div>`;
+  }).join('');
+}
+
+// ─── Controls ───────────────────────────────────────────────────────
+let lastTickTime = 0;
+function togglePlay() {
+  playing = !playing;
+  const btn = document.getElementById('play-btn');
+  if (playing) {
+    btn.innerHTML = '&#9646;&#9646; PAUSE';
+    if (currentDay >= 83) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    lastTickTime = performance.now();
+    requestAnimationFrame(playTick);
+  } else {
+    btn.innerHTML = '&#9654; PLAY';
+  }
+}
+function playTick(now) {
+  if (!playing) return;
+  if (now - lastTickTime >= speed) {
+    lastTickTime = now;
+    if (currentDay >= 83) { togglePlay(); return; }
+    currentDay++;
+    document.getElementById('timeline-slider').value = currentDay;
+    renderDay(currentDay);
+  }
+  requestAnimationFrame(playTick);
+}
+function changeSpeed() {
+  speed = +document.getElementById('speed-select').value;
+}
+function onSliderChange(v) { currentDay = v; renderDay(v); }
+function jumpTo(d) { currentDay = d; document.getElementById('timeline-slider').value = d; renderDay(d); }
+
+function setPhase(phase, btn) {
+  activePhase = phase;
+  document.querySelectorAll('.phase-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (phase === 'protests') map.setView([33, 53], 5.5, { animate: true });
+  else if (phase === 'war') map.setView([33, 48], 5, { animate: true });
+  else if (phase === 'regional') map.setView([28, 48], 4, { animate: true });
+  else map.setView([31, 51], 5, { animate: true });
+  renderDay(currentDay);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight' && currentDay < 83) { currentDay++; document.getElementById('timeline-slider').value = currentDay; renderDay(currentDay); }
+  else if (e.key === 'ArrowLeft' && currentDay > 0) { currentDay--; document.getElementById('timeline-slider').value = currentDay; renderDay(currentDay); }
+  else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+});
+
+// ─── Init ───────────────────────────────────────────────────────────
+async function init() {
+  buildPhaseBar();
+  buildDensity();
+
+  // Countries to show in high resolution (10m)
+  const hiResCountries = new Set([
+    'Iran','Israel','Lebanon','Syria','Iraq','Yemen','Bahrain','Qatar',
+    'United Arab Emirates','Kuwait','Oman','Saudi Arabia','Jordan','Turkey',
+    'Afghanistan','Pakistan','Egypt','Cyprus'
+  ]);
+
+  // Step 1: Load 50m for the whole world (fast base layer)
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson');
+    if (r.ok) {
+      const allCountries = await r.json();
+      // Filter OUT the conflict countries from 50m (they'll get 10m)
+      geoData = {
+        type: 'FeatureCollection',
+        features: allCountries.features.filter(f => {
+          const name = f.properties.ADMIN || f.properties.NAME || '';
+          return !hiResCountries.has(name);
+        })
+      };
+      renderGeo();
+      console.log('Loaded 50m base countries:', geoData.features.length);
+    }
+  } catch(e) { console.warn('50m countries failed:', e); }
+
+  // Step 2: Load 10m for conflict countries only (high detail, filtered)
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson');
+    if (r.ok) {
+      const all10m = await r.json();
+      const hiRes = {
+        type: 'FeatureCollection',
+        features: all10m.features.filter(f => {
+          const name = f.properties.ADMIN || f.properties.NAME || '';
+          return hiResCountries.has(name);
+        })
+      };
+      // Add hi-res features to geoData and re-render
+      if (geoData) {
+        geoData.features = geoData.features.concat(hiRes.features);
+      } else {
+        geoData = hiRes;
+      }
+      renderGeo();
+      console.log('Loaded 10m conflict countries:', hiRes.features.length);
+    }
+  } catch(e) { console.warn('10m countries failed, using 50m for all:', e); }
+
+  // Step 3: Load 10m provinces for conflict countries only
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_1_states_provinces.geojson');
+    if (r.ok) {
+      const allProv = await r.json();
+      // Filter to only focus countries (Iran, Israel, Iraq, Lebanon, Syria, Yemen)
+      provinceData = {
+        type: 'FeatureCollection',
+        features: allProv.features.filter(f => {
+          const admin = f.properties.admin || f.properties.ADMIN || '';
+          const iso = f.properties.iso_a2 || '';
+          return focusCountries.has(admin) || focusCountries.has(iso);
+        })
+      };
+      renderProvinces();
+      console.log('Loaded 10m provinces (filtered):', provinceData.features.length);
+    }
+  } catch(e) {
+    console.warn('10m provinces failed, trying 50m:', e);
+    try {
+      const r2 = await fetch('https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_1_states_provinces.geojson');
+      if (r2.ok) { provinceData = await r2.json(); renderProvinces(); }
+    } catch(e2) { console.warn('50m provinces also failed'); }
+  }
+
+  renderDay(0);
+  document.getElementById('loading').style.display = 'none';
+}
+init();
+</script>
+</body>
+</html>
