@@ -367,66 +367,78 @@
 
   /* === Mobile Responsive === */
   @media (max-width: 768px) {
-    #header { padding: 0 10px; height: 36px; }
-    #header h1 { font-size: 0.65rem; letter-spacing: 1px; }
-    .live-badge { font-size: 0.42rem; padding: 1px 5px; }
+    #header { padding: 0 8px; height: 32px; }
+    #header h1 { font-size: 0.6rem; letter-spacing: 1px; }
+    .live-badge { font-size: 0.4rem; padding: 1px 4px; }
     #phase-filters { gap: 2px; }
-    .phase-btn { padding: 2px 6px; font-size: 0.5rem; }
-    #date-display { font-size: 0.65rem; }
+    .phase-btn { padding: 2px 6px; font-size: 0.48rem; border-radius: 2px; }
+    #date-display { font-size: 0.6rem; }
     .header-coord { display: none; }
 
-    #map { height: calc(100vh - 140px); }
+    #map { height: calc(100vh - 110px); }
 
-    /* Horizontal compact stats bar */
+    /* Horizontal labeled stats strip */
     #stats-panel {
-      position: absolute; top: 36px; left: 0; right: 0;
-      border-radius: 0; padding: 4px 10px;
-      display: flex; flex-wrap: wrap; gap: 0 12px;
-      align-items: center; min-width: auto;
+      position: absolute; top: 32px; left: 0; right: 0; z-index: 1000;
+      border-radius: 0; padding: 3px 6px;
+      display: flex; flex-wrap: nowrap; gap: 0;
+      justify-content: space-between; align-items: center; min-width: auto;
       background: rgba(255,255,252,0.95); backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border); border-top: none;
+      overflow-x: auto;
     }
     #stats-panel::before { display: none; }
     #stats-panel h4 { display: none; }
     .stat-row {
-      flex: none; padding: 0; border: none; gap: 4px;
-      font-size: 0.58rem;
+      flex: 1; padding: 0; border: none; gap: 0;
+      flex-direction: column; align-items: center; text-align: center;
+      border-right: 1px solid rgba(0,0,0,0.04);
     }
-    .stat-label { font-size: 0.5rem; }
-    .stat-label .stat-indicator { width: 4px; height: 4px; margin-right: 3px; }
-    .stat-val { font-size: 0.6rem; }
-    /* Hide escalation index on mobile */
+    .stat-row:last-child { border-right: none; }
+    .stat-label { font-size: 0.38rem; letter-spacing: 0.3px; white-space: nowrap; }
+    .stat-label .stat-indicator { display: none; }
+    .stat-val { font-size: 0.6rem; line-height: 1.2; }
+    /* Hide escalation on mobile */
     #stats-panel > div:last-child { display: none; }
 
     #event-panel {
-      top: auto; bottom: 68px; right: 6px; left: 6px;
-      width: auto; max-height: 25vh; padding: 8px 10px;
-      border-radius: 8px; overflow-y: auto;
+      top: auto; bottom: 56px; right: 4px; left: 4px;
+      width: auto; max-height: 25vh; padding: 6px 8px;
+      border-radius: 6px; overflow-y: auto;
     }
-    #event-panel h3 { font-size: 0.55rem; margin-bottom: 6px; }
-    .ev-item { padding: 6px 8px; }
-    .ev-item .ev-title { font-size: 0.7rem; }
-    .ev-item .ev-desc { font-size: 0.6rem; }
-    .ev-item .ev-coords { font-size: 0.45rem; }
+    #event-panel h3 { font-size: 0.5rem; margin-bottom: 4px; padding-bottom: 4px; }
+    .ev-item { padding: 5px 6px; margin: 2px 0; }
+    .ev-item .ev-badge { font-size: 0.4rem; padding: 1px 4px; }
+    .ev-item .ev-title { font-size: 0.65rem; }
+    .ev-item .ev-desc { font-size: 0.55rem; }
+    .ev-item .ev-coords { display: none; }
 
     #legend { display: none; }
 
-    #timeline-container { height: 68px; padding: 4px 10px 2px; }
-    #play-btn { padding: 3px 10px; font-size: 0.55rem; }
-    #speed-select { font-size: 0.55rem; padding: 2px 4px; }
+    /* Timeline — ensure visible */
+    #timeline-container { height: 56px; padding: 3px 8px 2px; }
+    #timeline-controls { margin-bottom: 2px; }
+    #play-btn { padding: 2px 8px; font-size: 0.5rem; }
+    #speed-select { font-size: 0.5rem; padding: 1px 3px; }
     #phase-label { display: none; }
-    #date-markers span { font-size: 0.38rem; }
-    #date-markers .month-lbl { font-size: 0.42rem; }
-    #source-bar { font-size: 0.35rem; margin-top: 2px; }
+    #slider-wrap { height: 22px; }
+    #timeline-slider { margin-top: 2px; }
+    #tick-marks { height: 4px; }
+    #date-markers span { font-size: 0.35rem; }
+    #date-markers .month-lbl { font-size: 0.38rem; }
+    /* Hide non-month labels on mobile */
+    #date-markers span:not(.month-lbl) { display: none; }
+    #source-bar { font-size: 0.3rem; margin-top: 1px; }
 
     #region-frame { display: none !important; }
     #crosshair { display: none; }
   }
 
   @media (max-width: 380px) {
-    .stat-row { gap: 2px; }
-    .stat-label { display: none; }
-    #date-markers span:not(.month-lbl) { display: none; }
+    #header h1 { font-size: 0.5rem; }
+    .phase-btn { font-size: 0.42rem; padding: 1px 4px; }
+    .stat-val { font-size: 0.52rem; }
+    .stat-label { font-size: 0.33rem; }
   }
 </style>
 </head>
