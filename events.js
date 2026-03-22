@@ -15,7 +15,7 @@ const events = [
   { day: 0, lat: 35.6725, lng: 51.4216, title: "Tehran Grand Bazaar Strike", desc: "Gold, currency, fabric, footwear and home appliance corridors partially or fully closed. Inflation at 42%, food prices up 72%.", type: "protest", size: "large", phase: "protests" },
 
   // ── Day 1: Dec 29 — Protests Spread Beyond Tehran ──
-  { day: 1, lat: 35.6892, lng: 51.3890, title: "Tehran Bazaar Strike Day 2", desc: "Second day of strikes paralyzes Grand Bazaar. 20 buses of riot troops deployed near Alaeddin Passage.", type: "protest", size: "large", phase: "protests" },
+  { day: 1, lat: 35.660, lng: 51.330, title: "Tehran Bazaar Strike Day 2", desc: "Second day of strikes paralyzes Grand Bazaar. 20 buses of riot troops deployed near Alaeddin Passage.", type: "protest", size: "large", phase: "protests" },
   { day: 1, lat: 26.9564, lng: 56.2707, title: "Qeshm Island Protests", desc: "Nighttime protests erupt on Qeshm Island in southern Iran.", type: "protest", phase: "protests" },
   { day: 1, lat: 36.6736, lng: 48.4787, title: "Zanjan Protests", desc: "Nighttime demonstrations reported in Zanjan, northwestern Iran.", type: "protest", phase: "protests" },
   { day: 1, lat: 34.7988, lng: 48.5146, title: "Hamadan Protests", desc: "Protests reported overnight in Hamadan province.", type: "protest", phase: "protests" },
@@ -30,7 +30,7 @@ const events = [
   { day: 3, lat: 32.6546, lng: 51.6779, title: "Isfahan — Naqsh-e Jahan Square Sit-in", desc: "Women stage sit-in at Naqsh-e Jahan Square. Security forces attack sitting women with pepper spray. Strikes also at Imam Square, Goldasteh Street, Ahmadabad Roundabout.", type: "protest", phase: "protests" },
   { day: 3, lat: 29.6257, lng: 52.5310, title: "Shiraz — Kazemi Street Bazaar Shutdown", desc: "Extensive shutdowns in Kazemi Street market. Protests continue across Shiraz.", type: "protest", phase: "protests" },
   { day: 3, lat: 33.4435, lng: 47.6073, title: "Kuhdasht — Protester Shot Dead", desc: "Amirhesam Khodayarifard (21) shot in the head by plainclothes agent during protests. Live fire used to disperse crowds in at least two locations.", type: "humanitarian", phase: "protests" },
-  { day: 3, lat: 35.6892, lng: 51.3890, title: "Tehran — Universities Go Remote", desc: "Regime orders universities to switch to remote learning, citing 'cold weather'. Authorities dismiss security managers at several universities for 'mistreatment of students'.", type: "political", phase: "protests" },
+  { day: 3, lat: 35.660, lng: 51.335, title: "Tehran — Universities Go Remote", desc: "Regime orders universities to switch to remote learning, citing 'cold weather'. Authorities dismiss security managers at several universities for 'mistreatment of students'.", type: "political", phase: "protests" },
 
   // ── Day 4: Jan 1 — Kuhdasht Funeral, Protests Expand ──
   { day: 4, lat: 33.4435, lng: 47.6073, title: "Kuhdasht — Funeral Turns Protest", desc: "Funeral of Khodayarifard held under heavy security. Crowd resists when security forces try to seize body — stones thrown at forces. Attendees chant anti-regime slogans.", type: "protest", phase: "protests" },
@@ -38,52 +38,52 @@ const events = [
   { day: 4, lat: 38.0800, lng: 46.2919, title: "Tabriz Protests Begin", desc: "Protests erupt in Tabriz. Striking images of massive crowds circulate on social media.", type: "protest", phase: "protests" },
 
   // ── Day 5: Jan 2 — 70 Protests Recorded, Trump Warns ──
-  { day: 5, lat: 35.6892, lng: 51.3890, title: "Tehran — Protests Continue in Force", desc: "70 protests recorded nationwide (up from 56 on Jan 1). Protests in Tehran, Qom, Isfahan, Shiraz, Ilam, Mashhad, Karaj, Zanjan, Hamadan, and Qeshm.", type: "protest", size: "large", phase: "protests" },
+  { day: 5, lat: 35.660, lng: 51.340, title: "Tehran — Protests Continue in Force", desc: "70 protests recorded nationwide (up from 56 on Jan 1). Protests in Tehran, Qom, Isfahan, Shiraz, Ilam, Mashhad, Karaj, Zanjan, Hamadan, and Qeshm.", type: "protest", size: "large", phase: "protests" },
   { day: 5, lat: 36.2605, lng: 59.6168, title: "Mashhad — Mass Demonstrations", desc: "Iran's second-largest city sees massive protests as movement enters second week.", type: "protest", size: "large", phase: "protests" },
   { day: 5, lat: 33.6374, lng: 46.4227, title: "Ilam Province — IRGC Kills 4 in Malekshahi", desc: "IRGC forces violently suppress peaceful demos in Malekshahi County, killing at least 4 including one child.", type: "humanitarian", phase: "protests" },
   { day: 5, lat: 38.9072, lng: -77.0369, title: "Trump Warns Iran", desc: "President Trump warns Iranian authorities will be 'hit very hard' should additional protesters be killed.", type: "political", phase: "protests" },
 
   // ── Day 6: Jan 3 — Greater Geographic Spread ──
-  { day: 6, lat: 35.6892, lng: 51.3890, title: "Protests Surpass Previous Days", desc: "Jan 3 protests greater in geographic spread and protester numbers than all previous days. Security presence also increases dramatically.", type: "protest", size: "large", phase: "protests" },
+  { day: 6, lat: 35.660, lng: 51.345, title: "Protests Surpass Previous Days", desc: "Jan 3 protests greater in geographic spread and protester numbers than all previous days. Security presence also increases dramatically.", type: "protest", size: "large", phase: "protests" },
   { day: 6, lat: 33.6374, lng: 46.4227, title: "Ilam — Hospital Raided (Day 1)", desc: "IRGC forces raid Imam Khomeini Hospital in Ilam — forcing entry into wards, destroying doors, attempting to arrest injured protesters.", type: "humanitarian", phase: "protests" },
   { day: 6, lat: 30.2839, lng: 57.0834, title: "Kerman Joins — Regime Change Demands", desc: "Chants in Kerman shift from economic grievances to explicit regime change demands.", type: "protest", phase: "protests" },
 
   // ── Day 7: Jan 4 — 107 Cities, Hospital Attacks ──
   { day: 7, lat: 35.7219, lng: 51.3347, title: "Tehran — 20+ Neighborhoods Protest", desc: "Clashes in Jomhouri, Moshiriyeh, Sadeghieh, Narmak (Haft Hoz), Tehransar, Valiasr Town, Jannat Abad, Chaharrah-e Sirous. Chants of 'Death to Khamenei'.", type: "protest", size: "large", phase: "protests" },
   { day: 7, lat: 33.6374, lng: 46.4227, title: "Ilam — Hospital Raided (Day 2)", desc: "Security forces in full riot gear storm Imam Khomeini Hospital again — attack medical personnel with tear gas and shotgun pellets, arrest injured protesters.", type: "humanitarian", phase: "protests" },
-  { day: 7, lat: 35.6892, lng: 51.3890, title: "Saadi & Hafez Streets — Tear Gas", desc: "Morning raid: tear gas and pellet guns against merchants on Saadi and Hafez streets and around Alaeddin/Charsou. Youths resist by setting fires and creating roadblocks.", type: "protest", phase: "protests" },
+  { day: 7, lat: 35.660, lng: 51.350, title: "Saadi & Hafez Streets — Tear Gas", desc: "Morning raid: tear gas and pellet guns against merchants on Saadi and Hafez streets and around Alaeddin/Charsou. Youths resist by setting fires and creating roadblocks.", type: "protest", phase: "protests" },
 
   // ── Day 8: Jan 5 — 107 Cities, Islamabad-e Gharb Seized ──
   { day: 8, lat: 34.1093, lng: 46.5312, title: "Islamabad-e Gharb Seized by Protesters", desc: "Protesters control the city until 2 PM. Governor's office and government buildings seized or set ablaze. All surveillance cameras disabled. 6 security force members killed in clashes.", type: "protest", size: "large", phase: "protests" },
   { day: 8, lat: 34.3142, lng: 47.0650, title: "Kermanshah — Heavy Clashes", desc: "Heavy clashes in Dareh Derizh district. People respond to attacks with weapons. 41 citizens with gunfire wounds hospitalized at one Kermanshah hospital.", type: "humanitarian", phase: "protests" },
   { day: 8, lat: 35.3200, lng: 46.9900, title: "Sonqor — Live Fire", desc: "Security forces open fire in Sonqor, Kermanshah province. Despite live ammunition, people stand ground and continue rallying late into the night.", type: "protest", phase: "protests" },
-  { day: 8, lat: 35.6892, lng: 51.3890, title: "Uprising Reaches 107 Cities", desc: "NCRI reports uprising has now spread to 107 cities across Iran in 8 days. HRANA counts 348 sites in 111 cities across all 31 provinces.", type: "protest", size: "large", phase: "protests" },
+  { day: 8, lat: 35.660, lng: 51.355, title: "Uprising Reaches 107 Cities", desc: "NCRI reports uprising has now spread to 107 cities across Iran in 8 days. HRANA counts 348 sites in 111 cities across all 31 provinces.", type: "protest", size: "large", phase: "protests" },
 
   // ── Day 9: Jan 6 — Abdanan Falls, Bazaar War Zone ──
   { day: 9, lat: 32.9928, lng: 47.4186, title: "Abdanan Falls to Protesters", desc: "City of 25,000 effectively falls under people's control. Regime security apparatus collapses. Massive rally at dusk with chants: 'This is the year of blood, Seyyed Ali will be overthrown'.", type: "protest", size: "large", phase: "protests" },
-  { day: 9, lat: 35.6725, lng: 51.4216, title: "Grand Bazaar Sit-in & Tear Gas", desc: "Protesters sit-in inside Grand Bazaar passages. Security fires tear gas. Witnesses describe bazaar as 'war zone'. 20 buses of troops and water cannons at Alaeddin.", type: "protest", phase: "protests" },
+  { day: 9, lat: 35.660, lng: 51.360, title: "Grand Bazaar Sit-in & Tear Gas", desc: "Protesters sit-in inside Grand Bazaar passages. Security fires tear gas. Witnesses describe bazaar as 'war zone'. 20 buses of troops and water cannons at Alaeddin.", type: "protest", phase: "protests" },
   { day: 9, lat: 35.7150, lng: 51.4100, title: "Sina Hospital Tehran — Raided", desc: "Security forces assault Sina Hospital in Tehran, attacking medical staff and seizing injured protesters.", type: "humanitarian", phase: "protests" },
-  { day: 9, lat: 35.6892, lng: 51.3890, title: "Death Toll Reaches 36", desc: "Activist groups report at least 36 killed since protests began. CHRI documents 27+ civilians including 6 children killed by gunfire Dec 28 - Jan 5.", type: "humanitarian", phase: "protests" },
+  { day: 9, lat: 35.660, lng: 51.365, title: "Death Toll Reaches 36", desc: "Activist groups report at least 36 killed since protests began. CHRI documents 27+ civilians including 6 children killed by gunfire Dec 28 - Jan 5.", type: "humanitarian", phase: "protests" },
 
   // ── Day 10: Jan 7 — Oil Workers Strike, Kurdish Calls ──
   { day: 10, lat: 27.5260, lng: 52.6103, title: "South Pars Oil Workers Strike", desc: "Workers at South Pars refineries in Asaluyeh join nationwide strikes — major escalation threatening Iran's energy sector.", type: "protest", size: "large", phase: "protests" },
-  { day: 10, lat: 35.6725, lng: 51.4216, title: "Grand Bazaar — Hammamchal, Pachenar, Kaffashha", desc: "Merchants in Bein-ol-Haramein, Pachenar, Hammamchal districts and Gold & Jewelry Bazaar and Shoemakers Bazaar keep shutters down.", type: "protest", phase: "protests" },
+  { day: 10, lat: 35.660, lng: 51.370, title: "Grand Bazaar — Hammamchal, Pachenar, Kaffashha", desc: "Merchants in Bein-ol-Haramein, Pachenar, Hammamchal districts and Gold & Jewelry Bazaar and Shoemakers Bazaar keep shutters down.", type: "protest", phase: "protests" },
   { day: 10, lat: 35.3219, lng: 46.9862, title: "Kurdish Parties Call for Strike", desc: "Reza Pahlavi and Kurdish political parties issue joint call for protests and strikes. Shopkeepers and merchants in Sanandaj respond with strikes.", type: "political", phase: "protests" },
   { day: 10, lat: 34.7988, lng: 48.5146, title: "Qazvin Bazaar Strikes", desc: "Shopkeepers in Qazvin main bazaar close stores while chanting 'Death to the dictator'.", type: "protest", phase: "protests" },
 
   // ── Day 11: Jan 8 — THE MASSACRE BEGINS ──
-  { day: 11, lat: 35.6892, lng: 51.3890, title: "Reza Pahlavi's Call — 80M Views", desc: "Prince Reza Pahlavi's Instagram video calling for 8 PM protests reaches 80 million views. Massive turnout across country in response.", type: "political", size: "large", phase: "protests" },
+  { day: 11, lat: 35.660, lng: 51.375, title: "Reza Pahlavi's Call — 80M Views", desc: "Prince Reza Pahlavi's Instagram video calling for 8 PM protests reaches 80 million views. Massive turnout across country in response.", type: "political", size: "large", phase: "protests" },
   { day: 11, lat: 35.7000, lng: 51.3300, title: "Tehran — Sadeghieh Square Massacre", desc: "IRGC opens fire on protesters without warning in Sadeghieh Square. Eyewitness: 'Dozens fell — wounded, seriously injured.' Shooting from rooftops of buildings, mosques, police stations.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 11, lat: 35.7150, lng: 51.3100, title: "Tehran — Ekbatan Killings", desc: "Hit-and-run battles in Ekbatan Town. IRGC and Basij fire live rounds. Significant casualties reported.", type: "humanitarian", phase: "protests" },
   { day: 11, lat: 35.6600, lng: 51.3100, title: "Tehran — Moshiriyeh Massacre", desc: "Southern Tehran neighborhoods devastated. Disproportionate killing in poorer southern districts.", type: "humanitarian", phase: "protests" },
   { day: 11, lat: 35.6892, lng: 51.4200, title: "Tehran — 217 Dead at 6 Hospitals", desc: "Six hospitals in Tehran record 217 deaths of protesters, mostly from live ammunition. Thousands more believed killed across southern Tehran.", type: "humanitarian", size: "large", phase: "protests" },
-  { day: 11, lat: 35.6892, lng: 51.3890, title: "Total Internet Blackout Begins", desc: "Authorities cut all internet and phone service across 31 provinces. 97% fall in internet usage. Mobile antennas disabled, phone lines cut, SIM cards deactivated.", type: "political", size: "large", phase: "protests" },
+  { day: 11, lat: 35.660, lng: 51.380, title: "Total Internet Blackout Begins", desc: "Authorities cut all internet and phone service across 31 provinces. 97% fall in internet usage. Mobile antennas disabled, phone lines cut, SIM cards deactivated.", type: "political", size: "large", phase: "protests" },
   { day: 11, lat: 37.2682, lng: 49.5891, title: "Rasht Bazaar Massacre", desc: "Security forces surround and trap protesters inside Rasht Bazaar, set it on fire. People killed while surrendering or escaping. Wounded 'finished off' in streets and hospitals.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 11, lat: 32.6546, lng: 51.6779, title: "Isfahan Massacre — 2,000+ Killed", desc: "Mass killings across Isfahan, Najafabad, and Khorasgan. More than 2,000 estimated killed. Hospitals overwhelmed.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 11, lat: 35.3219, lng: 46.9862, title: "Sanandaj — Strikes and Gunfire", desc: "Street protests across Sanandaj following joint Kurdish party call. Videos show citizens gathering amid audible gunfire.", type: "protest", phase: "protests" },
 
   // ── Day 12: Jan 9 — Massacre Continues, Millions in Streets ──
-  { day: 12, lat: 35.6892, lng: 51.3890, title: "Millions Across All 31 Provinces", desc: "Millions take to streets across all 31 provinces despite massacres the previous night. 180+ cities in uprising.", type: "protest", size: "large", phase: "protests" },
+  { day: 12, lat: 35.660, lng: 51.385, title: "Millions Across All 31 Provinces", desc: "Millions take to streets across all 31 provinces despite massacres the previous night. 180+ cities in uprising.", type: "protest", size: "large", phase: "protests" },
   { day: 12, lat: 36.2605, lng: 59.6168, title: "Mashhad Massacre — 1,800+ Killed", desc: "150 bodies taken to one hospital alone between 7 PM and 2 AM. At least 1,800 estimated killed. Eyewitness on Vakilabad Blvd: 'The smell of blood is still in my nostrils'.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 12, lat: 35.8400, lng: 50.9700, title: "Karaj Massacre — 3,000+ Killed", desc: "At least 3,000 killed across Karaj, Shahriar, and Andisheh. 44 bodies to Madani Hospital, 36 to Ghaem Hospital on one day alone. Intense violence in Fardis.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 12, lat: 37.2682, lng: 49.5891, title: "Rasht — Death Toll Reaches 392+", desc: "HRANA confirms at least 392 killed in Rasht, vast majority since Jan 8 internet blackout began.", type: "humanitarian", size: "large", phase: "protests" },
@@ -92,23 +92,23 @@ const events = [
 
   // ── Day 13: Jan 10 — Kahrizak Morgue, Mohareb Charges ──
   { day: 13, lat: 35.5200, lng: 51.3800, title: "Kahrizak Morgue Overflows", desc: "Footage emerges of makeshift morgue at Legal Medicine Organization in Kahrizak. Amnesty identifies 205+ body bags. Distraught families search for loved ones.", type: "humanitarian", size: "large", phase: "protests" },
-  { day: 13, lat: 35.6892, lng: 51.3890, title: "Protesters Labeled 'Mohareb'", desc: "Prosecutor General declares protesters 'mohareb' (waging war against God) — carrying the death penalty. Provincial prosecutors follow suit.", type: "political", size: "large", phase: "protests" },
-  { day: 13, lat: 35.6892, lng: 51.4200, title: "Dr. Sarv-e Naz Amiri Arrested", desc: "Tehran physician Dr. Sarv-e Naz Amiri arrested for treating wounded protesters. Beginning of systematic targeting of medical workers.", type: "humanitarian", phase: "protests" },
+  { day: 13, lat: 35.660, lng: 51.390, title: "Protesters Labeled 'Mohareb'", desc: "Prosecutor General declares protesters 'mohareb' (waging war against God) — carrying the death penalty. Provincial prosecutors follow suit.", type: "political", size: "large", phase: "protests" },
+  { day: 13, lat: 35.660, lng: 51.395, title: "Dr. Sarv-e Naz Amiri Arrested", desc: "Tehran physician Dr. Sarv-e Naz Amiri arrested for treating wounded protesters. Beginning of systematic targeting of medical workers.", type: "humanitarian", phase: "protests" },
 
   // ── Day 14: Jan 11 — Death Toll Tops 496 (HRANA Confirmed) ──
-  { day: 14, lat: 35.6892, lng: 51.3890, title: "HRANA: 496 Confirmed Dead, 10,681 Arrested", desc: "HRANA confirms 496 deaths and 10,681 arrests. True toll believed far higher due to internet blackout concealing scale. Ministry of Health internal estimate: 30,000+ killed in 48 hours.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 14, lat: 35.660, lng: 51.400, title: "HRANA: 496 Confirmed Dead, 10,681 Arrested", desc: "HRANA confirms 496 deaths and 10,681 arrests. True toll believed far higher due to internet blackout concealing scale. Ministry of Health internal estimate: 30,000+ killed in 48 hours.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 14, lat: 35.6892, lng: 51.3500, title: "Funeral Protests Erupt", desc: "Mourners at cemeteries chant 'Death to Khamenei' and 'I will kill the one who killed my brother' as massacre victims are buried.", type: "protest", phase: "protests" },
 
   // ── Day 15: Jan 12 — 3,428 Killed in Peak Days ──
-  { day: 15, lat: 35.6892, lng: 51.3890, title: "Peak Violence: 3,428 Killed Jan 8-12", desc: "At least 3,428 protesters killed and 10,000+ arrested during peak of unrest Jan 8-12. Security forces continue operations.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 15, lat: 35.660, lng: 51.405, title: "Peak Violence: 3,428 Killed Jan 8-12", desc: "At least 3,428 protesters killed and 10,000+ arrested during peak of unrest Jan 8-12. Security forces continue operations.", type: "humanitarian", size: "large", phase: "protests" },
 
   // ── Day 16: Jan 13 — Trump Warning, Televised Mohareb ──
   { day: 16, lat: 38.9072, lng: -77.0369, title: "Trump: 'Very Strong Action' if Executions", desc: "President Trump states if protesters are executed, 'we will take very strong action' and 'help is on its way'.", type: "political", phase: "protests" },
-  { day: 16, lat: 35.6892, lng: 51.3890, title: "Tehran Prosecutor — Mohareb on TV", desc: "Tehran prosecutor announces on national television that undisclosed number of protesters will be charged with moharebeh (death penalty offense).", type: "political", phase: "protests" },
-  { day: 16, lat: 35.6892, lng: 51.4200, title: "Dr. Golnar Naraqi Arrested", desc: "Emergency physician Golnar Naraqi arrested and transferred to Qarchak Prison for treating protest wounded.", type: "humanitarian", phase: "protests" },
+  { day: 16, lat: 35.660, lng: 51.410, title: "Tehran Prosecutor — Mohareb on TV", desc: "Tehran prosecutor announces on national television that undisclosed number of protesters will be charged with moharebeh (death penalty offense).", type: "political", phase: "protests" },
+  { day: 16, lat: 35.660, lng: 51.415, title: "Dr. Golnar Naraqi Arrested", desc: "Emergency physician Golnar Naraqi arrested and transferred to Qarchak Prison for treating protest wounded.", type: "humanitarian", phase: "protests" },
 
   // ── Day 17: Jan 14 — NPR: 2,500+ Dead ──
-  { day: 17, lat: 35.6892, lng: 51.3890, title: "NPR: Death Toll Passes 2,500", desc: "NPR reports Iran crackdown death toll passes 2,500. HRANA reports 18,400+ arrested. Internet remains completely cut.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 17, lat: 35.660, lng: 51.420, title: "NPR: Death Toll Passes 2,500", desc: "NPR reports Iran crackdown death toll passes 2,500. HRANA reports 18,400+ arrested. Internet remains completely cut.", type: "humanitarian", size: "large", phase: "protests" },
   { day: 17, lat: 38.9072, lng: -77.0369, title: "Trump: 'Killing Has Stopped'", desc: "Trump says he has been told the killing has stopped and expresses 'respect' for Iran halting planned executions.", type: "political", phase: "protests" },
 
   // ── Day 18: Jan 15 — US Sanctions Iranian Officials ──
@@ -117,45 +117,45 @@ const events = [
 
   // ── Day 19: Jan 16 — HRW: Countrywide Massacres ──
   { day: 19, lat: 40.7128, lng: -74.0060, title: "HRW: Growing Evidence of Countrywide Massacres", desc: "Human Rights Watch publishes report documenting evidence of massacres across multiple cities. Calls for international investigation.", type: "political", phase: "protests" },
-  { day: 19, lat: 35.6892, lng: 51.3890, title: "Authorities: 3,117 Killed (Official)", desc: "Iranian authorities release official figures later (Jan 21): 3,117 deaths. Independent estimates range from HRANA's 7,007 to Iran International's 36,500.", type: "political", phase: "protests" },
+  { day: 19, lat: 35.660, lng: 51.425, title: "Authorities: 3,117 Killed (Official)", desc: "Iranian authorities release official figures later (Jan 21): 3,117 deaths. Independent estimates range from HRANA's 7,007 to Iran International's 36,500.", type: "political", phase: "protests" },
 
   // ── Day 20: Jan 17 — Khamenei Acknowledges 'Thousands' ──
-  { day: 20, lat: 35.6892, lng: 51.3890, title: "Khamenei: 'Thousands Killed'", desc: "In public speech, Supreme Leader Khamenei acknowledges 'thousands of people' were killed. First regime admission of massacre scale.", type: "political", size: "large", phase: "protests" },
-  { day: 20, lat: 35.6892, lng: 51.3890, title: "HRANA: 24,669 Detained", desc: "HRANA reports 24,669 protesters detained nationwide. Systematic torture and enforced disappearances documented.", type: "humanitarian", phase: "protests" },
+  { day: 20, lat: 35.660, lng: 51.430, title: "Khamenei: 'Thousands Killed'", desc: "In public speech, Supreme Leader Khamenei acknowledges 'thousands of people' were killed. First regime admission of massacre scale.", type: "political", size: "large", phase: "protests" },
+  { day: 20, lat: 35.660, lng: 51.435, title: "HRANA: 24,669 Detained", desc: "HRANA reports 24,669 protesters detained nationwide. Systematic torture and enforced disappearances documented.", type: "humanitarian", phase: "protests" },
 
   // ── Day 21: Jan 18 — Brief Internet, Then Cut Again ──
-  { day: 21, lat: 35.6892, lng: 51.3890, title: "Internet Briefly Restored, Then Cut", desc: "Limited internet access briefly restored on Jan 18 before being suspended again. Severe restrictions persist.", type: "political", phase: "protests" },
-  { day: 21, lat: 35.6892, lng: 51.3890, title: "Regime Reasserts Control", desc: "Government assessed to have reasserted control over most protest areas. Burial sites controlled, mourning rituals restricted to prevent further unrest.", type: "political", phase: "protests" },
+  { day: 21, lat: 35.660, lng: 51.440, title: "Internet Briefly Restored, Then Cut", desc: "Limited internet access briefly restored on Jan 18 before being suspended again. Severe restrictions persist.", type: "political", phase: "protests" },
+  { day: 21, lat: 35.660, lng: 51.445, title: "Regime Reasserts Control", desc: "Government assessed to have reasserted control over most protest areas. Burial sites controlled, mourning rituals restricted to prevent further unrest.", type: "political", phase: "protests" },
 
   // ── Day 22-23: Jan 19-20 — Ongoing Arrests ──
-  { day: 22, lat: 35.6892, lng: 51.3890, title: "Mass Arrests Continue", desc: "Tens of thousands detained including children. Forced confessions, torture, enforced disappearances reported by Amnesty International.", type: "humanitarian", phase: "protests" },
+  { day: 22, lat: 35.660, lng: 51.450, title: "Mass Arrests Continue", desc: "Tens of thousands detained including children. Forced confessions, torture, enforced disappearances reported by Amnesty International.", type: "humanitarian", phase: "protests" },
   { day: 22, lat: 48.8566, lng: 2.3522, title: "Paris Solidarity Rally", desc: "Demonstrators rally in Paris in solidarity with Iranian protesters, urging Western governments to support the Iranian people.", type: "political", phase: "protests" },
   { day: 22, lat: 54.6872, lng: 25.2797, title: "Vilnius Solidarity Rally", desc: "Solidarity protests in Vilnius, Lithuania.", type: "political", phase: "protests" },
   { day: 22, lat: 51.5074, lng: -0.1278, title: "London Solidarity Rally", desc: "Demonstrators in London rally for Iranian protesters and urge Western support.", type: "political", phase: "protests" },
 
   // ── Day 24: Jan 21 — Official Death Toll ──
-  { day: 24, lat: 35.6892, lng: 51.3890, title: "Iran's Supreme Council: 3,117 Killed", desc: "Supreme Council of National Security officially states 3,117 killed. HRANA's documented count: 7,007. Iran International's leaked documents: 36,500+.", type: "political", size: "large", phase: "protests" },
+  { day: 24, lat: 35.660, lng: 51.455, title: "Iran's Supreme Council: 3,117 Killed", desc: "Supreme Council of National Security officially states 3,117 killed. HRANA's documented count: 7,007. Iran International's leaked documents: 36,500+.", type: "political", size: "large", phase: "protests" },
 
   // ── Day 25: Jan 22 — US Additional Sanctions ──
   { day: 25, lat: 38.9072, lng: -77.0369, title: "US Announces Additional Sanctions", desc: "Second round of US sanctions on Jan 23 targeting additional Iranian security officials responsible for protest crackdown.", type: "political", phase: "protests" },
 
   // ── Day 27: Jan 24 — Internet Briefly Returns ──
-  { day: 27, lat: 35.6892, lng: 51.3890, title: "Internet Connections Briefly Detected", desc: "First internet connections from Iran briefly detected on Jan 24. Full blackout had lasted 16 days.", type: "political", phase: "protests" },
+  { day: 27, lat: 35.660, lng: 51.460, title: "Internet Connections Briefly Detected", desc: "First internet connections from Iran briefly detected on Jan 24. Full blackout had lasted 16 days.", type: "political", phase: "protests" },
 
   // ── Day 28: Jan 25 — Iran International Leak ──
-  { day: 28, lat: 35.6892, lng: 51.3890, title: "Leaked Documents: 36,500+ Killed", desc: "Iran International publishes leaked documents suggesting 36,500+ killed in Jan 8-9 crackdown — deadliest two-day protest massacre in modern history.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 28, lat: 35.660, lng: 51.465, title: "Leaked Documents: 36,500+ Killed", desc: "Iran International publishes leaked documents suggesting 36,500+ killed in Jan 8-9 crackdown — deadliest two-day protest massacre in modern history.", type: "humanitarian", size: "large", phase: "protests" },
 
   // ── Day 29: Jan 26 — UN Fact-Finding Mission ──
   { day: 29, lat: 46.2044, lng: 6.1432, title: "UN Fact-Finding Mission Statement", desc: "UN Fact-Finding Mission calls for immediate restoration of internet and adherence to international human rights law.", type: "political", phase: "protests" },
 
   // ── Day 31: Jan 28 — Internet Blackout Relaxed ──
-  { day: 31, lat: 35.6892, lng: 51.3890, title: "Internet Blackout Partially Relaxed", desc: "Blackout relaxed on Jan 28 after 20 days. Severe restrictions remain — whitelist system only allows pre-approved websites. Cost to economy: $35.7M/day.", type: "political", phase: "protests" },
+  { day: 31, lat: 35.660, lng: 51.470, title: "Internet Blackout Partially Relaxed", desc: "Blackout relaxed on Jan 28 after 20 days. Severe restrictions remain — whitelist system only allows pre-approved websites. Cost to economy: $35.7M/day.", type: "political", phase: "protests" },
 
   // ── Day 32: Jan 29 — EU Proscribes IRGC ──
   { day: 32, lat: 50.8503, lng: 4.3517, title: "EU Proscribes IRGC", desc: "EU announces proscription of the Islamic Revolutionary Guard Corps. EU also sanctions 15 top officials and 6 organizations for 'serious human rights violations'.", type: "political", size: "large", phase: "protests" },
 
   // ── Day 33+: Jan 30-Feb — HRANA Final Report ──
-  { day: 33, lat: 35.6892, lng: 51.3890, title: "HRANA: 51,790 Arrested Total", desc: "HRANA reports 51,790 total arrests. 7,007 deaths confirmed by name (6,488 adult protesters, 236 minors, 207 security, 76 bystanders). 11,744 additional cases under review.", type: "humanitarian", size: "large", phase: "protests" },
+  { day: 33, lat: 35.660, lng: 51.475, title: "HRANA: 51,790 Arrested Total", desc: "HRANA reports 51,790 total arrests. 7,007 deaths confirmed by name (6,488 adult protesters, 236 minors, 207 security, 76 bystanders). 11,744 additional cases under review.", type: "humanitarian", size: "large", phase: "protests" },
 
   // ═══════════════════════════════════════════════════════════════
   // ═══════════════════════════════════════════════════════════════
@@ -254,7 +254,7 @@ const events = [
   // ═══════════════════════════════════════════════════════════════
   { day: 63, lat: 31.73, lng: 35.00, title: "Beit Shemesh — 9 Dead", desc: "Missile destroys synagogue and bomb shelter. 9 killed including 3 teenage siblings, 49 injured.", type: "retaliation", size: "large", phase: "war" },
   { day: 63, lat: 31.77, lng: 35.23, title: "Jerusalem Struck", desc: "Ballistic missile hits Jerusalem area. 6 wounded.", type: "retaliation", phase: "war" },
-  { day: 63, lat: 35.69, lng: 51.42, title: "Top Officials Confirmed Dead", desc: "Chief of Staff Mousavi, ex-president Ahmadinejad killed in strikes.", type: "strike", phase: "war" },
+  { day: 63, lat: 35.660, lng: 51.480, title: "Top Officials Confirmed Dead", desc: "Chief of Staff Mousavi, ex-president Ahmadinejad killed in strikes.", type: "strike", phase: "war" },
   { day: 63, lat: 35.82, lng: 51.42, title: "Saadabad Palace Area Struck", desc: "Large explosions near Saadabad Palace complex, north Tehran.", type: "strike", phase: "war" },
   { day: 63, lat: 34.37, lng: 47.07, title: "Imam Ali Missile Base — Kermanshah", desc: "US-Israel strike destroys Imam Ali ballistic missile base.", type: "strike", phase: "war" },
   { day: 63, lat: 38.08, lng: 46.29, title: "Fighter Jets Destroyed — Tabriz", desc: "Strikes destroy Iranian fighter jets at Tabriz air base.", type: "strike", phase: "war" },
@@ -266,7 +266,7 @@ const events = [
   // ═══════════════════════════════════════════════════════════════
   // MARCH 2 (Day 64)
   // ═══════════════════════════════════════════════════════════════
-  { day: 64, lat: 35.70, lng: 51.40, title: "IRGC Building Flattened", desc: "Video confirms total destruction of IRGC compound in Tehran.", type: "strike", phase: "war" },
+  { day: 64, lat: 35.660, lng: 51.485, title: "IRGC Building Flattened", desc: "Video confirms total destruction of IRGC compound in Tehran.", type: "strike", phase: "war" },
   { day: 64, lat: 35.71, lng: 51.38, title: "20 Civilians Killed — Niloofar Square", desc: "Iranian state media reports 20 civilians killed at Tehran's Niloofar Square from strikes.", type: "humanitarian", phase: "war" },
   { day: 64, lat: 33.89, lng: 35.50, title: "Hezbollah Opens Front", desc: "Hezbollah launches missiles/drones at Israel. Israel strikes Beirut.", type: "hezbollah", size: "large", phase: "regional" },
   { day: 64, lat: 32.82, lng: 34.99, title: "Haifa Air Raid Sirens", desc: "Hezbollah rocket salvos trigger sirens across Haifa and Upper Galilee.", type: "hezbollah", phase: "regional" },
@@ -278,7 +278,7 @@ const events = [
   // ═══════════════════════════════════════════════════════════════
   // MARCH 3 (Day 65)
   // ═══════════════════════════════════════════════════════════════
-  { day: 65, lat: 35.70, lng: 51.41, title: "Assembly of Experts Bombed", desc: "Israel bombs 84-member Assembly of Experts during session on supreme leader election.", type: "strike", phase: "war" },
+  { day: 65, lat: 35.660, lng: 51.490, title: "Assembly of Experts Bombed", desc: "Israel bombs 84-member Assembly of Experts during session on supreme leader election.", type: "strike", phase: "war" },
   { day: 65, lat: 35.71, lng: 51.4, title: "SNSC Headquarters Destroyed", desc: "Supreme National Security Council headquarters in Tehran destroyed.", type: "strike", phase: "war" },
   { day: 65, lat: 34.32, lng: 47.10, title: "Mahidasht Drone Base", desc: "Satellite confirms strikes on IRGC drone base west of Kermanshah.", type: "strike", phase: "war" },
   { day: 65, lat: 38.07, lng: 46.30, title: "Basij Checkpoint Struck — Tabriz", desc: "13 fighters killed, 18 injured at Basij checkpoint.", type: "strike", phase: "war" },
@@ -329,7 +329,7 @@ const events = [
   { day: 69, lat: 28.83, lng: 51.58, title: "Projectile Near Bushehr Nuclear Plant", desc: "Projectile struck 350m from reactor. No radioactive leakage. Iran reports to IAEA.", type: "strike", phase: "war" },
   { day: 69, lat: 26.77, lng: 55.90, title: "Qeshm Island Desalination Plant", desc: "Water plant damaged, affecting 30 villages. US denies targeting civilians.", type: "humanitarian", phase: "war" },
   { day: 69, lat: 26.22, lng: 50.55, title: "Iran Hits Bahrain Desalination Plant", desc: "Bahrain accuses Iran of damaging desalination plant. 3 injured.", type: "retaliation", phase: "regional" },
-  { day: 69, lat: 35.73, lng: 51.43, title: "Red Crescent: Acid Rain Warning", desc: "Toxic hydrocarbons, sulphur, nitrogen oxides. Rainfall causing skin burns and lung damage.", type: "humanitarian", phase: "war" },
+  { day: 69, lat: 35.660, lng: 51.495, title: "Red Crescent: Acid Rain Warning", desc: "Toxic hydrocarbons, sulphur, nitrogen oxides. Rainfall causing skin burns and lung damage.", type: "humanitarian", phase: "war" },
   { day: 69, lat: 35.68, lng: 51.45, title: "IAF: 400+ Targets Over Weekend", desc: "1,465 munitions dropped on regime military sites across March 6-7.", type: "strike", phase: "war" },
 
   // ═══════════════════════════════════════════════════════════════
@@ -383,7 +383,7 @@ const events = [
   { day: 74, lat: 33.94, lng: 44.39, title: "KC-135 Crash — 6 US Crew Killed — Iraq", desc: "Refueling plane crashes in western Iraq. All 6 crew killed (non-hostile). Total US deaths reach 13.", type: "humanitarian", phase: "war" },
   { day: 74, lat: 36.19, lng: 44.01, title: "French Soldier Killed — Erbil Drone", desc: "CWO Arnaud Frion killed by Shahed drone. First European military death in war.", type: "retaliation", phase: "regional" },
   { day: 74, lat: 29.67, lng: 48.76, title: "Safesea Vishnu Hit Off Basra", desc: "Iranian drone boat hits tanker. 1 Indian crew member killed.", type: "naval", phase: "regional" },
-  { day: 74, lat: 35.69, lng: 51.39, title: "UNICEF: 1,100 Children Killed/Injured", desc: "200 dead in Iran, 91 in Lebanon, 4 in Israel, 1 in Kuwait.", type: "humanitarian", phase: "war" },
+  { day: 74, lat: 35.660, lng: 51.500, title: "UNICEF: 1,100 Children Killed/Injured", desc: "200 dead in Iran, 91 in Lebanon, 4 in Israel, 1 in Kuwait.", type: "humanitarian", phase: "war" },
   { day: 74, lat: 27.11, lng: 57.08, title: "Minab School — US Responsible", desc: "NYT: US Tomahawk hit Shajareh Tayyebeh school Feb 28. 175-180 killed (110 children). UN calls potential war crime.", type: "humanitarian", size: "large", phase: "war" },
 
   // ═══════════════════════════════════════════════════════════════
@@ -405,7 +405,7 @@ const events = [
   { day: 76, lat: 25.29, lng: 51.53, title: "Qatar LNG Facility Hit", desc: "Iran strikes Ras Laffan. 17% of Qatar LNG output lost. 3-5 years to repair.", type: "retaliation", size: "large", phase: "regional" },
   { day: 76, lat: 28.57, lng: 47.95, title: "Ahmad al-Jaber Airbase — Kuwait", desc: "Two missiles strike perimeter. 3 soldiers wounded.", type: "retaliation", phase: "regional" },
   { day: 76, lat: 29.23, lng: 47.97, title: "Kuwait Airport Radar Destroyed", desc: "Iranian drones strike radar system. Airport shut until further notice.", type: "retaliation", phase: "regional" },
-  { day: 76, lat: 35.81, lng: 51.42, title: "New Supreme Leader: Keep Hormuz Closed", desc: "Mojtaba Khamenei's first address warns attacks continue unless US bases close.", type: "political", phase: "war" },
+  { day: 76, lat: 35.660, lng: 51.505, title: "New Supreme Leader: Keep Hormuz Closed", desc: "Mojtaba Khamenei's first address warns attacks continue unless US bases close.", type: "political", phase: "war" },
 
   // ═══════════════════════════════════════════════════════════════
   // MARCH 15 (Day 77)
@@ -430,7 +430,7 @@ const events = [
   // ═══════════════════════════════════════════════════════════════
   // MARCH 17 (Day 79)
   // ═══════════════════════════════════════════════════════════════
-  { day: 79, lat: 35.69, lng: 51.42, title: "Larijani & Soleimani Assassinated", desc: "Israeli airstrikes kill Ali Larijani and Basij chief Gholamreza Soleimani.", type: "strike", phase: "war" },
+  { day: 79, lat: 35.660, lng: 51.510, title: "Larijani & Soleimani Assassinated", desc: "Israeli airstrikes kill Ali Larijani and Basij chief Gholamreza Soleimani.", type: "strike", phase: "war" },
   { day: 79, lat: 32.08, lng: 34.81, title: "Ramat Gan — 2 Killed", desc: "Cluster warhead missile hits building. Two elderly residents killed near safe room.", type: "retaliation", phase: "war" },
   { day: 79, lat: 33.27, lng: 35.20, title: "Israel Ground Invasion of Lebanon", desc: "IDF launches 'limited and targeted ground operations.' 1M+ displaced since Mar 2.", type: "strike", size: "large", phase: "regional" },
   { day: 79, lat: 33.86, lng: 35.50, title: "Beirut Airstrikes — Kafaat, Haret Hreik", desc: "Hezbollah command centers hit. Evacuation warning for Tyre.", type: "strike", phase: "regional" },
@@ -466,7 +466,7 @@ const events = [
   { day: 82, lat: 31.25, lng: 34.79, title: "Dimona Struck", desc: "Iranian missile hits near Israel's nuclear site.", type: "retaliation", phase: "war" },
   { day: 82, lat: 31.26, lng: 35.21, title: "Arad Mass Casualty", desc: "Missiles hit Arad. Mass casualty event declared.", type: "retaliation", size: "large", phase: "war" },
   { day: 82, lat: 29.08, lng: 48.08, title: "Kuwait Mina Al-Ahmadi Refinery", desc: "Iranian drones strike refinery (730k bbl/day) on Eid al-Fitr. Fires in multiple units.", type: "retaliation", phase: "regional" },
-  { day: 82, lat: 35.69, lng: 51.42, title: "Trump: 'Winding Down' — More Marines Deploy", desc: "Trump posts on Truth Social about meeting objectives while more Marines deploy.", type: "political", phase: "war" },
+  { day: 82, lat: 35.660, lng: 51.515, title: "Trump: 'Winding Down' — More Marines Deploy", desc: "Trump posts on Truth Social about meeting objectives while more Marines deploy.", type: "political", phase: "war" },
   { day: 82, lat: 15.35, lng: 44.21, title: "Houthi: 'All Military Options Possible'", desc: "Houthi politburo member declares all options possible. Considering naval blockade.", type: "political", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
@@ -477,7 +477,7 @@ const events = [
   { day: 83, lat: 31.26, lng: 35.21, title: "Arad — 64 Wounded", desc: "Direct hit on Arad. 7 serious, 15 moderate, 42 light injuries. 150+ injured across region.", type: "retaliation", phase: "war" },
   { day: 83, lat: -7.32, lng: 72.41, title: "Diego Garcia Missile Attack", desc: "Iran fires 2 IRBMs at US-UK base 4,000km away — double claimed range. 1 shot down, 1 failed.", type: "retaliation", phase: "regional" },
   { day: 83, lat: 38.90, lng: -77.04, title: "Trump: 48-Hour Hormuz Ultimatum", desc: "Threatens to 'obliterate' power plants if Hormuz not reopened.", type: "political", phase: "regional" },
-  { day: 83, lat: 35.69, lng: 51.42, title: "Tehran Strikes Continue", desc: "Israeli military strikes Tehran. Iranian attacks down 90% from early war days.", type: "strike", phase: "war" },
+  { day: 83, lat: 35.660, lng: 51.520, title: "Tehran Strikes Continue", desc: "Israeli military strikes Tehran. Iranian attacks down 90% from early war days.", type: "strike", phase: "war" },
   { day: 83, lat: 35.73, lng: 51.4, title: "Iran Death Toll Passes 1,500", desc: "State broadcaster reports 1,500+ killed. War enters 4th week. No end in sight.", type: "humanitarian", size: "large", phase: "war" },
   { day: 83, lat: 33.27, lng: 35.20, title: "IDF Mortar Casualties — Lebanon", desc: "Two IDF soldiers wounded by mortar from Lebanon as ground op continues.", type: "hezbollah", phase: "regional" },
   { day: 83, lat: 26.56, lng: 56.40, title: "Hormuz Still Closed — Week 4", desc: "20+ commercial vessels hit total. Houthis still holding fire in Red Sea.", type: "naval", phase: "regional" },
@@ -504,7 +504,7 @@ const events = [
   { day: 73, lat: 48.00, lng: 2.00, title: "IEA Releases Record 400M Barrels", desc: "International Energy Agency agrees to release record crude reserves.", type: "political", phase: "regional" },
   { day: 74, lat: 35.75, lng: 51.41, title: "UNHCR: 3.2M Displaced Inside Iran", desc: "600K-1M households displaced. Fastest internal displacement in decades. Afghan refugees doubly displaced.", type: "humanitarian", phase: "war" },
   { day: 74, lat: 52.37, lng: 4.90, title: "European Gas Prices Nearly Double", desc: "Dutch TTF benchmarks nearly double to EUR 60+/MWh. Storage at just 30%. Eurozone growth cut.", type: "political", phase: "regional" },
-  { day: 74, lat: 35.69, lng: 51.39, title: "UNICEF: 1,100 Children Killed/Injured", desc: "200 dead in Iran, 91 in Lebanon, 4 in Israel, 1 in Kuwait.", type: "humanitarian", phase: "war" },
+  { day: 74, lat: 35.660, lng: 51.525, title: "UNICEF: 1,100 Children Killed/Injured", desc: "200 dead in Iran, 91 in Lebanon, 4 in Israel, 1 in Kuwait.", type: "humanitarian", phase: "war" },
   { day: 76, lat: 35.72, lng: 51.42, title: "5,300 Killed Including 511 Civilians", desc: "Hengaw: 127 minors, 168 women. Strikes hit 178 cities across 25 provinces.", type: "humanitarian", phase: "war" },
   { day: 78, lat: 38.91, lng: -77.04, title: "US Gas Prices Surge 90 Cents", desc: "Average climbs from under $3 to $3.89. California exceeds $5/gallon.", type: "political", phase: "regional" },
   { day: 82, lat: 29.05, lng: 50.82, title: "Dubai Crude Surpasses $150/Barrel", desc: "Physical crude tops $150. Brent at $112. Analysts warn $200 possible if war drags on.", type: "political", phase: "regional" },
