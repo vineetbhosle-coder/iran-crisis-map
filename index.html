@@ -329,6 +329,33 @@
   #crosshair::before { width: 1px; height: 40px; left: 50%; top: -20px; }
   #crosshair::after { width: 40px; height: 1px; top: 50%; left: -20px; }
 
+  /* Spy movie region tooltip — bracket corners */
+  #region-overlay {
+    position: absolute; z-index: 800; pointer-events: none;
+    display: none;
+  }
+  #region-overlay .ro-inner {
+    position: relative; padding: 8px 14px;
+    font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+    color: var(--text); letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  /* Corner brackets */
+  #region-overlay .corner {
+    position: absolute; width: 12px; height: 12px;
+    border-color: var(--red); border-style: solid; border-width: 0;
+  }
+  #region-overlay .corner.tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+  #region-overlay .corner.tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+  #region-overlay .corner.bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+  #region-overlay .corner.br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+  #region-overlay .ro-coords {
+    font-size: 0.5rem; color: var(--text3); letter-spacing: 0.5px;
+    margin-top: 2px; text-transform: none;
+  }
+  @keyframes regionFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  #region-overlay.visible { display: block; animation: regionFadeIn 0.2s ease; }
+
   /* Scrollbar */
   #event-panel::-webkit-scrollbar { width: 3px; }
   #event-panel::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
@@ -399,7 +426,17 @@
   </div>
 </div>
 
-<div id="map"><div id="crosshair"></div></div>
+<div id="map">
+  <div id="crosshair"></div>
+  <div id="region-overlay">
+    <div class="ro-inner">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+      <div id="ro-name"></div>
+      <div class="ro-coords" id="ro-coords"></div>
+    </div>
+  </div>
+</div>
 
 <div id="stats-panel" class="glass-panel">
   <h4>Crisis Dashboard</h4>
@@ -766,6 +803,19 @@ function updateBorderWeights() {
   }
 }
 
+// Spy movie bracket overlay
+function showRegionOverlay(name, latlng, extra) {
+  const overlay = document.getElementById('region-overlay');
+  const nameEl = document.getElementById('ro-name');
+  const coordsEl = document.getElementById('ro-coords');
+  nameEl.textContent = extra ? `[ ${name} ] — ${extra}` : `[ ${name} ]`;
+  coordsEl.textContent = `${latlng.lat.toFixed(4)}°N  ${latlng.lng.toFixed(4)}°E`;
+  overlay.className = 'visible';
+}
+function hideRegionOverlay() {
+  document.getElementById('region-overlay').className = '';
+}
+
 function renderGeo() {
   if (!geoData) return;
   if (geoLayer) map.removeLayer(geoLayer);
@@ -775,18 +825,34 @@ function renderGeo() {
       const name = feature.properties.ADMIN || feature.properties.NAME || '';
       const role = countryRoles[name];
       if (role) {
-        layer.bindTooltip(name, { sticky: true, className: 'country-tip' });
-        layer.on('mouseover', function() {
+        layer.on('mouseover', function(e) {
           const z = map.getZoom();
           this.setStyle({ weight: z <= 4 ? 1.5 : 2.5, opacity: 0.7 });
+          const status = getCountryStatus(name);
+          showRegionOverlay(name, e.latlng, status);
+        });
+        layer.on('mousemove', function(e) {
+          const overlay = document.getElementById('region-overlay');
+          const container = map.getContainer().getBoundingClientRect();
+          overlay.style.left = (e.originalEvent.clientX - container.left + 16) + 'px';
+          overlay.style.top = (e.originalEvent.clientY - container.top - 16) + 'px';
         });
         layer.on('mouseout', function() {
           this.setStyle(styleCountry(this.feature));
+          hideRegionOverlay();
         });
       }
     }
   }).addTo(map);
   geoLayer.bringToBack();
+}
+
+function getCountryStatus(name) {
+  const roles = { 'Iran': 'TARGET', 'Israel': 'ALLIED', 'Lebanon': 'PROXY FRONT', 'Syria': 'CONTESTED',
+    'Iraq': 'ALLIED BASE', 'Yemen': 'HOUTHI', 'Bahrain': 'US 5TH FLEET', 'Qatar': 'STRUCK',
+    'United Arab Emirates': 'STRUCK', 'Kuwait': 'STRUCK', 'Oman': 'STRUCK', 'Saudi Arabia': 'NEUTRAL',
+    'Turkey': 'NATO', 'Jordan': 'ALLIED BASE', 'Cyprus': 'RAF BASE STRUCK' };
+  return roles[name] || '';
 }
 
 function renderProvinces() {
@@ -799,7 +865,20 @@ function renderProvinces() {
       const name = feature.properties.name || feature.properties.NAME || '';
       const isIran = admin === 'Iran';
       if (isIran && name) {
-        layer.bindTooltip(name + ' Province', { sticky: true, className: 'province-tip' });
+        layer.on('mouseover', function(e) {
+          this.setStyle({ opacity: 0.5, weight: 1.5, color: '#666' });
+          showRegionOverlay(name + ' Province', e.latlng, 'IRAN');
+        });
+        layer.on('mousemove', function(e) {
+          const overlay = document.getElementById('region-overlay');
+          const container = map.getContainer().getBoundingClientRect();
+          overlay.style.left = (e.originalEvent.clientX - container.left + 16) + 'px';
+          overlay.style.top = (e.originalEvent.clientY - container.top - 16) + 'px';
+        });
+        layer.on('mouseout', function() {
+          this.setStyle(styleProvince(this.feature));
+          hideRegionOverlay();
+        });
       }
     }
   }).addTo(map);
