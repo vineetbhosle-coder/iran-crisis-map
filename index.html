@@ -398,10 +398,10 @@
     #date-display { font-size: 0.78rem; color: var(--red); }
     .header-coord { display: none; }
 
-    /* === KPI STRIP: 54px === */
+    /* === KPI STRIP: 68px === */
     #stats-panel {
       position: fixed !important; top: 32px; left: 0; right: 0; z-index: 1001;
-      border-radius: 0 !important; padding: 6px 2px;
+      border-radius: 0 !important; padding: 10px 2px;
       display: flex; flex-wrap: nowrap; gap: 0;
       justify-content: space-between; align-items: stretch; min-width: auto;
       background: rgba(255,255,252,0.97); backdrop-filter: blur(10px);
@@ -421,19 +421,19 @@
       line-height: 1.2; display: block; color: var(--text3);
     }
     .stat-label .stat-indicator { display: none; }
-    .stat-val { font-size: 0.72rem; line-height: 1.3; font-weight: 700; }
+    .stat-val { font-size: 0.8rem; line-height: 1.4; font-weight: 700; }
     /* Hide escalation on mobile */
     #stats-panel > div:last-child { display: none; }
 
     /* === MAP: fills remaining space === */
     #map {
-      position: fixed !important; top: 86px; left: 0; right: 0; bottom: 72px;
+      position: fixed !important; top: 100px; left: 0; right: 0; bottom: 88px;
       height: auto !important; margin: 0 !important;
     }
 
     /* === EVENTS: collapsible sheet above timeline === */
     #event-panel {
-      position: fixed !important; bottom: 72px; left: 0; right: 0;
+      position: fixed !important; bottom: 88px; left: 0; right: 0;
       width: 100%; max-height: 25vh; padding: 0;
       border-radius: 8px 8px 0 0 !important; overflow: hidden;
       z-index: 999; transition: max-height 0.3s ease;
@@ -457,27 +457,28 @@
 
     #legend { display: none; }
 
-    /* === TIMELINE: fixed at bottom, 72px total === */
+    /* === TIMELINE: fixed at bottom, 88px total === */
     #timeline-container {
       position: fixed !important; bottom: 0; left: 0; right: 0;
-      height: 72px !important; padding: 4px 10px 2px;
+      height: 88px !important; padding: 6px 10px 3px;
       z-index: 1001; background: rgba(255,255,252,0.98);
+      border-top: 1px solid var(--border);
     }
-    #timeline-controls { margin-bottom: 2px; gap: 6px; }
-    #play-btn { padding: 3px 12px; font-size: 0.52rem; }
-    #speed-select { font-size: 0.5rem; padding: 2px 4px; }
+    #timeline-controls { margin-bottom: 3px; gap: 8px; }
+    #play-btn { padding: 4px 14px; font-size: 0.55rem; }
+    #speed-select { font-size: 0.52rem; padding: 2px 6px; }
     #phase-label { display: none; }
-    #slider-wrap { height: 20px; }
-    #timeline-slider { margin-top: 1px; height: 4px; }
-    #timeline-slider::-webkit-slider-thumb { width: 12px; height: 12px; }
-    #tick-marks { height: 3px; }
-    #phase-bar { height: 3px; }
-    #density-bar { height: 6px; }
-    #date-markers { margin-top: 0; }
-    #date-markers span { font-size: 0.36rem; }
-    #date-markers .month-lbl { font-size: 0.42rem; }
+    #slider-wrap { height: 26px; }
+    #timeline-slider { margin-top: 2px; height: 5px; }
+    #timeline-slider::-webkit-slider-thumb { width: 16px; height: 16px; }
+    #tick-marks { height: 4px; }
+    #phase-bar { height: 4px; }
+    #density-bar { height: 8px; }
+    #date-markers { margin-top: 1px; }
+    #date-markers span { font-size: 0.4rem; }
+    #date-markers .month-lbl { font-size: 0.45rem; }
     #date-markers span:not(.month-lbl) { display: none; }
-    #source-bar { font-size: 0.32rem; margin-top: 1px; padding: 0 10px; color: #bbb; }
+    #source-bar { font-size: 0.33rem; margin-top: 2px; padding: 0 10px; color: #aaa; }
 
     /* Hide decorative elements */
     #region-frame { display: none !important; }
