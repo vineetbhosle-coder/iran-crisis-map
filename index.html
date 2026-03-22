@@ -144,10 +144,11 @@
   #timeline-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
   #date-markers { display: flex; justify-content: space-between; margin-top: 0; }
   #date-markers span {
-    font-size: 0.55rem; color: var(--text3); font-weight: 500; cursor: pointer;
-    font-family: 'JetBrains Mono', monospace; transition: color 0.2s;
+    font-size: 0.48rem; color: var(--text3); font-weight: 500; cursor: pointer;
+    font-family: var(--mono); transition: color 0.2s;
   }
   #date-markers span:hover { color: var(--text); }
+  #date-markers .month-lbl { font-weight: 700; color: var(--text2); font-size: 0.52rem; }
 
   /* === Panels (glassmorphism + intel dossier) === */
   .glass-panel {
@@ -337,7 +338,7 @@
   <div id="phase-filters">
     <button class="phase-btn active" onclick="setPhase('all',this)">All</button>
     <button class="phase-btn" onclick="setPhase('protests',this)">Protests</button>
-    <button class="phase-btn" onclick="setPhase('war',this)">War</button>
+    <button class="phase-btn" onclick="setPhase('war',this)">Conflict</button>
     <button class="phase-btn" onclick="setPhase('regional',this)">Regional</button>
   </div>
   <div style="display:flex;align-items:center;gap:16px;">
@@ -369,6 +370,10 @@
   <div class="stat-row">
     <span class="stat-label"><span class="stat-indicator" style="background:var(--green)"></span>Internet (Iran)</span>
     <span class="stat-val" id="s-internet" style="color:var(--green)">ONLINE</span>
+  </div>
+  <div class="stat-row">
+    <span class="stat-label"><span class="stat-indicator" style="background:var(--gold)"></span>Brent Crude</span>
+    <span class="stat-val" id="s-oil" style="color:var(--text);">$73</span>
   </div>
   <div class="stat-row">
     <span class="stat-label"><span class="stat-indicator" style="background:var(--text2)"></span>Day of Crisis</span>
@@ -418,13 +423,20 @@
     <div id="density-bar"></div>
     <input type="range" id="timeline-slider" min="0" max="83" value="0" oninput="onSliderChange(+this.value)">
     <div id="date-markers">
-      <span onclick="jumpTo(0)">DEC 28</span>
-      <span onclick="jumpTo(11)">JAN 8</span>
-      <span onclick="jumpTo(24)">JAN 21</span>
-      <span onclick="jumpTo(40)">FEB 6</span>
-      <span onclick="jumpTo(62)">FEB 28</span>
-      <span onclick="jumpTo(72)">MAR 9</span>
-      <span onclick="jumpTo(83)">MAR 21</span>
+      <span class="month-lbl" onclick="jumpTo(0)">DEC</span>
+      <span onclick="jumpTo(4)">1</span>
+      <span onclick="jumpTo(7)">4</span>
+      <span class="month-lbl" onclick="jumpTo(11)">JAN 8</span>
+      <span onclick="jumpTo(18)">15</span>
+      <span onclick="jumpTo(24)">21</span>
+      <span class="month-lbl" onclick="jumpTo(35)">FEB</span>
+      <span onclick="jumpTo(45)">11</span>
+      <span onclick="jumpTo(54)">20</span>
+      <span class="month-lbl" onclick="jumpTo(62)">FEB 28</span>
+      <span onclick="jumpTo(69)">7</span>
+      <span onclick="jumpTo(75)">13</span>
+      <span class="month-lbl" onclick="jumpTo(78)">MAR 16</span>
+      <span onclick="jumpTo(83)">21</span>
     </div>
   </div>
 </div>
@@ -477,7 +489,7 @@ const phases = [
   { start: 14, end: 24, label: "Internet Blackout & Crackdown", color: 'var(--gray)' },
   { start: 25, end: 60, label: "Diplomatic Escalation", color: 'var(--blue)' },
   { start: 61, end: 61, label: "Operation Epic Fury Begins", color: 'var(--red)' },
-  { start: 62, end: 72, label: "War — Active Combat", color: 'var(--red)' },
+  { start: 62, end: 72, label: "Operation Epic Fury — Active Strikes", color: 'var(--red)' },
   { start: 73, end: 83, label: "Ongoing Escalation", color: 'var(--orange)' },
 ];
 function getPhaseLabel(d) { const p = phases.find(p => d >= p.start && d <= p.end); return p ? p.label : ''; }
@@ -923,13 +935,27 @@ PLACEHOLDER END */
 
 // ─── Stats ──────────────────────────────────────────────────────────
 function getStats(day) {
-  let pd = 0, sd = 0, ic = 0, hormuz = 'OPEN', internet = 'ONLINE';
+  let pd = 0, sd = 0, ic = 0, hormuz = 'OPEN', internet = 'ONLINE', oil = 73;
   if (day >= 3) pd = 28; if (day >= 5) pd = 50; if (day >= 11) pd = 30000; if (day >= 13) pd = 36500;
   if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444;
   if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118;
   if (day >= 12) internet = 'BLACKOUT'; if (day >= 62) internet = 'PARTIAL';
   if (day >= 63) hormuz = 'DISRUPTED'; if (day >= 66) hormuz = 'BLOCKED';
-  return { pd, sd, ic, hormuz, internet, dayNum: day + 1 };
+  // Brent crude oil price trajectory (approximate)
+  if (day >= 62) oil = 80;  // war starts
+  if (day >= 63) oil = 85;  // first trading day
+  if (day >= 65) oil = 92;
+  if (day >= 66) oil = 100; // Hormuz blocked
+  if (day >= 68) oil = 96;  // brief dip
+  if (day >= 70) oil = 100; // sustained
+  if (day >= 71) oil = 119; // spike
+  if (day >= 73) oil = 108;
+  if (day >= 75) oil = 105;
+  if (day >= 78) oil = 110;
+  if (day >= 80) oil = 112; // South Pars
+  if (day >= 82) oil = 126; // peak
+  if (day >= 83) oil = 120;
+  return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1 };
 }
 function fmtN(n) { return n >= 1000 ? (n/1000).toFixed(n>=10000?0:1)+'K' : n.toString(); }
 
@@ -1050,6 +1076,9 @@ function renderDay(day) {
   document.getElementById('s-hormuz').style.color = s.hormuz==='OPEN'?'var(--green)':s.hormuz==='BLOCKED'?'var(--red)':'var(--orange)';
   document.getElementById('s-internet').textContent = s.internet;
   document.getElementById('s-internet').style.color = s.internet==='ONLINE'?'var(--green)':s.internet==='BLACKOUT'?'var(--red)':'var(--orange)';
+  const oilEl = document.getElementById('s-oil');
+  oilEl.textContent = '$' + s.oil;
+  oilEl.style.color = s.oil >= 100 ? 'var(--red)' : s.oil >= 85 ? 'var(--orange)' : 'var(--text)';
   document.getElementById('s-day').textContent = s.dayNum;
 
   document.getElementById('date-display').textContent = formatDate(day);
