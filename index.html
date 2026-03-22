@@ -367,41 +367,66 @@
 
   /* === Mobile Responsive === */
   @media (max-width: 768px) {
-    #header { padding: 0 12px; height: 40px; flex-wrap: wrap; }
-    #header h1 { font-size: 0.7rem; letter-spacing: 1.5px; }
-    .live-badge { font-size: 0.45rem; padding: 1px 5px; }
+    #header { padding: 0 10px; height: 36px; }
+    #header h1 { font-size: 0.65rem; letter-spacing: 1px; }
+    .live-badge { font-size: 0.42rem; padding: 1px 5px; }
     #phase-filters { gap: 2px; }
-    .phase-btn { padding: 2px 8px; font-size: 0.55rem; }
-    #date-display { font-size: 0.7rem; }
+    .phase-btn { padding: 2px 6px; font-size: 0.5rem; }
+    #date-display { font-size: 0.65rem; }
     .header-coord { display: none; }
 
-    #map { height: calc(100vh - 120px); }
+    #map { height: calc(100vh - 140px); }
 
-    #stats-panel { top: 48px; left: 6px; padding: 8px 10px; min-width: 160px; font-size: 0.65rem; }
-    #stats-panel h4 { font-size: 0.55rem; }
-    .stat-label { font-size: 0.62rem; }
-    .stat-val { font-size: 0.72rem; }
+    /* Horizontal compact stats bar */
+    #stats-panel {
+      position: absolute; top: 36px; left: 0; right: 0;
+      border-radius: 0; padding: 4px 10px;
+      display: flex; flex-wrap: wrap; gap: 0 12px;
+      align-items: center; min-width: auto;
+      background: rgba(255,255,252,0.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border); border-top: none;
+    }
+    #stats-panel::before { display: none; }
+    #stats-panel h4 { display: none; }
+    .stat-row {
+      flex: none; padding: 0; border: none; gap: 4px;
+      font-size: 0.58rem;
+    }
+    .stat-label { font-size: 0.5rem; }
+    .stat-label .stat-indicator { width: 4px; height: 4px; margin-right: 3px; }
+    .stat-val { font-size: 0.6rem; }
+    /* Hide escalation index on mobile */
+    #stats-panel > div:last-child { display: none; }
 
-    #event-panel { top: 48px; right: 6px; width: 260px; max-height: calc(100vh - 180px); padding: 10px; }
-    #event-panel h3 { font-size: 0.55rem; }
-    .ev-item .ev-title { font-size: 0.72rem; }
-    .ev-item .ev-desc { font-size: 0.65rem; }
+    #event-panel {
+      top: auto; bottom: 80px; right: 6px; left: 6px;
+      width: auto; max-height: 35vh; padding: 10px;
+      border-radius: 10px 10px 0 0;
+    }
+    #event-panel h3 { font-size: 0.55rem; margin-bottom: 6px; }
+    .ev-item { padding: 6px 8px; }
+    .ev-item .ev-title { font-size: 0.7rem; }
+    .ev-item .ev-desc { font-size: 0.6rem; }
+    .ev-item .ev-coords { font-size: 0.45rem; }
 
-    #legend { bottom: 90px; left: 6px; padding: 6px 10px; font-size: 0.6rem; }
-    #legend h4 { font-size: 0.5rem; }
+    #legend { display: none; }
 
-    #timeline-container { height: 72px; padding: 6px 12px 4px; }
-    #play-btn { padding: 3px 12px; font-size: 0.6rem; }
-    #phase-label { font-size: 0.55rem; display: none; }
-    #date-markers span { font-size: 0.4rem; }
-    #source-bar { font-size: 0.4rem; }
+    #timeline-container { height: 68px; padding: 4px 10px 2px; }
+    #play-btn { padding: 3px 10px; font-size: 0.55rem; }
+    #speed-select { font-size: 0.55rem; padding: 2px 4px; }
+    #phase-label { display: none; }
+    #date-markers span { font-size: 0.38rem; }
+    #date-markers .month-lbl { font-size: 0.42rem; }
+    #source-bar { font-size: 0.35rem; margin-top: 2px; }
+
+    #region-frame { display: none !important; }
+    #crosshair { display: none; }
   }
 
-  @media (max-width: 480px) {
-    #event-panel { display: none; }
-    #stats-panel { min-width: 140px; }
-    .stat-row { gap: 8px; }
-    #legend { display: none; }
+  @media (max-width: 380px) {
+    .stat-row { gap: 2px; }
+    .stat-label { display: none; }
+    #date-markers span:not(.month-lbl) { display: none; }
   }
 </style>
 </head>
@@ -471,7 +496,7 @@
     <span class="stat-val" id="s-day" style="color:var(--text);">1</span>
   </div>
   <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
-    <div style="font-family:var(--mono);font-size:0.55rem;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:6px;">Escalation Index</div>
+    <div style="font-family:var(--mono);font-size:0.55rem;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:6px;cursor:help;" title="3-day rolling window. Weights: Nuclear strike=10, Military strike=6, Retaliation=6, Naval=4, Hezbollah/proxy=4, Humanitarian=2, Political=1. Large events get 2x multiplier. Normalized to 50-point scale.">Escalation Index &#9432;</div>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
       <span style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:28px;text-align:right;">US/IL</span>
       <div style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
