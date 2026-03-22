@@ -1460,23 +1460,24 @@ if (localStorage.getItem('theme') === 'dark') {
 }
 
 // ─── Animated counter ───────────────────────────────────────────────
-let counterTarget = 0, counterCurrent = 0, counterAnim = null;
+let counterCurrent = 0, counterInterval = null;
 function animateCounter(target) {
-  counterTarget = target;
-  if (counterAnim) cancelAnimationFrame(counterAnim);
+  if (counterInterval) clearInterval(counterInterval);
   const el = document.getElementById('total-counter');
+  if (!el) return;
   const start = counterCurrent;
   const diff = target - start;
-  const duration = 400;
-  const t0 = performance.now();
-  function step(now) {
-    const p = Math.min((now - t0) / duration, 1);
+  if (diff === 0) { el.textContent = `${target} EVENTS`; return; }
+  const steps = 20;
+  let step = 0;
+  counterInterval = setInterval(() => {
+    step++;
+    const p = step / steps;
     const ease = 1 - Math.pow(1 - p, 3);
     counterCurrent = Math.round(start + diff * ease);
     el.textContent = `${counterCurrent} EVENTS`;
-    if (p < 1) counterAnim = requestAnimationFrame(step);
-  }
-  counterAnim = requestAnimationFrame(step);
+    if (step >= steps) { clearInterval(counterInterval); counterInterval = null; }
+  }, 20);
 }
 
 // ─── Controls ───────────────────────────────────────────────────────
