@@ -112,7 +112,7 @@
   #dark-toggle:hover { border-color: var(--text3); color: var(--text); }
   /* Dark mode tile filter — night vision green tint */
   [data-theme="dark"] .base-tiles { filter: invert(1) hue-rotate(60deg) brightness(0.7) contrast(1.05) saturate(0.5) sepia(0.15); }
-  [data-theme="dark"] .label-tiles { filter: invert(1) hue-rotate(60deg) brightness(1.5) contrast(1.2) saturate(0.3); }
+  [data-theme="dark"] .label-tiles { filter: invert(1) hue-rotate(60deg) brightness(0.75) contrast(0.9) saturate(0.3); opacity: 0.6; }
   [data-theme="dark"] #loading { background: var(--loading-bg); }
   [data-theme="dark"] #loading h2 { color: var(--text); text-shadow: var(--nv-glow); }
   [data-theme="dark"] .ev-item:hover { background: rgba(60,200,80,0.05); }
@@ -130,6 +130,32 @@
   [data-theme="dark"] .glass-panel::before { background: rgba(60,200,80,0.4); }
   [data-theme="dark"] #dark-toggle { color: #7aad70; border-color: rgba(60,200,80,0.2); }
   [data-theme="dark"] .counter-badge { color: #7aad70; text-shadow: var(--nv-glow); }
+  /* Dark mode badges — muted tones on dark backgrounds */
+  [data-theme="dark"] .badge-strike { background: rgba(21,101,192,0.2); color: #64b5f6; }
+  [data-theme="dark"] .badge-retaliation { background: rgba(198,40,40,0.2); color: #ef9a9a; }
+  [data-theme="dark"] .badge-protest { background: rgba(230,81,0,0.2); color: #ffcc80; }
+  [data-theme="dark"] .badge-political { background: rgba(69,90,100,0.2); color: #90a4ae; }
+  [data-theme="dark"] .badge-nuclear { background: rgba(106,27,154,0.2); color: #ce93d8; }
+  [data-theme="dark"] .badge-naval { background: rgba(2,119,189,0.2); color: #4fc3f7; }
+  [data-theme="dark"] .badge-hezbollah { background: rgba(46,125,50,0.2); color: #81c784; }
+  [data-theme="dark"] .badge-humanitarian { background: rgba(183,28,28,0.2); color: #ef9a9a; }
+  /* Dark mode legend icons — adjust borders */
+  [data-theme="dark"] .legend-item div:first-child { background: rgba(10,16,10,0.8) !important; }
+  /* Dark mode popup */
+  [data-theme="dark"] .leaflet-popup-content-wrapper { background: rgba(10,16,10,0.96) !important; color: #c8e6c0 !important; border-color: rgba(60,200,80,0.15) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important; }
+  [data-theme="dark"] .leaflet-popup-tip { background: rgba(10,16,10,0.96) !important; }
+  [data-theme="dark"] .popup-title { color: #c8e6c0 !important; }
+  [data-theme="dark"] .popup-badge { opacity: 0.9; }
+  [data-theme="dark"] .popup-date, [data-theme="dark"] .popup-coords { color: #5a9a5a !important; }
+  [data-theme="dark"] .leaflet-popup-close-button { color: #5a9a5a !important; }
+  /* Dark mode slider thumb */
+  [data-theme="dark"] #timeline-slider::-webkit-slider-thumb { background: #5a9a5a; box-shadow: 0 0 6px rgba(60,200,80,0.3); }
+  /* Dark mode source bar */
+  [data-theme="dark"] #source-bar { color: #3d6636; }
+  /* Dark mode date markers */
+  [data-theme="dark"] #date-markers span { color: #3d6636; }
+  [data-theme="dark"] #date-markers span:hover { color: #7aad70; }
+  [data-theme="dark"] #date-markers .month-lbl { color: #5a9a5a; }
   /* Scanline texture overlay on map in dark mode */
   [data-theme="dark"] #map::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
