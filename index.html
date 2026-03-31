@@ -438,11 +438,73 @@
   /* Smooth day-to-day transitions */
   .leaflet-marker-icon { transition: opacity 0.4s ease; }
   .leaflet-overlay-pane path { transition: opacity 0.4s ease, stroke-opacity 0.4s ease, fill-opacity 0.4s ease; }
-  @keyframes markerFadeIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
-  .marker-new { animation: markerFadeIn 0.4s ease-out; }
 
+  /* Marker entrance — scale + fade */
+  @keyframes markerFadeIn { from { opacity: 0; transform: scale(0.3) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .marker-new { animation: markerFadeIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  /* Explosion burst on strike/retaliation markers */
+  @keyframes explosionBurst {
+    0% { box-shadow: 0 0 0 0 rgba(196,30,30,0.6); }
+    50% { box-shadow: 0 0 0 12px rgba(196,30,30,0); }
+    100% { box-shadow: 0 0 0 0 rgba(196,30,30,0); }
+  }
+  .marker-explode > div { animation: explosionBurst 0.8s ease-out; }
+
+  /* Radar sweep pulse rings */
+  @keyframes radarSweep {
+    0% { width: 0; height: 0; opacity: 0.5; border-width: 2px; }
+    100% { width: 60px; height: 60px; opacity: 0; border-width: 0.5px; }
+  }
+  .radar-ring {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    border-radius: 50%; border: 2px solid var(--red); pointer-events: none;
+    animation: radarSweep 2s ease-out infinite;
+  }
+  .radar-ring.ring2 { animation-delay: 0.7s; }
+  .radar-ring.ring3 { animation-delay: 1.4s; }
+  .radar-ring.blue { border-color: var(--blue); }
+
+  /* Click ripple effect */
+  @keyframes rippleOut {
+    0% { width: 0; height: 0; opacity: 0.4; }
+    100% { width: 80px; height: 80px; opacity: 0; }
+  }
+  .ripple {
+    position: absolute; border-radius: 50%; border: 1.5px solid var(--red);
+    pointer-events: none; z-index: 2000;
+    animation: rippleOut 0.6s ease-out forwards;
+  }
+
+  /* Animated missile arc drawing */
   .missile-path { stroke-dasharray: 10 5; animation: missileFlow 1.2s linear infinite; }
   @keyframes missileFlow { to { stroke-dashoffset: -15; } }
+  @keyframes arcDraw { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+  .arc-animate { stroke-dasharray: 1000; animation: arcDraw 1.5s ease-out forwards, missileFlow 1.2s linear 1.5s infinite; }
+
+  /* Event item stagger entrance */
+  @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+  .ev-item { animation: slideIn 0.35s ease-out backwards; }
+  .ev-item:nth-child(1) { animation-delay: 0s; }
+  .ev-item:nth-child(2) { animation-delay: 0.06s; }
+  .ev-item:nth-child(3) { animation-delay: 0.12s; }
+  .ev-item:nth-child(4) { animation-delay: 0.18s; }
+  .ev-item:nth-child(5) { animation-delay: 0.24s; }
+  .ev-item:nth-child(6) { animation-delay: 0.3s; }
+  .ev-item:nth-child(7) { animation-delay: 0.36s; }
+  .ev-item:nth-child(8) { animation-delay: 0.42s; }
+
+  /* Stats number flash on change */
+  @keyframes numFlash { 0% { color: var(--red); transform: scale(1.15); } 100% { color: inherit; transform: scale(1); } }
+  .stat-flash { animation: numFlash 0.5s ease-out; }
+
+  /* Oil price glow when critical */
+  @keyframes oilGlow { 0%, 100% { text-shadow: 0 0 4px rgba(196,30,30,0.3); } 50% { text-shadow: 0 0 12px rgba(196,30,30,0.6); } }
+  .oil-critical { animation: oilGlow 2s ease-in-out infinite; }
+
+  /* Escalation bar pulse when maxed */
+  @keyframes escPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .esc-maxed { animation: escPulse 1.5s ease-in-out infinite; }
 
   /* Crosshair overlay */
   #crosshair {
@@ -1028,11 +1090,20 @@ function drawBezierArc(from, to, color, label) {
     color, weight: 1.5, opacity: 0.55, dashArray: '6 4', className: 'missile-path'
   }).addTo(arcLayer);
   line.bindTooltip(label, { sticky: true, opacity: 0.9 });
+  return line;
 }
 
 function renderArcs(day) {
   arcLayer.clearLayers();
-  missileArcs.filter(a => a.day === day).forEach(a => drawBezierArc(a.from, a.to, a.color, a.label));
+  missileArcs.filter(a => a.day === day).forEach((a, i) => {
+    const arc = drawBezierArc(a.from, a.to, a.color, a.label);
+    // Stagger arc animations
+    if (arc && arc._path) {
+      arc._path.classList.remove('missile-path');
+      arc._path.classList.add('arc-animate');
+      arc._path.style.animationDelay = (i * 0.2) + 's';
+    }
+  });
 }
 
 // ─── Blast Radius ───────────────────────────────────────────────────
@@ -1515,12 +1586,32 @@ function renderDay(day) {
     const m = L.marker([e.lat, e.lng], { icon: makeIcon(e.type, 'small'), opacity: 0.35 }).addTo(markerLayer);
     m.bindPopup(popupHtml(e));
   });
-  // Current (with fade-in class)
-  current.forEach(e => {
+  // Current (with fade-in + explosion + radar)
+  current.forEach((e, i) => {
     const icon = makeIcon(e.type, e.size||'normal');
-    icon.options.className = (icon.options.className || '') + ' marker-new';
+    const isStrike = e.type === 'strike' || e.type === 'retaliation' || e.type === 'nuclear';
+    const isLarge = e.size === 'large';
+    let cls = 'marker-new';
+    if (isStrike) cls += ' marker-explode';
+    icon.options.className = (icon.options.className || '') + ' ' + cls;
+    // Add radar rings to large markers
+    if (isLarge && isStrike) {
+      const ringColor = e.type === 'strike' || e.type === 'nuclear' ? 'blue' : '';
+      icon.options.html = icon.options.html +
+        `<div class="radar-ring ${ringColor}"></div><div class="radar-ring ring2 ${ringColor}"></div><div class="radar-ring ring3 ${ringColor}"></div>`;
+    }
     const m = L.marker([e.lat, e.lng], { icon, opacity: 1 }).addTo(markerLayer);
     m.bindPopup(popupHtml(e));
+    // Click ripple effect
+    m.on('click', function(ev) {
+      const pt = map.latLngToContainerPoint(ev.latlng);
+      const rip = document.createElement('div');
+      rip.className = 'ripple';
+      rip.style.left = (pt.x - 40) + 'px';
+      rip.style.top = (pt.y - 40) + 'px';
+      document.getElementById('map').appendChild(rip);
+      setTimeout(() => rip.remove(), 700);
+    });
   });
 
   renderArcs(day);
@@ -1557,6 +1648,9 @@ function renderDay(day) {
   const oilEl = document.getElementById('s-oil');
   oilEl.textContent = '$' + s.oil;
   oilEl.style.color = s.oil >= 100 ? 'var(--red)' : s.oil >= 85 ? 'var(--orange)' : 'var(--text)';
+  if (s.oil >= 110) { oilEl.classList.add('oil-critical'); } else { oilEl.classList.remove('oil-critical'); }
+  // Flash stats on change
+  document.querySelectorAll('.stat-val').forEach(el => { el.classList.remove('stat-flash'); void el.offsetWidth; el.classList.add('stat-flash'); });
   document.getElementById('s-day').textContent = s.dayNum;
 
   // Animated total counter in header
@@ -1580,10 +1674,14 @@ function renderDay(day) {
   const maxEsc = 50; // normalize to percentage
   const usPct = Math.min(100, (usScore / maxEsc) * 100);
   const irPct = Math.min(100, (irScore / maxEsc) * 100);
-  document.getElementById('esc-us').style.width = usPct + '%';
-  document.getElementById('esc-ir').style.width = irPct + '%';
+  const escUs = document.getElementById('esc-us');
+  const escIr = document.getElementById('esc-ir');
+  escUs.style.width = usPct + '%';
+  escIr.style.width = irPct + '%';
   document.getElementById('esc-us-val').textContent = Math.round(usScore);
   document.getElementById('esc-ir-val').textContent = Math.round(irScore);
+  if (usPct >= 90) escUs.classList.add('esc-maxed'); else escUs.classList.remove('esc-maxed');
+  if (irPct >= 90) escIr.classList.add('esc-maxed'); else escIr.classList.remove('esc-maxed');
 
   document.getElementById('date-display').textContent = formatDate(day);
   document.getElementById('phase-label').textContent = getPhaseLabel(day);
