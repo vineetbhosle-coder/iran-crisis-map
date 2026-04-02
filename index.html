@@ -61,9 +61,60 @@
     font-family: var(--mono);
     background: var(--bg); color: var(--text); overflow: hidden; height: 100vh;
     -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column;
   }
 
-  #map { width: 100%; height: calc(100vh - 132px); z-index: 1; position: relative; }
+  /* === Dashboard Grid === */
+  #dashboard {
+    display: flex; flex: 1; overflow: hidden; position: relative;
+  }
+  #left-panel {
+    width: 240px; flex-shrink: 0; overflow-y: auto; overflow-x: hidden;
+    background: var(--panel); border-right: 1px solid var(--border);
+    padding: 12px; z-index: 1000;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  #left-panel::-webkit-scrollbar { width: 3px; }
+  #left-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  #right-panel {
+    width: 300px; flex-shrink: 0; overflow-y: auto; overflow-x: hidden;
+    background: var(--panel); border-left: 1px solid var(--border);
+    padding: 12px; z-index: 1000;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  #right-panel::-webkit-scrollbar { width: 3px; }
+  #right-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  #map-wrap { flex: 1; position: relative; overflow: hidden; }
+  #map { width: 100%; height: 100%; z-index: 1; position: relative; }
+
+  /* === Command center panel sections === */
+  .cmd-section {
+    margin-bottom: 12px; position: relative;
+  }
+  .cmd-section-title {
+    font-family: var(--mono); font-size: 0.5rem; font-weight: 700;
+    color: var(--text3); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 8px; padding-bottom: 4px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cmd-section-title::before {
+    content: ''; width: 3px; height: 10px; background: var(--red); border-radius: 1px;
+  }
+  /* Corner bracket cards */
+  .cmd-card {
+    position: relative; padding: 8px 10px; margin: 4px 0;
+    border: 1px solid var(--border); border-radius: 2px;
+    background: rgba(0,0,0,0.02);
+  }
+  .cmd-card::before, .cmd-card::after {
+    content: ''; position: absolute; width: 6px; height: 6px;
+    border-style: solid; border-color: var(--text3);
+  }
+  .cmd-card::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .cmd-card::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+  [data-theme="dark"] .cmd-card { background: rgba(60,200,80,0.03); border-color: rgba(60,200,80,0.1); }
+  [data-theme="dark"] .cmd-card::before, [data-theme="dark"] .cmd-card::after { border-color: rgba(60,200,80,0.25); }
 
   /* === Loading === */
   #loading {
@@ -82,23 +133,31 @@
   /* === Header === */
   #header {
     background: var(--header-bg);
-    padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--border); height: 48px; z-index: 1000;
+    padding: 0 16px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border); height: 40px; z-index: 1000;
     backdrop-filter: blur(12px);
   }
-  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-left { display: flex; align-items: center; gap: 10px; }
+  .hdr-icon { color: var(--red); font-size: 1rem; line-height: 1; }
   #header h1 {
-    font-family: var(--mono); font-size: 0.82rem; font-weight: 700;
-    letter-spacing: 2px; color: var(--text); text-transform: uppercase;
+    font-family: var(--mono); font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 2.5px; color: var(--text); text-transform: uppercase;
   }
   .live-badge {
-    font-family: var(--mono); font-size: 0.52rem; font-weight: 700; color: white;
-    background: var(--red); padding: 2px 8px; border-radius: 3px; letter-spacing: 1px;
+    font-family: var(--mono); font-size: 0.48rem; font-weight: 700; color: white;
+    background: var(--red); padding: 2px 8px; border-radius: 2px; letter-spacing: 1.5px;
     animation: livePulse 1.5s infinite;
   }
   @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .header-center { display: flex; align-items: center; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .hdr-stat { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .hdr-stat-label { font-family: var(--mono); font-size: 0.4rem; color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; }
+  .hdr-stat-val { font-family: var(--mono); font-size: 0.72rem; font-weight: 700; color: var(--text); }
+  .hdr-divider { width: 1px; height: 18px; background: var(--border); }
+  #utc-clock { font-family: var(--mono); font-size: 0.55rem; color: var(--text3); letter-spacing: 0.5px; }
   .header-coord {
-    font-family: var(--mono); font-size: 0.6rem; color: var(--text3);
+    font-family: var(--mono); font-size: 0.55rem; color: var(--text3);
     letter-spacing: 0.5px;
   }
 
@@ -171,7 +230,7 @@
   [data-theme="dark"] #phase-label { text-shadow: var(--nv-glow); }
   [data-theme="dark"] h3, [data-theme="dark"] h4 { text-shadow: var(--nv-glow); }
   /* Scanline texture overlay on map in dark mode */
-  [data-theme="dark"] #map::after {
+  [data-theme="dark"] #map-wrap #map::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: repeating-linear-gradient(
       0deg,
@@ -183,7 +242,7 @@
     pointer-events: none; z-index: 999; mix-blend-mode: multiply;
   }
   /* Subtle vignette on map edges */
-  [data-theme="dark"] #map::before {
+  [data-theme="dark"] #map-wrap #map::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
     pointer-events: none; z-index: 998;
@@ -286,7 +345,15 @@
   #date-markers span:hover { color: var(--text); }
   #date-markers .month-lbl { font-weight: 700; color: var(--text2); font-size: 0.55rem; }
 
-  /* === Panels (glassmorphism + intel dossier) === */
+  /* === Stat typography === */
+  .stat-label-sm { font-family: var(--mono); font-size: 0.45rem; color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
+  .stat-val-lg { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; }
+  .stat-val-xl { font-family: var(--mono); font-size: 1.1rem; font-weight: 800; letter-spacing: -0.5px; }
+  .legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 8px; }
+  .legend-grid .legend-item { font-size: 0.55rem; gap: 5px; }
+  .legend-grid .legend-item span { color: var(--text2); }
+
+  /* === Legacy glass-panel (kept for compatibility) === */
   .glass-panel {
     background: var(--panel); border: 1px solid var(--border);
     border-radius: 4px; backdrop-filter: blur(20px) saturate(1.6);
@@ -298,22 +365,7 @@
     background: var(--red); border-radius: 4px 4px 0 0; opacity: 0.6;
   }
 
-  /* === Event Panel === */
-  #event-panel {
-    position: absolute; top: 56px; right: 12px; width: 320px; max-height: 340px;
-    overflow-y: auto; padding: 14px;
-  }
-  #event-panel h3 {
-    font-family: var(--mono); color: var(--text2); font-size: 0.6rem; margin-bottom: 12px;
-    text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
-    display: flex; align-items: center; gap: 8px;
-    border-bottom: 1px solid var(--border); padding-bottom: 8px;
-  }
-  #event-panel h3 .ev-count {
-    background: var(--red); color: white; font-size: 0.55rem;
-    padding: 1px 7px; border-radius: 2px; font-weight: 700;
-    font-family: var(--mono);
-  }
+  /* === Event List (in right panel) === */
   #event-list { transition: opacity 0.25s ease; }
   .stat-val { transition: color 0.3s ease; }
   #date-display { transition: color 0.2s ease; }
@@ -345,42 +397,17 @@
   .badge-hezbollah { background: #e8f5e9; color: #2e7d32; }
   .badge-humanitarian { background: #ffebee; color: #b71c1c; }
 
-  /* === Stats Panel === */
-  #stats-panel {
-    position: absolute; top: 56px; left: 12px;
-    padding: 14px 18px; min-width: 210px;
-  }
-  #stats-panel h4 {
-    font-family: var(--mono); color: var(--text2); margin-bottom: 10px; font-size: 0.58rem;
-    text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
-    border-bottom: 1px solid var(--border); padding-bottom: 8px;
-  }
+  /* === Stats === */
   .stat-row {
     display: flex; justify-content: space-between; align-items: center;
-    gap: 14px; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.04);
+    gap: 8px; padding: 0;
   }
-  .stat-row:last-child { border-bottom: none; }
-  .stat-label { color: var(--text2); font-size: 0.68rem; font-weight: 400; }
+  .stat-label { color: var(--text2); font-size: 0.58rem; font-weight: 400; }
   .stat-val {
     font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.82rem;
     transition: color 0.3s;
   }
-  .stat-indicator {
-    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
-    margin-right: 6px;
-  }
-
-  /* === Legend === */
-  #legend {
-    position: absolute; bottom: 90px; left: 12px;
-    padding: 10px 14px; font-size: 0.66rem;
-  }
-  #legend h4 {
-    font-family: var(--mono); color: var(--text2); margin-bottom: 6px; font-size: 0.55rem;
-    text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
-  }
-  .legend-item { display: flex; align-items: center; gap: 8px; margin: 3px 0; color: var(--text2); font-size: 0.64rem; }
-  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .legend-item { display: flex; align-items: center; gap: 6px; margin: 2px 0; color: var(--text2); font-size: 0.58rem; }
 
   /* === Source === */
   #source-bar {
@@ -408,8 +435,30 @@
   .popup-date { color: var(--text3); font-size: 0.6rem; margin-top: 4px; font-family: var(--mono); letter-spacing: 0.5px; }
   .popup-coords { color: var(--text3); font-size: 0.55rem; font-family: var(--mono); margin-top: 2px; }
 
+  /* Dot grid pattern on map background */
+  #map-wrap::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+    background-size: 20px 20px; pointer-events: none; z-index: 2; opacity: 0.4;
+  }
+  [data-theme="dark"] #map-wrap::after {
+    background-image: radial-gradient(circle, rgba(60,200,80,0.08) 1px, transparent 1px);
+    opacity: 0.5;
+  }
+
+  /* Dark mode panel styles */
+  [data-theme="dark"] #left-panel, [data-theme="dark"] #right-panel {
+    background: rgba(8,12,8,0.98); border-color: rgba(60,200,80,0.08);
+  }
+  [data-theme="dark"] .cmd-section-title { color: rgba(60,200,80,0.5); border-color: rgba(60,200,80,0.1); }
+  [data-theme="dark"] .cmd-section-title::before { background: rgba(60,200,80,0.6); }
+  [data-theme="dark"] .stat-label-sm { color: rgba(60,200,80,0.4); }
+  [data-theme="dark"] .stat-val-xl { text-shadow: 0 0 8px rgba(60,200,80,0.3); }
+  [data-theme="dark"] .stat-val-lg { text-shadow: 0 0 6px rgba(60,200,80,0.2); }
+  [data-theme="dark"] #esc-info { background: rgba(10,16,10,0.95); color: #7aad70; }
+
   /* Leaflet controls */
-  .leaflet-control-zoom { z-index: 1000 !important; margin-top: 260px !important; margin-left: 12px !important; }
+  .leaflet-control-zoom { z-index: 1000 !important; margin-top: 12px !important; margin-left: 12px !important; }
   .leaflet-control-zoom a {
     background: var(--panel) !important; color: var(--text) !important;
     border: 1px solid var(--border) !important; border-radius: 6px !important;
@@ -564,131 +613,60 @@
   #event-panel::-webkit-scrollbar-track { background: transparent; }
 
   /* === Mobile Responsive === */
-  /*
-   * MOBILE LAYOUT — clear stacking, no overlaps
-   * ┌─────────────────────────┐
-   * │ HEADER         32px     │ position: fixed, top: 0
-   * ├─────────────────────────┤
-   * │ KPI STRIP      54px     │ position: fixed, top: 32px
-   * ├─────────────────────────┤
-   * │                         │
-   * │ MAP        remaining    │ position: fixed, top: 86px, bottom: 72px
-   * │                         │
-   * ├─────────────────────────┤
-   * │ EVENTS     collapsible  │ position: fixed, above timeline
-   * ├─────────────────────────┤
-   * │ PLAY + SLIDER   40px    │ position: fixed, bottom: 20px
-   * ├─────────────────────────┤
-   * │ DATES + SOURCES 20px    │ position: fixed, bottom: 0
-   * └─────────────────────────┘
-   */
-  @media (max-width: 768px) {
-    body { overflow: hidden; }
+  @media (max-width: 900px) {
+    body { overflow: hidden; display: flex; flex-direction: column; }
 
-    /* === HEADER: 32px === */
-    #header { position: fixed; top: 0; left: 0; right: 0; z-index: 1001; padding: 0 10px; height: 32px; }
-    #header h1 { font-size: 0.72rem; letter-spacing: 1.5px; }
-    .live-badge { display: none; }
-    #phase-filters { display: none; }
-    #date-display { font-size: 0.78rem; color: var(--red); }
+    /* Hide side panels on mobile */
+    #left-panel { display: none; }
+    #right-panel { display: none; }
+
+    /* Header compact */
+    #header { position: fixed; top: 0; left: 0; right: 0; z-index: 1001; padding: 0 10px; height: 36px; }
+    #header h1 { font-size: 0.65rem; letter-spacing: 1.5px; }
+    .hdr-icon { display: none; }
+    .header-center { display: none; }
     .header-coord { display: none; }
+    #utc-clock { display: none; }
+    .hdr-divider { display: none; }
+    .hdr-stat-label { font-size: 0.35rem; }
+    .hdr-stat-val { font-size: 0.65rem; }
+    .counter-badge { display: none; }
 
-    /* === KPI STRIP: 72px === */
-    #stats-panel {
-      position: fixed !important; top: 32px; left: 0; right: 0; z-index: 1001;
-      border-radius: 0 !important; padding: 8px 2px 6px;
-      display: flex; flex-wrap: nowrap; gap: 0;
-      justify-content: space-between; align-items: stretch; min-width: auto;
-      background: var(--header-bg); backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      box-shadow: none !important;
-    }
-    #stats-panel::before { display: none !important; }
-    #stats-panel h4 { display: none; }
-    .stat-row {
-      flex: 1; padding: 2px 1px; border: none; gap: 1px;
-      flex-direction: column; align-items: center; text-align: center;
-      border-right: 1px solid var(--border);
-    }
-    .stat-row:last-child { border-right: none; }
-    .stat-label {
-      font-size: 0.42rem; letter-spacing: 0.1px; white-space: normal;
-      line-height: 1.2; display: block; color: var(--text2);
-      max-width: 46px; text-align: center; min-height: 20px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .stat-label .stat-indicator { display: none; }
-    .stat-val { font-size: 0.85rem; line-height: 1.3; font-weight: 700; margin-top: 2px; }
-    /* Hide escalation on mobile */
-    #stats-panel > div:last-child { display: none; }
+    /* Dashboard fills screen */
+    #dashboard { position: fixed; top: 36px; left: 0; right: 0; bottom: 88px; }
+    #map-wrap { width: 100%; height: 100%; }
+    #map { width: 100%; height: 100%; }
 
-    /* === MAP: fills remaining space === */
-    #map {
-      position: fixed !important; top: 104px; left: 0; right: 0; bottom: 100px;
-      height: auto !important; margin: 0 !important;
-    }
+    /* Dot grid off on mobile */
+    #map-wrap::after { display: none; }
 
-    /* === EVENTS: collapsible sheet above timeline === */
-    #event-panel {
-      position: fixed !important; bottom: 100px; left: 0; right: 0;
-      top: auto; width: 100%; max-height: 30vh; padding: 0;
-      border-radius: 8px 8px 0 0 !important; overflow: hidden;
-      z-index: 999; transition: max-height 0.3s ease;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.08) !important;
-    }
-    #event-panel.collapsed { max-height: 32px; }
-    #event-panel h3 {
-      font-size: 0.55rem; margin: 0; padding: 7px 12px;
-      cursor: pointer; background: var(--header-bg);
-      border-bottom: 1px solid var(--border);
-    }
-    #event-list {
-      max-height: calc(25vh - 30px); overflow-y: auto;
-      padding: 2px 10px 6px; background: var(--panel);
-    }
-    .ev-item { padding: 5px 6px; margin: 2px 0; border-radius: 6px; }
-    .ev-item .ev-badge { font-size: 0.42rem; padding: 1px 4px; }
-    .ev-item .ev-title { font-size: 0.68rem; }
-    .ev-item .ev-desc { font-size: 0.55rem; }
-    .ev-item .ev-coords { display: none; }
-
-    #legend { display: none; }
-
-    /* === TIMELINE: fixed at bottom, 100px total === */
+    /* Timeline at bottom */
     #timeline-container {
       position: fixed !important; bottom: 0; left: 0; right: 0;
-      height: 100px !important; padding: 6px 10px 4px;
+      height: 88px !important; padding: 4px 10px 2px;
       z-index: 1001; background: var(--timeline-bg);
       border-top: 1px solid var(--border);
     }
-    #timeline-controls { margin-bottom: 4px; gap: 8px; }
-    #play-btn { padding: 6px 18px; font-size: 0.6rem; border-radius: 4px; }
-    #speed-select { font-size: 0.55rem; padding: 3px 8px; border-radius: 4px; }
+    #timeline-controls { margin-bottom: 2px; gap: 6px; }
+    #play-btn { padding: 5px 16px; font-size: 0.58rem; }
+    #speed-select { font-size: 0.52rem; }
     #phase-label { display: none; }
-    #slider-wrap { height: 28px; }
-    #timeline-slider { margin-top: 4px; height: 5px; }
-    #timeline-slider::-webkit-slider-thumb { width: 18px; height: 18px; margin-top: -7px; }
-    #tick-marks { height: 4px; }
-    #phase-bar { height: 4px; }
-    #density-bar { height: 8px; }
-    #date-markers { margin-top: 2px; }
-    #date-markers span { font-size: 0.42rem; }
-    #date-markers .month-lbl { font-size: 0.48rem; }
+    #slider-wrap { height: 26px; }
+    #timeline-slider::-webkit-slider-thumb { width: 16px; height: 16px; }
+    #date-markers span { font-size: 0.4rem; }
     #date-markers span:not(.month-lbl) { display: none; }
     #source-bar { display: none; }
 
-    /* Hide decorative elements */
+    /* Hide decorative */
     #region-frame { display: none !important; }
     #crosshair { display: none; }
     .leaflet-control-zoom { margin-top: 4px !important; margin-left: 4px !important; }
-    .leaflet-control-zoom a { width: 26px !important; height: 26px !important; line-height: 26px !important; font-size: 13px !important; }
+    .leaflet-control-zoom a { width: 28px !important; height: 28px !important; line-height: 28px !important; font-size: 14px !important; }
   }
 
   @media (max-width: 380px) {
-    #header h1 { font-size: 0.6rem; }
-    #date-display { font-size: 0.65rem; }
-    .stat-val { font-size: 0.6rem; }
-    .stat-label { font-size: 0.32rem; }
+    #header h1 { font-size: 0.55rem; }
+    .hdr-stat { display: none; }
   }
 </style>
 </head>
@@ -702,108 +680,123 @@
 
 <div id="header">
   <div class="header-left">
-    <h1>Iran Crisis</h1>
-    <span class="live-badge">ONGOING</span>
+    <span class="hdr-icon">&#9673;</span>
+    <h1>Iran Crisis 2025–2026</h1>
+    <span class="live-badge">LIVE</span>
   </div>
-  <div id="phase-filters">
-    <button class="phase-btn active" onclick="setPhase('all',this)">All</button>
-    <button class="phase-btn" onclick="setPhase('protests',this)">Protests</button>
-    <button class="phase-btn" onclick="setPhase('war',this)">Conflict</button>
-    <button class="phase-btn" onclick="setPhase('regional',this)">Regional</button>
+  <div class="header-center">
+    <div id="phase-filters">
+      <button class="phase-btn active" onclick="setPhase('all',this)">All</button>
+      <button class="phase-btn" onclick="setPhase('protests',this)">Protests</button>
+      <button class="phase-btn" onclick="setPhase('war',this)">Conflict</button>
+      <button class="phase-btn" onclick="setPhase('regional',this)">Regional</button>
+    </div>
   </div>
-  <div style="display:flex;align-items:center;gap:16px;">
+  <div class="header-right">
+    <span class="hdr-stat"><span class="hdr-stat-label">OIL</span><span class="hdr-stat-val" id="hdr-oil">$73</span></span>
+    <span class="hdr-divider"></span>
+    <span class="hdr-stat"><span class="hdr-stat-label">DAY</span><span class="hdr-stat-val" id="hdr-day">1</span></span>
+    <span class="hdr-divider"></span>
     <span class="counter-badge" id="total-counter">0 EVENTS</span>
-    <span class="header-coord" id="cursor-coord">35.6895°N 51.3890°E</span>
+    <span class="hdr-divider"></span>
     <div id="date-display">28 DEC 2025</div>
+    <span id="utc-clock"></span>
+    <span class="header-coord" id="cursor-coord">35.6895°N 51.3890°E</span>
     <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">&#9790;</button>
   </div>
 </div>
 
-<div id="map">
-  <div id="crosshair"></div>
-  <div id="region-frame">
-    <div class="corner tl"></div><div class="corner tr"></div>
-    <div class="corner bl"></div><div class="corner br"></div>
-    <div class="rf-label" id="rf-label"></div>
-    <div class="rf-coords" id="rf-coords"></div>
+<div id="dashboard">
+  <!-- ═══ LEFT PANEL ═══ -->
+  <div id="left-panel">
+    <div class="cmd-section">
+      <div class="cmd-section-title">Crisis Dashboard</div>
+      <div class="cmd-card">
+        <div class="stat-row"><span class="stat-label">Protest Deaths</span><span class="stat-val" id="s-protest" style="color:var(--orange)">0</span></div>
+      </div>
+      <div class="cmd-card">
+        <div class="stat-row"><span class="stat-label">Strike Deaths (Iran)</span><span class="stat-val" id="s-strike" style="color:var(--red)">0</span></div>
+      </div>
+      <div class="cmd-card">
+        <div class="stat-row"><span class="stat-label">Israeli Casualties</span><span class="stat-val" id="s-israel" style="color:var(--orange)">0</span></div>
+      </div>
+      <div class="cmd-card" style="display:flex;gap:8px;">
+        <div style="flex:1;"><div class="stat-label-sm">Hormuz</div><div class="stat-val-lg" id="s-hormuz" style="color:var(--green)">OPEN</div></div>
+        <div style="flex:1;"><div class="stat-label-sm">Internet</div><div class="stat-val-lg" id="s-internet" style="color:var(--green)">ONLINE</div></div>
+      </div>
+      <div class="cmd-card">
+        <div class="stat-label-sm">Brent Crude Oil</div>
+        <div style="display:flex;align-items:baseline;gap:8px;">
+          <span class="stat-val-xl" id="s-oil">$73</span>
+          <svg id="oil-spark" width="100" height="24" style="flex:1;"></svg>
+        </div>
+      </div>
+      <div class="cmd-card">
+        <div class="stat-label-sm">Day of Crisis</div>
+        <div class="stat-val-xl" id="s-day">1</div>
+      </div>
+    </div>
+
+    <div class="cmd-section">
+      <div class="cmd-section-title" style="cursor:pointer;" onclick="document.getElementById('esc-info').classList.toggle('visible')">Escalation Index &#9432;</div>
+      <div id="esc-info" style="display:none;font-size:0.52rem;color:var(--text2);line-height:1.5;margin-bottom:8px;padding:6px;background:rgba(0,0,0,0.03);border-radius:3px;">
+        3-day rolling window. <b>Weights:</b> Nuclear=10, Strike=6, Retaliation=6, Naval=4, Hezbollah=4<br>
+        <span style="color:#1565c0;">US/IL</span> = strike + nuclear | <span style="color:#c62828;">IRAN</span> = retaliation + proxy
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
+        <span class="esc-label" style="font-family:var(--mono);font-size:0.48rem;color:#1565c0;width:24px;text-align:right;">US/IL</span>
+        <div class="esc-track" style="flex:1;height:5px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
+          <div id="esc-us" style="height:100%;background:#1565c0;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
+        </div>
+        <span id="esc-us-val" style="font-family:var(--mono);font-size:0.48rem;color:#1565c0;width:16px;">0</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span class="esc-label" style="font-family:var(--mono);font-size:0.48rem;color:#c62828;width:24px;text-align:right;">IRAN</span>
+        <div class="esc-track" style="flex:1;height:5px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
+          <div id="esc-ir" style="height:100%;background:#c62828;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
+        </div>
+        <span id="esc-ir-val" style="font-family:var(--mono);font-size:0.48rem;color:#c62828;width:16px;">0</span>
+      </div>
+    </div>
+
+    <div class="cmd-section" id="legend-section">
+      <div class="cmd-section-title">Event Types</div>
+      <div class="legend-grid">
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #1565c0;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="20" stroke="#1565c0" stroke-width="4"/><line x1="4" y1="12" x2="20" y2="12" stroke="#1565c0" stroke-width="4"/></svg></div><span>Strike</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #c62828;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><path d="M12 3l10 18H2z" fill="#c62828"/></svg></div><span>Retaliation</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #e65100;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4" fill="#e65100"/><path d="M5 22v-4a7 7 0 0114 0v4" fill="#e65100" opacity="0.5"/></svg></div><span>Protest</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #455a64;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><line x1="5" y1="2" x2="5" y2="22" stroke="#455a64" stroke-width="2"/><path d="M5 2h14l-5 5 5 5H5" fill="#455a64" opacity="0.4"/></svg></div><span>Political</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #6a1b9a;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z" fill="#6a1b9a" opacity="0.85"/></svg></div><span>Nuclear</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #0277bd;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="#0277bd" stroke-width="3.5"/></svg></div><span>Naval</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #78909c;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><div style="width:6px;height:6px;border-radius:50%;background:#78909c;"></div></div><span>Hezbollah</span></div>
+        <div class="legend-item"><div style="width:14px;height:14px;border:1.5px solid #b71c1c;border-radius:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);"><svg width="8" height="8" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="18" rx="1" fill="#b71c1c"/><rect x="3" y="9" width="18" height="6" rx="1" fill="#b71c1c"/></svg></div><span>Humanitarian</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MAP ═══ -->
+  <div id="map-wrap">
+    <div id="map">
+      <div id="crosshair"></div>
+      <div id="region-frame">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="rf-label" id="rf-label"></div>
+        <div class="rf-coords" id="rf-coords"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <div id="right-panel">
+    <div class="cmd-section">
+      <div class="cmd-section-title">Intel Feed <span class="ev-count" id="ev-count" style="background:var(--red);color:white;font-size:0.5rem;padding:1px 6px;border-radius:2px;margin-left:auto;">0</span></div>
+      <div id="event-list"></div>
+    </div>
   </div>
 </div>
 
-<div id="stats-panel" class="glass-panel">
-  <h4>Crisis Dashboard</h4>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--gold)"></span>Protest Deaths</span>
-    <span class="stat-val" id="s-protest" style="color:var(--orange)">0</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--red)"></span>Strike Deaths (Iran)</span>
-    <span class="stat-val" id="s-strike" style="color:var(--red)">0</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--orange)"></span>Israeli Casualties</span>
-    <span class="stat-val" id="s-israel" style="color:var(--orange)">0</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--cyan)"></span>Strait of Hormuz</span>
-    <span class="stat-val" id="s-hormuz" style="color:var(--green)">OPEN</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--green)"></span>Internet (Iran)</span>
-    <span class="stat-val" id="s-internet" style="color:var(--green)">ONLINE</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--gold)"></span>Brent Crude</span>
-    <span class="stat-val" id="s-oil" style="color:var(--text);">$73</span>
-  </div>
-  <div class="stat-row">
-    <span class="stat-label"><span class="stat-indicator" style="background:var(--text2)"></span>Day of Crisis</span>
-    <span class="stat-val" id="s-day" style="color:var(--text);">1</span>
-  </div>
-  <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;">
-    <div style="font-family:var(--mono);font-size:0.55rem;color:var(--text2);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;margin-bottom:6px;cursor:pointer;position:relative;" onclick="document.getElementById('esc-info').classList.toggle('visible')">Escalation Index &#9432;
-      <div id="esc-info" class="glass-panel" style="display:none;position:absolute;top:20px;left:0;width:220px;padding:10px;font-size:0.55rem;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text2);line-height:1.5;z-index:1001;">
-        <div style="font-weight:700;color:var(--text);margin-bottom:4px;">METHODOLOGY</div>
-        3-day rolling window scoring events by type and intensity.<br><br>
-        <b>Weights:</b> Nuclear=10, Strike=6, Retaliation=6, Naval=4, Hezbollah=4, Humanitarian=2, Political=1<br><br>
-        <b>Large events:</b> 2x multiplier<br>
-        <b>Normalized:</b> 50-point scale<br><br>
-        <span style="color:#1565c0;">US/IL</span> = strike + nuclear events<br>
-        <span style="color:#c62828;">IRAN</span> = retaliation + proxy events
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-      <span class="esc-label" style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:28px;text-align:right;">US/IL</span>
-      <div class="esc-track" style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
-        <div id="esc-us" style="height:100%;background:#1565c0;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
-      </div>
-      <span id="esc-us-val" style="font-family:var(--mono);font-size:0.5rem;color:#1565c0;width:16px;">0</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <span class="esc-label" style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:28px;text-align:right;">IRAN</span>
-      <div class="esc-track" style="flex:1;height:6px;background:#e8e8e8;border-radius:3px;overflow:hidden;">
-        <div id="esc-ir" style="height:100%;background:#c62828;border-radius:3px;width:0%;transition:width 0.5s ease;"></div>
-      </div>
-      <span id="esc-ir-val" style="font-family:var(--mono);font-size:0.5rem;color:#c62828;width:16px;">0</span>
-    </div>
-  </div>
-</div>
-
-<div id="event-panel" class="glass-panel">
-  <h3 onclick="this.parentElement.classList.toggle('collapsed')">Events <span class="ev-count" id="ev-count">0</span> <span style="float:right;font-size:0.6rem;color:var(--text3);">&#9660;</span></h3>
-  <div id="event-list"></div>
-</div>
-
-<div id="legend" class="glass-panel">
-  <h4>Event Types</h4>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #1565c0;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><line x1="12" y1="4" x2="12" y2="20" stroke="#1565c0" stroke-width="4"/><line x1="4" y1="12" x2="20" y2="12" stroke="#1565c0" stroke-width="4"/></svg></div> US/Israeli Strike</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #c62828;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><path d="M12 3l10 18H2z" fill="#c62828"/></svg></div> Iranian Retaliation</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #e65100;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4" fill="#e65100"/><path d="M5 22v-4a7 7 0 0114 0v4" fill="#e65100" opacity="0.5"/></svg></div> Protest</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #455a64;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><line x1="5" y1="2" x2="5" y2="22" stroke="#455a64" stroke-width="2"/><path d="M5 2h14l-5 5 5 5H5" fill="#455a64" opacity="0.4"/></svg></div> Political</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #6a1b9a;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z" fill="#6a1b9a" opacity="0.85"/></svg></div> Nuclear</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #0277bd;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="none" stroke="#0277bd" stroke-width="3.5"/></svg></div> Naval</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #78909c;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><div style="width:7px;height:7px;border-radius:50%;background:#78909c;opacity:0.7;"></div></div> Hezbollah</div>
-  <div class="legend-item"><div style="width:16px;height:16px;border:1.5px solid #b71c1c;border-radius:3px;display:flex;align-items:center;justify-content:center;background:white;"><svg width="10" height="10" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="18" rx="1" fill="#b71c1c"/><rect x="3" y="9" width="18" height="6" rx="1" fill="#b71c1c"/></svg></div> Humanitarian</div>
-</div>
+<!-- Legend now in left panel -->
 
 <div id="timeline-container">
   <div id="timeline-controls">
@@ -1702,6 +1695,13 @@ function renderDay(day) {
   // Flash stats on change
   document.querySelectorAll('.stat-val').forEach(el => { el.classList.remove('stat-flash'); void el.offsetWidth; el.classList.add('stat-flash'); });
   document.getElementById('s-day').textContent = s.dayNum;
+  // Header stats
+  const hdrOil = document.getElementById('hdr-oil');
+  if (hdrOil) { hdrOil.textContent = '$' + s.oil; hdrOil.style.color = s.oil >= 100 ? 'var(--red)' : 'var(--text)'; }
+  const hdrDay = document.getElementById('hdr-day');
+  if (hdrDay) hdrDay.textContent = s.dayNum;
+  // Oil sparkline
+  updateOilSparkline(day);
 
   // Animated total counter in header
   const totalSoFar = events.filter(e => e.day <= day && (!pf || e.phase === pf)).length;
@@ -1950,6 +1950,36 @@ async function init() {
   document.getElementById('loading').style.display = 'none';
 }
 init();
+
+// ─── UTC Clock ─────────────────────────────────────────────────────
+function updateClock() {
+  const el = document.getElementById('utc-clock');
+  if (!el) return;
+  const now = new Date();
+  el.textContent = now.toUTCString().slice(17, 25) + ' UTC';
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── Oil Price Sparkline ───────────────────────────────────────────
+const oilPrices = [73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,80,85,85,92,100,96,96,96,100,119,108,108,105,105,105,110,110,110,112,112,126,120,128,125,118,120,122,124,128,126,128];
+function updateOilSparkline(day) {
+  const svg = document.getElementById('oil-spark');
+  if (!svg) return;
+  const start = Math.max(0, day - 20);
+  const data = oilPrices.slice(start, day + 1);
+  if (data.length < 2) { svg.innerHTML = ''; return; }
+  const mn = Math.min(...data) - 5, mx = Math.max(...data) + 5;
+  const w = 100, h = 24;
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - mn) / (mx - mn)) * h;
+    return `${x},${y}`;
+  });
+  const dk = isDark();
+  const col = data[data.length-1] >= 100 ? (dk ? '#ff5252' : '#c62828') : (dk ? '#7aad70' : '#666');
+  svg.innerHTML = `<polyline points="${pts.join(' ')}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
 </script>
 </body>
 </html>
