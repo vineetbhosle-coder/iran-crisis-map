@@ -476,11 +476,18 @@
     animation: rippleOut 0.6s ease-out forwards;
   }
 
-  /* Animated missile arc drawing */
+  /* Flowing dashed missile arcs (original) */
   .missile-path { stroke-dasharray: 10 5; animation: missileFlow 1.2s linear infinite; }
   @keyframes missileFlow { to { stroke-dashoffset: -15; } }
-  @keyframes arcDraw { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
-  .arc-animate { stroke-dasharray: 1000; animation: arcDraw 1.5s ease-out forwards, missileFlow 1.2s linear 1.5s infinite; }
+
+  /* Glowing orb that follows trajectory */
+  .missile-orb {
+    filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px currentColor);
+    transition: none !important;
+  }
+  [data-theme="dark"] .missile-orb {
+    filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 16px currentColor) drop-shadow(0 0 24px currentColor);
+  }
 
   /* Event item stagger entrance */
   @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
@@ -1093,16 +1100,51 @@ function drawBezierArc(from, to, color, label) {
   return line;
 }
 
+// Glowing orb that follows a bezier path
+function animateOrbAlongArc(points, color, delay) {
+  const orb = L.circleMarker(points[0], {
+    radius: 4, color: color, fillColor: color, fillOpacity: 0.9, weight: 0,
+    className: 'missile-orb'
+  }).addTo(arcLayer);
+  let step = 0;
+  const total = points.length;
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      step++;
+      if (step >= total) { clearInterval(interval); arcLayer.removeLayer(orb); return; }
+      orb.setLatLng(points[step]);
+    }, 20);
+    // Loop: restart after reaching end
+    setTimeout(() => {
+      const loopInterval = setInterval(() => {
+        step = 0;
+        const inner = setInterval(() => {
+          step++;
+          if (step >= total) { clearInterval(inner); return; }
+          try { orb.setLatLng(points[step]); } catch(e) { clearInterval(inner); clearInterval(loopInterval); }
+        }, 20);
+      }, total * 20 + 500);
+    }, total * 20 + 100);
+  }, delay);
+}
+
 function renderArcs(day) {
   arcLayer.clearLayers();
   missileArcs.filter(a => a.day === day).forEach((a, i) => {
     const arc = drawBezierArc(a.from, a.to, a.color, a.label);
-    // Stagger arc animations
-    if (arc && arc._path) {
-      arc._path.classList.remove('missile-path');
-      arc._path.classList.add('arc-animate');
-      arc._path.style.animationDelay = (i * 0.2) + 's';
+    // Collect bezier points for orb animation
+    const midLat = (a.from[0] + a.to[0]) / 2;
+    const midLng = (a.from[1] + a.to[1]) / 2;
+    const dist = Math.sqrt((a.to[0]-a.from[0])**2 + (a.to[1]-a.from[1])**2);
+    const offsetLat = midLat + dist * 0.18;
+    const pts = [a.from];
+    for (let t = 0.02; t < 1; t += 0.02) {
+      const lat = (1-t)**2*a.from[0] + 2*(1-t)*t*offsetLat + t**2*a.to[0];
+      const lng = (1-t)**2*a.from[1] + 2*(1-t)*t*midLng + t**2*a.to[1];
+      pts.push([lat, lng]);
     }
+    pts.push(a.to);
+    animateOrbAlongArc(pts, a.color, i * 300);
   });
 }
 
