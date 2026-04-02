@@ -922,7 +922,8 @@
 <script>
 // ─── Map ────────────────────────────────────────────────────────────
 const map = L.map('map', {
-  center: [31, 51], zoom: 5, minZoom: 3, maxZoom: 12, zoomControl: false
+  center: [31, 51], zoom: 5, minZoom: 3, maxZoom: 12, zoomControl: false,
+  scrollWheelZoom: true, wheelDebounceTime: 100
 });
 L.control.zoom({ position: 'topleft' }).addTo(map);
 
@@ -1026,6 +1027,13 @@ function drawGraticule() {
 map.on('moveend', drawGraticule);
 map.on('zoomend', drawGraticule);
 setTimeout(drawGraticule, 500);
+
+// Prevent side panel scroll from zooming map
+document.querySelectorAll('#left-panel, #right-panel').forEach(el => {
+  el.addEventListener('wheel', e => e.stopPropagation());
+  el.addEventListener('mouseenter', () => map.scrollWheelZoom.disable());
+  el.addEventListener('mouseleave', () => map.scrollWheelZoom.enable());
+});
 let geoLayer = null, geoData = null;
 let provinceLayer = null, provinceData = null;
 let currentDay = 0, playing = false, playInterval = null, speed = 700;
