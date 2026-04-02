@@ -615,7 +615,7 @@
   }
 
   /* Flowing dashed missile arcs (original) */
-  .missile-path { stroke-dasharray: 10 5; animation: missileFlow 1.2s linear infinite; }
+  .missile-path { stroke-dasharray: 10 5; animation: missileFlow 2.4s linear infinite; }
   @keyframes missileFlow { to { stroke-dashoffset: -15; } }
 
   /* Glowing orb that follows trajectory */
@@ -990,13 +990,13 @@ function drawGraticule() {
   // Horizontal lines (latitude)
   for (let lat = startLat; lat <= n; lat += step) {
     const line = L.polyline([[lat, w - 5], [lat, e + 5]], {
-      color: '#999', weight: 0.5, opacity: 0.12,
+      color: '#888', weight: 0.7, opacity: 0.3,
       dashArray: '4 6', interactive: false
     }).addTo(graticuleLayer);
     if (lat >= s && lat <= n) {
       const label = L.divIcon({
         className: 'graticule-label-div',
-        html: `<span style="font-family:var(--mono);font-size:8px;color:var(--text3);opacity:0.35;white-space:nowrap;">${Math.abs(lat).toFixed(step < 1 ? 1 : 0)}°${lat >= 0 ? 'N' : 'S'}</span>`,
+        html: `<span style="font-family:var(--mono);font-size:8px;color:var(--text3);opacity:0.55;white-space:nowrap;">${Math.abs(lat).toFixed(step < 1 ? 1 : 0)}°${lat >= 0 ? 'N' : 'S'}</span>`,
         iconSize: [40, 12], iconAnchor: [0, 6]
       });
       L.marker([lat, bounds.getWest() + (e - w) * 0.01], { icon: label, interactive: false }).addTo(graticuleLayer);
@@ -1005,13 +1005,13 @@ function drawGraticule() {
   // Vertical lines (longitude)
   for (let lng = startLng; lng <= e; lng += step) {
     const line = L.polyline([[s - 5, lng], [n + 5, lng]], {
-      color: '#999', weight: 0.5, opacity: 0.12,
+      color: '#888', weight: 0.7, opacity: 0.3,
       dashArray: '4 6', interactive: false
     }).addTo(graticuleLayer);
     if (lng >= w && lng <= e) {
       const label = L.divIcon({
         className: 'graticule-label-div',
-        html: `<span style="font-family:var(--mono);font-size:8px;color:var(--text3);opacity:0.35;white-space:nowrap;">${Math.abs(lng).toFixed(step < 1 ? 1 : 0)}°${lng >= 0 ? 'E' : 'W'}</span>`,
+        html: `<span style="font-family:var(--mono);font-size:8px;color:var(--text3);opacity:0.55;white-space:nowrap;">${Math.abs(lng).toFixed(step < 1 ? 1 : 0)}°${lng >= 0 ? 'E' : 'W'}</span>`,
         iconSize: [40, 12], iconAnchor: [20, 0]
       });
       L.marker([bounds.getNorth() - (n - s) * 0.02, lng], { icon: label, interactive: false }).addTo(graticuleLayer);
@@ -1274,7 +1274,7 @@ function animateOrbAlongArc(points, color, delay) {
   }).addTo(arcLayer);
   let step = 0;
   const total = points.length;
-  const speed = 18; // ms per step
+  const speed = 36; // ms per step (slowed down)
   const pauseAtEnd = 400; // ms pause before restart
   function runLoop() {
     step = 0;
