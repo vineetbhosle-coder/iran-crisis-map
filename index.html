@@ -813,7 +813,7 @@
     <div id="tick-marks"></div>
     <div id="phase-bar"></div>
     <div id="density-bar"></div>
-    <input type="range" id="timeline-slider" min="0" max="84" value="0" oninput="onSliderChange(+this.value)">
+    <input type="range" id="timeline-slider" min="0" max="92" value="0" oninput="onSliderChange(+this.value)">
     <div id="date-markers">
       <span class="month-lbl" onclick="jumpTo(0)">DEC 28</span>
       <span onclick="jumpTo(4)">JAN 1</span>
@@ -1485,8 +1485,8 @@ PLACEHOLDER END */
 function getStats(day) {
   let pd = 0, sd = 0, ic = 0, hormuz = 'OPEN', internet = 'ONLINE', oil = 73;
   if (day >= 3) pd = 28; if (day >= 5) pd = 50; if (day >= 11) pd = 30000; if (day >= 13) pd = 36500;
-  if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444;
-  if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118;
+  if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444; if (day >= 85) sd = 1600; if (day >= 90) sd = 1800; if (day >= 92) sd = 1950;
+  if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118; if (day >= 89) ic = 148; if (day >= 92) ic = 160;
   if (day >= 12) internet = 'BLACKOUT'; if (day >= 62) internet = 'PARTIAL';
   if (day >= 63) hormuz = 'DISRUPTED'; if (day >= 66) hormuz = 'BLOCKED';
   // Brent crude oil price trajectory (approximate)
@@ -1504,6 +1504,14 @@ function getStats(day) {
   if (day >= 82) oil = 126; // peak
   if (day >= 83) oil = 120;
   if (day >= 84) oil = 128; // Trump ultimatum + Hormuz standoff
+  if (day >= 85) oil = 125; // slight easing on talks
+  if (day >= 86) oil = 118; // Trump pauses power plant strikes
+  if (day >= 87) oil = 120;
+  if (day >= 88) oil = 122; // steelworks/economic targets
+  if (day >= 89) oil = 124; // Prince Sultan Air Base hit again
+  if (day >= 90) oil = 128; // Houthis enter war
+  if (day >= 91) oil = 126;
+  if (day >= 92) oil = 128; // one month mark
   return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1 };
 }
 function fmtN(n) { return n >= 1000 ? (n/1000).toFixed(n>=10000?0:1)+'K' : n.toString(); }
@@ -1697,7 +1705,7 @@ function popupHtml(e) {
 // ─── Phase Bar & Density ────────────────────────────────────────────
 function buildPhaseBar() {
   const bar = document.getElementById('phase-bar');
-  const total = 84;
+  const total = 92;
   bar.innerHTML = phases.map(p => {
     const w = ((p.end - p.start + 1) / total * 100);
     return `<div class="phase-seg" style="width:${w}%;background:${p.color};opacity:0.2;" title="${p.label}"></div>`;
@@ -1706,8 +1714,8 @@ function buildPhaseBar() {
 
 function buildDensity() {
   const bar = document.getElementById('density-bar');
-  const counts = new Array(85).fill(0);
-  events.forEach(e => { if (e.day >= 0 && e.day <= 84) counts[e.day]++; });
+  const counts = new Array(93).fill(0);
+  events.forEach(e => { if (e.day >= 0 && e.day <= 92) counts[e.day]++; });
   const mx = Math.max(...counts, 1);
   bar.innerHTML = counts.map((c, i) => {
     const int = c / mx;
@@ -1719,7 +1727,7 @@ function buildDensity() {
 function buildTickMarks() {
   const bar = document.getElementById('tick-marks');
   // Weekly ticks (every 7 days) are major, others minor
-  bar.innerHTML = Array.from({length: 84}, (_, i) => {
+  bar.innerHTML = Array.from({length: 93}, (_, i) => {
     const isMajor = i % 7 === 0;
     return `<div class="tick"><div class="tick-line ${isMajor ? 'major' : 'minor'}"></div></div>`;
   }).join('');

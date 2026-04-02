@@ -627,4 +627,80 @@ const events = [
   { day: 84, lat: 31.78, lng: 35.22, title: "Israel Defense Minister: 'Set Iran Back Decades'", desc: "Israeli defense minister vows to set Iran back decades following Iran's first-ever strikes on the area around the Negev Nuclear Research Center at Dimona.", type: "political", phase: "war" },
   { day: 84, lat: 15.35, lng: 44.21, title: "Houthis Weigh Joining War Against Israel & US", desc: "Al Jazeera reports Houthi politburo in active discussions on whether to formally join the war. Iranian resupply of advanced drones and anti-ship missiles confirmed.", type: "political", phase: "regional" },
   { day: 84, lat: 35.73, lng: 51.41, title: "Iran Death Toll: 1,444+ Including 204 Children", desc: "Confirmed toll stands at 1,444 killed. At least 204 children among the dead. Strikes have hit 178 cities across 25 provinces.", type: "humanitarian", size: "large", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 23 (Day 85)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 85, lat: 35.69, lng: 51.39, title: "7,800+ Targets Struck in Iran Since Feb 28", desc: "CENTCOM reports approximately 7,800 targets struck in Iran since Operation Epic Fury began. Over 120 Iranian ships damaged or destroyed.", type: "strike", size: "large", phase: "war" },
+  { day: 85, lat: 31.90, lng: 34.82, title: "Netanyahu: Strikes Continue Despite Talks", desc: "Netanyahu confirms continued Israeli strikes in Iran and Lebanon despite diplomatic discussions. Emphasizes elimination of nuclear scientists and systematic dismantling of Iranian capabilities.", type: "political", phase: "war" },
+  { day: 85, lat: 32.08, lng: 34.78, title: "Search and Rescue in Central Israel", desc: "IDF reports search and rescue operations in central Israel following Iranian missile impacts. Defense systems activated across multiple regions.", type: "retaliation", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 24 (Day 86)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 86, lat: 32.65, lng: 51.68, title: "Isfahan Gas Infrastructure Struck", desc: "Israel strikes gas administration building and pressure reduction station in Isfahan. Khorramshahr power plant gas pipeline also targeted.", type: "strike", phase: "war" },
+  { day: 86, lat: 32.78, lng: 51.72, title: "Three Steelworks Bombed Across Iran", desc: "Airstrikes target Mobarakeh Steel (Isfahan), Khuzestan Steel (Ahvaz), and a third steel plant. Shift in strategy toward degrading Iran's economic base.", type: "strike", size: "large", phase: "war" },
+  { day: 86, lat: 24.72, lng: 46.72, title: "Iranian Drones Strike Prince Sultan Air Base", desc: "Iranian drones and missiles target Prince Sultan Air Base in Saudi Arabia. E-3 Sentry AWACS aircraft damaged, multiple American aircraft hit, several US service members wounded.", type: "retaliation", size: "large", phase: "regional" },
+  { day: 86, lat: 38.90, lng: -77.04, title: "Trump Pauses Power Plant Strikes 5 Days", desc: "Trump announces 5-day pause on strikes against Iranian power plants, citing 'very good and productive conversations.' Pakistan initiates mediation efforts between US and Iran.", type: "political", size: "large", phase: "war" },
+  { day: 86, lat: 33.69, lng: 73.04, title: "Pakistan Mediates US-Iran Talks", desc: "Pakistani PM Sharif brokers potential in-person meetings in Islamabad. Iranian President Pezeshkian holds calls with Pakistan and Oman.", type: "political", phase: "regional" },
+  { day: 86, lat: 29.35, lng: 47.97, title: "Kuwait Confronts Missile and Drone Attacks", desc: "Kuwait military confronts hostile missile and drone attacks overnight. Saudi Arabia intercepts at least 5 drones in eastern region.", type: "retaliation", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 25 (Day 87)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 87, lat: 32.39, lng: 34.87, title: "Iranian Missile Targets Orot Rabin Power Plant", desc: "Iranian ballistic missile strikes open area near Orot Rabin, Israel's largest power plant in Hadera. Near-miss; no damage to plant. Iran state TV showed infographics targeting Israeli power infrastructure.", type: "retaliation", size: "large", phase: "war" },
+  { day: 87, lat: 32.65, lng: 51.68, title: "Iran Submarine Facility Destroyed in Isfahan", desc: "IAF bombs Iran's sole submarine development facility in Isfahan area as part of wave of strikes on weapons manufacturing facilities.", type: "strike", size: "large", phase: "war" },
+  { day: 87, lat: 35.69, lng: 51.39, title: "Nuclear Scientists Targeted", desc: "Israel continues targeted assassinations of Iranian nuclear scientists. Ali Pouladvand (SPND research head) and Mohammad Reza Kia killed.", type: "strike", phase: "war" },
+  { day: 87, lat: 35.69, lng: 51.39, title: "Iranian Lawmakers Push NPT Exit", desc: "Iranian parliament pushes for exit from Nuclear Non-Proliferation Treaty in response to strikes on nuclear facilities.", type: "political", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 26 (Day 88)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 88, lat: 32.65, lng: 51.68, title: "Steel and Cement Factories Bombed Across Iran", desc: "Videos show strikes hitting several steel and cement factories across southern, central Iran, and Isfahan. Economic degradation strategy intensifies.", type: "strike", phase: "war" },
+  { day: 88, lat: 31.32, lng: 48.69, title: "Khuzestan Steel Complex Hit in Ahvaz", desc: "Major strike on Khuzestan Steel Company in Ahvaz. Facility is one of Iran's largest steel producers.", type: "strike", phase: "war" },
+  { day: 88, lat: 34.09, lng: 49.70, title: "Arak Heavy Water Reactor Struck", desc: "Israeli strikes hit Arak heavy water facility and Ardakan yellowcake production site. Part of continued degradation of nuclear infrastructure.", type: "nuclear", size: "large", phase: "war" },
+  { day: 88, lat: 28.97, lng: 50.84, title: "Bushehr Nuclear Power Plant Area Struck", desc: "Strikes reported near Bushehr nuclear power plant. IAEA monitoring for radiation leakage.", type: "nuclear", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 27 (Day 89)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 89, lat: 32.08, lng: 34.78, title: "1 Israeli Civilian Killed in Tel Aviv", desc: "Iranian ballistic missile kills 1 Israeli civilian in Tel Aviv area. 3 people injured in Rosh HaAyin and Beit Shemesh. Cumulative: 19 Israeli civilians killed, 5,768+ injured.", type: "retaliation", phase: "war" },
+  { day: 89, lat: 24.72, lng: 46.72, title: "Second Strike on Prince Sultan Air Base", desc: "Iran attacks Prince Sultan Air Base again. 29 American soldiers injured (5 seriously). E-3 Sentry refueling aircraft further damaged.", type: "retaliation", size: "large", phase: "regional" },
+  { day: 89, lat: 35.76, lng: 51.41, title: "University of Science and Technology Struck", desc: "Israeli strikes hit University of Science and Technology in Tehran. Military weapons production and ballistic missile component sites also targeted.", type: "strike", phase: "war" },
+  { day: 89, lat: 35.70, lng: 51.35, title: "General Eshaqi & Ayatollah Jannati Killed", desc: "Israeli strikes kill Gen. Jamshid Eshaqi (Iranian army budget chief) and Ayatollah Mohammad Taqi Jannati. Continued decapitation strategy.", type: "strike", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 28 (Day 90)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 90, lat: 15.35, lng: 44.21, title: "Houthis Enter War — Missile Strike on Israel", desc: "Houthis fire first ballistic missile barrage at Israel since war began. Missile toward southern Israel and UAV + missile toward Eilat. Marks formal Houthi entry into conflict.", type: "retaliation", size: "large", phase: "regional" },
+  { day: 90, lat: 26.22, lng: 50.58, title: "Bahrain Intercepts 20 Missiles, 23 UAVs", desc: "Bahraini army reports intercepting 20 missiles and 23 UAVs. Bapco energy facilities sustain damage despite interceptions.", type: "retaliation", phase: "regional" },
+  { day: 90, lat: 24.45, lng: 54.65, title: "UAE: 414 Missiles, 1,914 UAVs Total Since Feb 28", desc: "UAE reports cumulative Iranian attacks: 414 ballistic missiles, 15 cruise missiles, 1,914 UAVs launched toward UAE since campaign began.", type: "retaliation", phase: "regional" },
+  { day: 90, lat: 24.45, lng: 54.38, title: "Emirates Global Aluminium Facility Damaged", desc: "Iranian strikes cause significant damage to Emirates Global Aluminium facility in Abu Dhabi. 6 employees wounded.", type: "retaliation", phase: "regional" },
+  { day: 90, lat: 26.22, lng: 50.60, title: "Aluminium Bahrain Facility Hit", desc: "Aluminium Bahrain (ALBA) facility struck. 2 employees slightly injured. Industrial targets across Gulf increasingly targeted.", type: "retaliation", phase: "regional" },
+  { day: 90, lat: 28.97, lng: 50.84, title: "Family of 4 Killed in Bushehr Province", desc: "Iranian family of four killed in strike on Bushehr Province. Water facility in Khuzestan Province also struck.", type: "humanitarian", phase: "war" },
+  { day: 90, lat: 33.86, lng: 35.50, title: "3 Journalists Killed in Beirut", desc: "Fatima Ftouni and Mohammed Ftouni (Al Mayadeen) and Ali Shuaib (Al-Manar) killed in Israeli strikes on Beirut. Protests follow.", type: "humanitarian", phase: "regional" },
+  { day: 90, lat: 32.82, lng: 34.99, title: "Hezbollah Strikes Ein Shemer & Regavim", desc: "Hezbollah targets Ein Shemer airfield and Regavim military camp with high-quality missiles. 118 Hezbollah attack waves identified over weekend.", type: "hezbollah", phase: "regional" },
+  { day: 90, lat: 36.34, lng: 43.13, title: "US Strikes PMF Sites in Iraq", desc: "US strikes PMF headquarters in Tuz Khurmatu (Salah ad-Din) and Rashidiya area of Mosul. Targeting Iran-aligned militias.", type: "strike", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 29 (Day 91)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 91, lat: 35.55, lng: 51.30, title: "Strikes on Residential Areas Near Tehran", desc: "2 killed, 5 wounded in strikes near Shaft city. 3 wounded in Saadat Abad (north Tehran), 9 wounded in western Tehran. Residential areas increasingly hit.", type: "humanitarian", phase: "war" },
+  { day: 91, lat: 32.82, lng: 34.97, title: "Iran Targets Haifa Radar Complex", desc: "IRGC targets electronic warfare/radar center at military aerospace complex near Haifa. Also targets Ben Gurion Airport fuel storage.", type: "retaliation", phase: "war" },
+  { day: 91, lat: 32.01, lng: 34.89, title: "Iran Targets Ben Gurion Airport Fuel Storage", desc: "Iranian missiles target fuel storage facility at Ben Gurion Airport. IRGC claims to have shot down US MQ-9 drone and hit an F-16 jet.", type: "retaliation", phase: "war" },
+  { day: 91, lat: 29.35, lng: 47.97, title: "Kuwait Shoots Down 4 Drones", desc: "Kuwait National Guard shoots down 4 Iranian drones in early morning hours. Saudi Arabia intercepts and destroys 10 drones.", type: "retaliation", phase: "regional" },
+  { day: 91, lat: 32.96, lng: 35.50, title: "Hezbollah Strikes Mahava Alon & Berea Bases", desc: "Hezbollah targets Mahava Alon base and Berea base near Safed with missiles and drones.", type: "hezbollah", phase: "regional" },
+  { day: 91, lat: 33.27, lng: 35.20, title: "IDF Soldier Killed in Southern Lebanon", desc: "Soldier Moshe Yitzhak HaCohen Katz killed during operations in southern Lebanon. Ground campaign continues.", type: "hezbollah", phase: "regional" },
+  { day: 91, lat: 40.71, lng: -74.01, title: "'No Kings' Anti-War Protests Across 50 US States", desc: "Thousands protest across all 50 states in 'No Kings' anti-war demonstrations. 3,500 additional soldiers arrive via USS Tripoli.", type: "political", phase: "regional" },
+  { day: 91, lat: 33.69, lng: 73.04, title: "Egypt-Turkey-Saudi Ministers Meet in Islamabad", desc: "Foreign ministers from Egypt, Turkey, Saudi Arabia meet in Islamabad to discuss de-escalation. Qatar signs joint defense treaty with Ukraine on missile/drone defense.", type: "political", phase: "regional" },
+  { day: 91, lat: 26.56, lng: 56.25, title: "Iran Allows 20 Pakistani Ships Through Hormuz", desc: "Iran allows 20 Pakistani vessels to transit Strait of Hormuz. Significant diplomatic gesture amid ongoing blockade.", type: "naval", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 30 (Day 92)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 92, lat: 35.69, lng: 51.39, title: "Iran War Enters 31st Day", desc: "One month since Operation Epic Fury began. Over 7,800 targets struck in Iran. 120+ Iranian ships destroyed. Oil at $128/barrel. No ceasefire in sight.", type: "political", size: "large", phase: "war" },
+  { day: 92, lat: 35.67, lng: 51.45, title: "Police Special Forces Patrol Tehran Streets", desc: "Armed police special forces patrol Enqelab-e-Eslami Square in downtown Tehran. City under heavy security as strikes and protests continue.", type: "political", phase: "war" },
+  { day: 92, lat: 38.90, lng: -77.04, title: "Washington Post: Pentagon Plans Ground Operations", desc: "Washington Post reports Pentagon planning weeks of ground operations in Iran. Unverified but signals potential escalation beyond air campaign.", type: "political", size: "large", phase: "war" },
+  { day: 92, lat: 25.12, lng: 55.20, title: "UAE Cumulative: 414 Missiles, 1,914 UAVs Intercepted", desc: "UAE Ministry of Defense cumulative report: 414 ballistic missiles, 15 cruise missiles, 1,914 UAVs launched toward UAE since Feb 28.", type: "retaliation", phase: "regional" },
+  { day: 92, lat: 32.08, lng: 34.78, title: "Anti-War Protests in Tel Aviv", desc: "Anti-war protests in Tel Aviv met with police clashes. Increased settler violence reported in West Bank.", type: "political", phase: "regional" },
 ];
