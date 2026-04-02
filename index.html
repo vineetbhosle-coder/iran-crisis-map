@@ -870,13 +870,6 @@
 
 <div id="timeline-container">
   <div id="timeline-controls">
-    <button id="play-btn" onclick="togglePlay()">&#9654; PLAY</button>
-    <select id="speed-select" onchange="changeSpeed()">
-      <option value="1500">Slow</option>
-      <option value="700" selected>Normal</option>
-      <option value="350">Fast</option>
-      <option value="150">Rush</option>
-    </select>
     <span id="phase-label">Protests Erupt Across Iran</span>
   </div>
   <div id="slider-wrap">
@@ -1163,7 +1156,7 @@ function drawBezierArc(from, to, color, label) {
   return line;
 }
 
-// Glowing orb that follows a bezier path
+// Glowing orb that follows a bezier path — loops continuously
 function animateOrbAlongArc(points, color, delay) {
   const orb = L.circleMarker(points[0], {
     radius: 4, color: color, fillColor: color, fillOpacity: 0.9, weight: 0,
@@ -1171,24 +1164,22 @@ function animateOrbAlongArc(points, color, delay) {
   }).addTo(arcLayer);
   let step = 0;
   const total = points.length;
-  setTimeout(() => {
+  const speed = 18; // ms per step
+  const pauseAtEnd = 400; // ms pause before restart
+  function runLoop() {
+    step = 0;
+    try { orb.setLatLng(points[0]); } catch(e) { return; }
     const interval = setInterval(() => {
       step++;
-      if (step >= total) { clearInterval(interval); arcLayer.removeLayer(orb); return; }
-      orb.setLatLng(points[step]);
-    }, 20);
-    // Loop: restart after reaching end
-    setTimeout(() => {
-      const loopInterval = setInterval(() => {
-        step = 0;
-        const inner = setInterval(() => {
-          step++;
-          if (step >= total) { clearInterval(inner); return; }
-          try { orb.setLatLng(points[step]); } catch(e) { clearInterval(inner); clearInterval(loopInterval); }
-        }, 20);
-      }, total * 20 + 500);
-    }, total * 20 + 100);
-  }, delay);
+      if (step >= total) {
+        clearInterval(interval);
+        setTimeout(runLoop, pauseAtEnd); // loop back
+        return;
+      }
+      try { orb.setLatLng(points[step]); } catch(e) { clearInterval(interval); }
+    }, speed);
+  }
+  setTimeout(runLoop, delay);
 }
 
 function renderArcs(day) {
