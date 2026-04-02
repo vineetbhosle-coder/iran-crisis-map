@@ -912,6 +912,7 @@
       <span onclick="jumpTo(69)">MAR 7</span>
       <span onclick="jumpTo(76)">MAR 14</span>
       <span class="month-lbl" onclick="jumpTo(83)">MAR 21</span>
+      <span onclick="jumpTo(90)">MAR 28</span>
     </div>
   </div>
   <div id="source-bar" style="margin-top:4px;">Sources: Al Jazeera | Britannica | Amnesty Intl | UK Parliament | Critical Threats | HRANA | Alma Research | FDD | Wikipedia</div>
@@ -1065,6 +1066,7 @@ const phases = [
   { start: 61, end: 61, label: "Operation Epic Fury Begins", color: 'var(--red)' },
   { start: 62, end: 72, label: "Operation Epic Fury — Active Strikes", color: 'var(--red)' },
   { start: 73, end: 83, label: "Ongoing Escalation", color: 'var(--orange)' },
+  { start: 84, end: 92, label: "Houthis Enter War — 1 Month Mark", color: '#d32f2f' },
 ];
 function getPhaseLabel(d) { const p = phases.find(p => d >= p.start && d <= p.end); return p ? p.label : ''; }
 
@@ -1996,7 +1998,7 @@ function togglePlay() {
   const btn = document.getElementById('play-btn');
   if (playing) {
     btn.innerHTML = '&#9646;&#9646; PAUSE';
-    if (currentDay >= 84) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    if (currentDay >= 92) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
     lastTickTime = performance.now();
     requestAnimationFrame(playTick);
   } else {
@@ -2007,7 +2009,7 @@ function playTick(now) {
   if (!playing) return;
   if (now - lastTickTime >= speed) {
     lastTickTime = now;
-    if (currentDay >= 84) { togglePlay(); return; }
+    if (currentDay >= 92) { togglePlay(); return; }
     currentDay++;
     document.getElementById('timeline-slider').value = currentDay;
     renderDay(currentDay);
