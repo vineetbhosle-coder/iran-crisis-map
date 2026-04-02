@@ -229,6 +229,76 @@
   [data-theme="dark"] .ev-title { text-shadow: 0 0 4px rgba(60,200,80,0.15); }
   [data-theme="dark"] #phase-label { text-shadow: var(--nv-glow); }
   [data-theme="dark"] h3, [data-theme="dark"] h4 { text-shadow: var(--nv-glow); }
+  /* === CRT Screen Effect (full page) === */
+  body::after {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 99999;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0,0,0,0.015) 1px,
+        rgba(0,0,0,0.015) 2px
+      );
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  [data-theme="dark"] body::after {
+    opacity: 1;
+    background:
+      /* Horizontal scanlines */
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1px,
+        rgba(0,0,0,0.08) 1px,
+        rgba(0,0,0,0.08) 2px
+      ),
+      /* RGB sub-pixel columns */
+      repeating-linear-gradient(
+        90deg,
+        rgba(255,0,0,0.01),
+        rgba(0,255,0,0.01) 1px,
+        rgba(0,0,255,0.01) 2px,
+        transparent 3px
+      );
+  }
+  /* CRT vignette — darkened edges like a curved screen */
+  body::before {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 99998;
+    opacity: 0; transition: opacity 0.5s;
+  }
+  [data-theme="dark"] body::before {
+    opacity: 1;
+    background: radial-gradient(
+      ellipse at 50% 50%,
+      transparent 55%,
+      rgba(0,0,0,0.25) 75%,
+      rgba(0,0,0,0.55) 100%
+    );
+  }
+  /* Subtle CRT flicker */
+  @keyframes crtFlicker {
+    0% { opacity: 0.97; }
+    5% { opacity: 1; }
+    10% { opacity: 0.98; }
+    15% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.96; }
+    94% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  [data-theme="dark"] #dashboard {
+    animation: crtFlicker 8s linear infinite;
+  }
+  /* Light mode: very subtle scanlines only */
+  body.crt-light::after {
+    opacity: 0.3;
+  }
+
   /* Scanline texture overlay on map in dark mode */
   [data-theme="dark"] #map-wrap #map::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
@@ -241,7 +311,7 @@
     );
     pointer-events: none; z-index: 999; mix-blend-mode: multiply;
   }
-  /* Subtle vignette on map edges */
+  /* Vignette on map edges */
   [data-theme="dark"] #map-wrap #map::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
