@@ -924,7 +924,7 @@
     <div id="tick-marks"></div>
     <div id="phase-bar"></div>
     <div id="density-bar"></div>
-    <input type="range" id="timeline-slider" min="0" max="92" value="0" oninput="onSliderChange(+this.value)">
+    <input type="range" id="timeline-slider" min="0" max="101" value="0" oninput="onSliderChange(+this.value)">
     <div id="date-markers">
       <span class="month-lbl" onclick="jumpTo(0)">DEC 28</span>
       <span onclick="jumpTo(4)">JAN 1</span>
@@ -941,6 +941,8 @@
       <span onclick="jumpTo(76)">MAR 14</span>
       <span class="month-lbl" onclick="jumpTo(83)">MAR 21</span>
       <span onclick="jumpTo(90)">MAR 28</span>
+      <span class="month-lbl" onclick="jumpTo(97)">APR 4</span>
+      <span onclick="jumpTo(100)">CEASEFIRE</span>
     </div>
   </div>
   <div id="source-bar" style="margin-top:4px;">Sources: Al Jazeera | Britannica | Amnesty Intl | UK Parliament | Critical Threats | HRANA | Alma Research | FDD | Wikipedia</div>
@@ -1095,6 +1097,8 @@ const phases = [
   { start: 62, end: 72, label: "Operation Epic Fury — Active Strikes", color: 'var(--red)' },
   { start: 73, end: 83, label: "Ongoing Escalation", color: 'var(--orange)' },
   { start: 84, end: 92, label: "Houthis Enter War — 1 Month Mark", color: '#d32f2f' },
+  { start: 93, end: 99, label: "Ceasefire Negotiations", color: '#ff8f00' },
+  { start: 100, end: 101, label: "2-Week Ceasefire Agreed", color: '#2e7d32' },
 ];
 function getPhaseLabel(d) { const p = phases.find(p => d >= p.start && d <= p.end); return p ? p.label : ''; }
 
@@ -1758,8 +1762,8 @@ PLACEHOLDER END */
 function getStats(day) {
   let pd = 0, sd = 0, ic = 0, hormuz = 'OPEN', internet = 'ONLINE', oil = 73;
   if (day >= 3) pd = 28; if (day >= 5) pd = 50; if (day >= 11) pd = 30000; if (day >= 13) pd = 36500;
-  if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444; if (day >= 85) sd = 1600; if (day >= 90) sd = 1800; if (day >= 92) sd = 1950;
-  if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118; if (day >= 89) ic = 148; if (day >= 92) ic = 160;
+  if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444; if (day >= 85) sd = 1600; if (day >= 90) sd = 1800; if (day >= 92) sd = 1950; if (day >= 93) sd = 4700; if (day >= 97) sd = 5200; if (day >= 101) sd = 5500;
+  if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118; if (day >= 89) ic = 148; if (day >= 92) ic = 160; if (day >= 93) ic = 170; if (day >= 97) ic = 195; if (day >= 99) ic = 205; if (day >= 101) ic = 460;
   if (day >= 12) internet = 'BLACKOUT'; if (day >= 62) internet = 'PARTIAL';
   if (day >= 63) hormuz = 'DISRUPTED'; if (day >= 66) hormuz = 'BLOCKED';
   // Brent crude oil price trajectory (approximate)
@@ -1785,6 +1789,14 @@ function getStats(day) {
   if (day >= 90) oil = 128; // Houthis enter war
   if (day >= 91) oil = 126;
   if (day >= 92) oil = 128; // one month mark
+  if (day >= 93) oil = 125;
+  if (day >= 94) oil = 122;
+  if (day >= 96) oil = 120;
+  if (day >= 97) oil = 118; // Haifa hit
+  if (day >= 98) oil = 122; // South Pars again
+  if (day >= 99) oil = 118; // Islamabad Accord hope
+  if (day >= 100) oil = 108; // ceasefire announced
+  if (day >= 101) oil = 112; // cracks in ceasefire
   return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1 };
 }
 function fmtN(n) { return n >= 1000 ? (n/1000).toFixed(n>=10000?0:1)+'K' : n.toString(); }
@@ -1985,7 +1997,7 @@ function popupHtml(e) {
 // ─── Phase Bar & Density ────────────────────────────────────────────
 function buildPhaseBar() {
   const bar = document.getElementById('phase-bar');
-  const total = 92;
+  const total = 101;
   bar.innerHTML = phases.map(p => {
     const w = ((p.end - p.start + 1) / total * 100);
     return `<div class="phase-seg" style="width:${w}%;background:${p.color};opacity:0.2;" title="${p.label}"></div>`;
@@ -1994,8 +2006,8 @@ function buildPhaseBar() {
 
 function buildDensity() {
   const bar = document.getElementById('density-bar');
-  const counts = new Array(93).fill(0);
-  events.forEach(e => { if (e.day >= 0 && e.day <= 92) counts[e.day]++; });
+  const counts = new Array(102).fill(0);
+  events.forEach(e => { if (e.day >= 0 && e.day <= 101) counts[e.day]++; });
   const mx = Math.max(...counts, 1);
   bar.innerHTML = counts.map((c, i) => {
     const int = c / mx;
@@ -2007,7 +2019,7 @@ function buildDensity() {
 function buildTickMarks() {
   const bar = document.getElementById('tick-marks');
   // Weekly ticks (every 7 days) are major, others minor
-  bar.innerHTML = Array.from({length: 93}, (_, i) => {
+  bar.innerHTML = Array.from({length: 102}, (_, i) => {
     const isMajor = i % 7 === 0;
     return `<div class="tick"><div class="tick-line ${isMajor ? 'major' : 'minor'}"></div></div>`;
   }).join('');
@@ -2063,7 +2075,7 @@ function togglePlay() {
   const btn = document.getElementById('play-btn');
   if (playing) {
     btn.innerHTML = '&#9646;&#9646; PAUSE';
-    if (currentDay >= 92) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    if (currentDay >= 101) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
     lastTickTime = performance.now();
     requestAnimationFrame(playTick);
   } else {
@@ -2074,7 +2086,7 @@ function playTick(now) {
   if (!playing) return;
   if (now - lastTickTime >= speed) {
     lastTickTime = now;
-    if (currentDay >= 92) { togglePlay(); return; }
+    if (currentDay >= 101) { togglePlay(); return; }
     currentDay++;
     document.getElementById('timeline-slider').value = currentDay;
     renderDay(currentDay);
@@ -2200,7 +2212,7 @@ setInterval(updateClock, 1000);
 updateClock();
 
 // ─── Oil Price Sparkline ───────────────────────────────────────────
-const oilPrices = [73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,80,85,85,92,100,96,96,96,100,119,108,108,105,105,105,110,110,110,112,112,126,120,128,125,118,120,122,124,128,126,128];
+const oilPrices = [73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,80,85,85,92,100,96,96,96,100,119,108,108,105,105,105,110,110,110,112,112,126,120,128,125,118,120,122,124,128,126,128,125,122,122,120,118,122,118,108,112];
 function updateOilSparkline(day) {
   const svg = document.getElementById('oil-spark');
   if (!svg) return;

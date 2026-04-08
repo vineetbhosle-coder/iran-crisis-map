@@ -703,4 +703,84 @@ const events = [
   { day: 92, lat: 38.90, lng: -77.04, title: "Washington Post: Pentagon Plans Ground Operations", desc: "Washington Post reports Pentagon planning weeks of ground operations in Iran. Unverified but signals potential escalation beyond air campaign.", type: "political", size: "large", phase: "war" },
   { day: 92, lat: 25.12, lng: 55.20, title: "UAE Cumulative: 414 Missiles, 1,914 UAVs Intercepted", desc: "UAE Ministry of Defense cumulative report: 414 ballistic missiles, 15 cruise missiles, 1,914 UAVs launched toward UAE since Feb 28.", type: "retaliation", phase: "regional" },
   { day: 92, lat: 32.08, lng: 34.78, title: "Anti-War Protests in Tel Aviv", desc: "Anti-war protests in Tel Aviv met with police clashes. Increased settler violence reported in West Bank.", type: "political", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MARCH 31 (Day 93)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 93, lat: 35.69, lng: 51.42, title: "Strikes on Tehran Weapons Factories", desc: "US-Israel strikes hit central weapons component production facility, UAV engine manufacturing, anti-tank missile R&D site, ballistic missile warhead casting factory in Tehran.", type: "strike", size: "large", phase: "war" },
+  { day: 93, lat: 32.65, lng: 51.68, title: "Isfahan Underground 'Missile City' Hit", desc: "Strikes target underground missile city, weapons depots, and military bases in Isfahan.", type: "strike", phase: "war" },
+  { day: 93, lat: 35.52, lng: 51.77, title: "Parchin Nuclear Complex Struck Again", desc: "Strikes reported at Parchin military-nuclear complex southeast of Tehran.", type: "nuclear", phase: "war" },
+  { day: 93, lat: 37.47, lng: 49.46, title: "Caspian Sea Air Defense System Struck", desc: "Air defense installation site near Caspian Sea coast destroyed in strikes.", type: "strike", phase: "war" },
+  { day: 93, lat: 25.12, lng: 55.27, title: "UAE Intercepts 8 Missiles, 36 Drones", desc: "UAE engages 8 ballistic missiles, 4 cruise missiles, and 36 drones from Iran. 4 injured in southern Dubai. Bangladeshi killed by debris in Fujairah.", type: "retaliation", phase: "regional" },
+  { day: 93, lat: 37.07, lng: 37.38, title: "4th Iranian Missile Intercepted Over Turkey", desc: "NATO intercepts fourth ballistic missile entering Turkish airspace since war began.", type: "retaliation", phase: "regional" },
+  { day: 93, lat: 32.82, lng: 34.99, title: "Cluster Warhead Hits Shefa-'Amr Near Haifa", desc: "Iranian cluster warhead strikes Shefa-'Amr and Bazan facilities in Haifa area. 19 Israeli civilians killed total since war start; 6,130+ injured.", type: "retaliation", phase: "war" },
+  { day: 93, lat: 33.27, lng: 35.20, title: "5 IDF Soldiers Killed in Lebanon", desc: "5 IDF soldiers killed in southern Lebanon fighting over past 2 days. Total Hezbollah-related deaths: 10 soldiers, 2 civilians.", type: "hezbollah", phase: "regional" },
+  { day: 93, lat: 35.69, lng: 51.39, title: "4,700 Iranian Security Forces Killed", desc: "Iran International reports at least 4,700 security forces killed since Feb 28.", type: "humanitarian", phase: "war" },
+  { day: 93, lat: 33.69, lng: 73.04, title: "Pakistan-China Deliver 5-Point Peace Initiative", desc: "Pakistan and China deliver joint 5-point initiative calling for immediate cessation of hostilities and humanitarian assistance.", type: "political", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 1 (Day 94)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 94, lat: 25.20, lng: 55.27, title: "Burj Al Arab Damaged by Missile Debris", desc: "UAE intercepts 5 ballistic missiles and 35 UAVs. Fragments fall on Abu Dhabi and Dubai; iconic Burj Al Arab hotel damaged by debris.", type: "retaliation", size: "large", phase: "regional" },
+  { day: 94, lat: 36.35, lng: 43.13, title: "PMF Commander Killed in Tel Afar", desc: "Shelling on Al-Hussein Brigade PMF HQ in Tel Afar kills commander and 3 fighters affiliated with Iran-linked armed groups.", type: "strike", phase: "regional" },
+  { day: 94, lat: 35.69, lng: 51.42, title: "Continued Strikes on Tehran", desc: "US-Israel strikes continue targeting military infrastructure across Tehran province.", type: "strike", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 2 (Day 95)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 95, lat: 35.69, lng: 51.42, title: "Strikes Target IRGC Intelligence Network", desc: "Continued degradation of Iranian command and control. IRGC intelligence sites and communications infrastructure targeted.", type: "strike", phase: "war" },
+  { day: 95, lat: 32.08, lng: 34.78, title: "Iranian Missiles Target Central Israel", desc: "Multiple attack waves toward Tel Aviv and central Israel continue. Defense systems engaged.", type: "retaliation", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 3 (Day 96)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 96, lat: 35.69, lng: 51.39, title: "IRGC Oil HQ Commander Ashrafi Kahi Killed", desc: "Mohammad Reza Ashrafi Kahi, senior commander of IRGC Oil Headquarters, killed in Israeli strike.", type: "strike", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 4 (Day 97)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 97, lat: 25.20, lng: 55.27, title: "UAE Intercepts 23 Missiles, 56 UAVs", desc: "UAE intercepts 23 ballistic missiles and 56 UAVs from Iran. Debris lands on Marina residential tower facade; no injuries.", type: "retaliation", phase: "regional" },
+  { day: 97, lat: 35.75, lng: 51.35, title: "Aircraft Destroyed at 3 Tehran Airports", desc: "Strikes destroy aircraft and helicopters at Bahram, Mehrabad, and Azmayesh airports in Tehran.", type: "strike", size: "large", phase: "war" },
+  { day: 97, lat: 30.32, lng: 48.30, title: "Drone Strikes Oil Facilities Near Basra", desc: "Drone strikes oil facilities near Basra, Iraq, causing fire. Escalation of attacks on regional energy infrastructure.", type: "retaliation", phase: "regional" },
+  { day: 97, lat: 32.82, lng: 34.97, title: "4 Killed in Haifa Residential Building", desc: "Iranian missile direct hit on residential building in Haifa. 4 civilians killed, ~10 injured. Deadliest single strike on Haifa during war.", type: "retaliation", size: "large", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 5 (Day 98)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 98, lat: 32.65, lng: 51.68, title: "Air Defense College Commander Killed in Isfahan", desc: "Brig. Gen. Masoud Zare, commander of Iran's Air Defense College, eliminated in strikes on Isfahan.", type: "strike", phase: "war" },
+  { day: 98, lat: 27.47, lng: 52.58, title: "South Pars Asaluyeh Hit Again", desc: "South Pars petrochemical facility at Asaluyeh — Iran's largest — struck again. Marvdasht petrochemical complex also targeted.", type: "strike", size: "large", phase: "war" },
+  { day: 98, lat: 25.12, lng: 56.34, title: "Iranian UAV Hits Fujairah Comms Building", desc: "Iranian drone strikes communications building in Fujairah, UAE. UAE intercepts 9 missiles, 1 cruise missile, 50 UAVs.", type: "retaliation", phase: "regional" },
+  { day: 98, lat: 24.09, lng: 52.65, title: "Borouge Petrochemical Plant Fires", desc: "Multiple fires at Borouge petrochemicals plant in Abu Dhabi caused by interception debris.", type: "retaliation", phase: "regional" },
+  { day: 98, lat: 32.95, lng: 35.09, title: "Hezbollah UAV Strikes Home Near Acre", desc: "Hezbollah UAV strikes residential home near Acre in Galilee. 1,121 Hezbollah attack waves since March 2.", type: "hezbollah", phase: "regional" },
+  { day: 98, lat: 33.86, lng: 35.55, title: "Imam Hussein Division Commander Killed", desc: "IDF strike kills Hezbollah Imam Hussein Division commander Kamal Malham and aide in Lebanon.", type: "strike", phase: "regional" },
+  { day: 98, lat: 33.89, lng: 35.53, title: "Ain Saadeh Strike Kills Christian Leader", desc: "Israeli Navy strikes Ain Saadeh apartment (east Beirut) targeting Quds Force operative. Senior Christian Lebanese Forces party figure killed nearby.", type: "strike", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 6 (Day 99)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 99, lat: 35.69, lng: 51.42, title: "IRGC Intelligence Chief Khademi Eliminated", desc: "Overnight strike kills Majid Khademi, head of IRGC Intelligence Directorate. Also killed: Yazdan Mir (Quds Force Unit 840 commander).", type: "strike", size: "large", phase: "war" },
+  { day: 99, lat: 32.08, lng: 34.78, title: "23 Israeli Civilians Killed, 7,035+ Injured Total", desc: "Cumulative toll: 23 civilians killed, 7,035+ injured. 455 Iranian attack waves total. 6,700 residents displaced from 42 municipalities.", type: "humanitarian", phase: "war" },
+  { day: 99, lat: 33.27, lng: 35.20, title: "IDF Strikes Al-Qasmiya Bridge", desc: "Israeli strikes disable Al-Qasmiya Bridge between Tyre and Sidon, cutting key north-south route in Lebanon.", type: "strike", phase: "regional" },
+  { day: 99, lat: 33.69, lng: 73.04, title: "Islamabad Accord: 45-Day Ceasefire Framework", desc: "Pakistan introduces 'Islamabad Accord' — 45-day two-phased ceasefire framework. Overnight negotiations between Army Chief Asim Munir, VP Vance, envoy Witkoff, and FM Araghchi.", type: "political", size: "large", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 7 (Day 100)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 100, lat: 38.90, lng: -77.04, title: "US-Iran Agree to 2-Week Ceasefire", desc: "Trump announces ceasefire on Truth Social at 6:32pm ET. Iran's Araghchi confirms acceptance. Based on Iran's 10-point proposal mediated by Pakistan. Takes effect April 8.", type: "political", size: "large", phase: "war" },
+  { day: 100, lat: 33.69, lng: 73.04, title: "Pakistan Brokers Historic Deal", desc: "PM Shehbaz Sharif announces ceasefire. Negotiations to resume in Islamabad on April 10. US team: VP Vance, envoy Witkoff, Jared Kushner.", type: "political", size: "large", phase: "regional" },
+  { day: 100, lat: 26.56, lng: 56.25, title: "Hormuz to Reopen for 14 Days", desc: "Iran agrees to 'complete, immediate and safe opening' of Strait of Hormuz for 14 days. Iran and Oman to charge transit fees; proceeds fund Iran reconstruction.", type: "naval", size: "large", phase: "regional" },
+  { day: 100, lat: 35.69, lng: 51.39, title: "Iran Claims 'Nearly All War Objectives Achieved'", desc: "Iran's Supreme National Security Council confirms ceasefire and claims victory. 40 days of US-Israeli attacks paused.", type: "political", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 8 (Day 101) — Ceasefire Day 1
+  // ═══════════════════════════════════════════════════════════════
+  { day: 101, lat: 33.86, lng: 35.50, title: "Operation Eternal Darkness — 100 Strikes in 10 Min", desc: "Israel launches Operation Eternal Darkness: 100 airstrikes on Lebanon in 10 minutes. Targets Hezbollah HQ, intelligence centers, missile infrastructure. Netanyahu says Lebanon NOT included in ceasefire.", type: "strike", size: "large", phase: "regional" },
+  { day: 101, lat: 33.89, lng: 35.50, title: "254 Killed in Lebanon on Ceasefire Day", desc: "Israeli strikes across Lebanon kill 254, injure 1,165 on the same day ceasefire takes effect. Worst single day of Lebanon campaign.", type: "humanitarian", size: "large", phase: "regional" },
+  { day: 101, lat: 26.74, lng: 53.36, title: "Lavan Oil Refinery Struck", desc: "Fire at Lavan Island oil refinery in early hours of April 8. Israel denies involvement. Raises questions about ceasefire compliance.", type: "strike", phase: "war" },
+  { day: 101, lat: 24.10, lng: 54.40, title: "Fire at Abu Dhabi Habshan Gas Complex", desc: "Gulf states report intercepting missiles throughout April 8. Fire starts at Abu Dhabi's Habshan gas complex. Saudi pipeline directly hit by drone.", type: "retaliation", phase: "regional" },
+  { day: 101, lat: 29.35, lng: 47.97, title: "Kuwait Intercepts 28+ Drones", desc: "Kuwait reports intercepting 28+ drone attacks. UAE intercepts 35+. Ceasefire already showing cracks.", type: "retaliation", phase: "regional" },
+  { day: 101, lat: 35.69, lng: 51.42, title: "IRGC Threatens 'Regret-Inducing Response'", desc: "Less than 24 hours after ceasefire, IRGC threatens 'regret-inducing response' if Israeli strikes on Lebanon don't end. Iran decries 'savage attack in Beirut.'", type: "political", phase: "war" },
+  { day: 101, lat: 26.56, lng: 56.25, title: "Hormuz Oil Traffic Halted Again", desc: "Oil traffic through Strait of Hormuz halted again hours after first tankers allowed to pass. Iran cites Israeli Lebanon strikes. Trump wants Hormuz open 'without limitation, including tolls.'", type: "naval", phase: "regional" },
+  { day: 101, lat: 31.32, lng: 48.69, title: "7-Year-Old Killed by Drone Debris in Khuzestan", desc: "One 7-year-old child killed in Khuzestan province by falling drone debris. Six family members injured.", type: "humanitarian", phase: "war" },
+  { day: 101, lat: 33.31, lng: 44.39, title: "Baghdad Airport Diplomatic Center Struck", desc: "Baghdad International Airport diplomatic center struck by Iranian-allied groups.", type: "retaliation", phase: "regional" },
 ];
