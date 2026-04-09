@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iran Crisis 2025-2026 — Day by Day</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"></script>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=anchor,orbit,person,flag,warning,add,change_history,close,radio_button_checked" />
 <style>
@@ -758,6 +760,7 @@
     .header-center { display: none; }
     .header-coord { display: none; }
     #utc-clock { display: none; }
+    #globe-toggle { display: none; }
     .hdr-divider { display: none; }
     .hdr-stat-label { font-size: 0.35rem; }
     .hdr-stat-val { font-size: 0.65rem; }
@@ -835,6 +838,7 @@
     <span id="utc-clock"></span>
     <span class="header-coord" id="grid-scale">Grid: 5° ≈ 495 km</span>
     <span class="header-coord" id="cursor-coord">35.6895°N 51.3890°E</span>
+    <button id="globe-toggle" onclick="toggleMapMode()" title="Toggle 2D/3D view" style="background:transparent;border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:4px;cursor:pointer;font-size:0.65rem;font-family:var(--mono);font-weight:700;transition:all 0.2s;">3D</button>
     <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">&#9790;</button>
   </div>
 </div>
@@ -926,6 +930,7 @@
         <div class="rf-coords" id="rf-coords"></div>
       </div>
     </div>
+    <div id="cesium-container" style="display:none;width:100%;height:100%;position:absolute;top:0;left:0;"></div>
   </div>
 
   <!-- ═══ RIGHT PANEL ═══ -->
@@ -1937,6 +1942,7 @@ function animateNum(elId, target, fmt) {
 let prevMarkerLayer = null;
 
 function renderDay(day) {
+  if (mapMode === '3d') { renderCesiumDay(day); return; }
   // Crossfade: keep old markers briefly, fade them out
   if (prevMarkerLayer) { map.removeLayer(prevMarkerLayer); }
   prevMarkerLayer = markerLayer;
@@ -2101,6 +2107,100 @@ function renderDay(day) {
 
   document.getElementById('date-display').textContent = formatDate(day);
   document.getElementById('phase-label').textContent = getPhaseLabel(day);
+}
+
+// Shared panel update for both 2D and 3D modes
+function updatePanels(day) {
+  const pf = activePhase === 'all' ? null : activePhase;
+  const current = events.filter(e => e.day === day && (!pf || e.phase === pf));
+
+  const el = document.getElementById('event-list');
+  el.style.opacity = '0';
+  document.getElementById('ev-count').textContent = current.length;
+  setTimeout(() => {
+    if (!current.length) {
+      el.innerHTML = '<div style="color:var(--text3);font-size:0.78rem;padding:12px 0;">No major events this day.</div>';
+    } else {
+      el.innerHTML = current.map(e => `
+        <div class="ev-item" onclick="flyToEvent(${e.lat},${e.lng})">
+          <span class="ev-badge badge-${e.type}">${e.type}</span>
+          <div class="ev-title">${e.title}</div>
+          <div class="ev-desc">${e.desc}</div>
+          <div class="ev-coords">${e.lat.toFixed(3)}°N  ${e.lng.toFixed(3)}°E</div>
+        </div>`).join('');
+    }
+    el.style.opacity = '1';
+  }, 150);
+
+  const s = getStats(day);
+  animateNum('s-protest', s.pd, fmtN);
+  animateNum('s-strike', s.sd, fmtN);
+  animateNum('s-israel', s.ic, (n) => n.toString());
+  document.getElementById('s-hormuz').textContent = s.hormuz;
+  document.getElementById('s-hormuz').style.color = s.hormuz==='OPEN'?'var(--green)':s.hormuz==='BLOCKED'?'var(--red)':'var(--orange)';
+  document.getElementById('s-internet').textContent = s.internet;
+  document.getElementById('s-internet').style.color = s.internet==='ONLINE'?'var(--green)':s.internet==='BLACKOUT'?'var(--red)':'var(--orange)';
+  const oilEl = document.getElementById('s-oil');
+  oilEl.textContent = '$' + s.oil;
+  oilEl.style.color = s.oil >= 100 ? 'var(--red)' : s.oil >= 85 ? 'var(--orange)' : 'var(--text)';
+  if (s.oil >= 110) { oilEl.classList.add('oil-critical'); } else { oilEl.classList.remove('oil-critical'); }
+  document.querySelectorAll('.stat-val').forEach(el => { el.classList.remove('stat-flash'); void el.offsetWidth; el.classList.add('stat-flash'); });
+  document.getElementById('s-day').textContent = s.dayNum;
+  const tEl = document.getElementById('s-targets');
+  if (tEl) tEl.textContent = s.targets ? (s.targets >= 1000 ? (s.targets/1000).toFixed(1)+'K' : s.targets) : '—';
+  const shEl = document.getElementById('s-ships');
+  if (shEl) shEl.textContent = s.ships || '—';
+  const ulEl = document.getElementById('s-usloss');
+  if (ulEl) { ulEl.textContent = s.usloss || '0'; ulEl.style.color = s.usloss > 0 ? 'var(--red)' : 'var(--green)'; }
+  const adEl = document.getElementById('s-airdef');
+  if (adEl) { adEl.textContent = s.airdef ? s.airdef + '%' : '0%'; adEl.style.color = s.airdef >= 80 ? 'var(--red)' : s.airdef >= 50 ? 'var(--orange)' : 'var(--text)'; }
+  const hdrOil = document.getElementById('hdr-oil');
+  if (hdrOil) { hdrOil.textContent = '$' + s.oil; hdrOil.style.color = s.oil >= 100 ? 'var(--red)' : 'var(--text)'; }
+  const hdrDay = document.getElementById('hdr-day');
+  if (hdrDay) hdrDay.textContent = s.dayNum;
+  updateOilSparkline(day);
+  const totalSoFar = events.filter(e => e.day <= day && (!pf || e.phase === pf)).length;
+  animateCounter(totalSoFar);
+
+  const weights = { strike: 3, nuclear: 5, naval: 2, retaliation: 3, hezbollah: 2, humanitarian: 1, protest: 1, political: 0.5 };
+  const usTypes = new Set(['strike', 'nuclear']);
+  const irTypes = new Set(['retaliation', 'hezbollah']);
+  const win = events.filter(e => e.day >= Math.max(0, day-2) && e.day <= day);
+  let usScore = 0, irScore = 0;
+  win.forEach(e => {
+    const w = weights[e.type] || 1;
+    const mult = e.size === 'large' ? 2 : 1;
+    if (usTypes.has(e.type)) usScore += w * mult;
+    else if (irTypes.has(e.type)) irScore += w * mult;
+    else if (e.type === 'naval') { usScore += w * 0.5; irScore += w * 0.5; }
+  });
+  const maxEsc = 50;
+  const usPct = Math.min(100, (usScore / maxEsc) * 100);
+  const irPct = Math.min(100, (irScore / maxEsc) * 100);
+  const escUs = document.getElementById('esc-us');
+  const escIr = document.getElementById('esc-ir');
+  escUs.style.width = usPct + '%';
+  escIr.style.width = irPct + '%';
+  document.getElementById('esc-us-val').textContent = Math.round(usScore);
+  document.getElementById('esc-ir-val').textContent = Math.round(irScore);
+  if (usPct >= 90) escUs.classList.add('esc-maxed'); else escUs.classList.remove('esc-maxed');
+  if (irPct >= 90) escIr.classList.add('esc-maxed'); else escIr.classList.remove('esc-maxed');
+  document.getElementById('date-display').textContent = formatDate(day);
+  document.getElementById('phase-label').textContent = getPhaseLabel(day);
+}
+
+// Fly to event — works in both 2D and 3D
+function flyToEvent(lat, lng) {
+  if (mapMode === '3d' && cesiumViewer) {
+    cesiumViewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(lng, lat, 500000),
+      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
+      duration: 1.5
+    });
+  } else {
+    map.setView([lat, lng], 8);
+    selectMarkerByLatLng(lat, lng);
+  }
 }
 
 // Track all current markers for selection lookup
@@ -2344,6 +2444,212 @@ async function init() {
   document.getElementById('loading').style.display = 'none';
 }
 init();
+
+// ─── 3D Globe (CesiumJS) ───────────────────────────────────────────
+let mapMode = '2d';
+let cesiumViewer = null;
+let cesiumEntities = null;
+let cesiumInitialized = false;
+
+function initCesium() {
+  if (cesiumInitialized) return;
+  // Use default Ion token for basic imagery
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzMjdjMjM0Yy01NTFhLTQ0ZTctOGI2OC05NTQ1NmMyMzUyNDkiLCJpZCI6MjY0MTE4LCJpYXQiOjE3MzQ5NzY0MTV9.5cxrRnXX6ha-r3AIOG9-oEI73MBjLHZuzwmkbMOayWQ';
+  cesiumViewer = new Cesium.Viewer('cesium-container', {
+    animation: false,
+    baseLayerPicker: false,
+    fullscreenButton: false,
+    geocoder: false,
+    homeButton: false,
+    infoBox: false,
+    sceneModePicker: false,
+    selectionIndicator: false,
+    timeline: false,
+    navigationHelpButton: false,
+    creditContainer: document.createElement('div'), // hide credits
+    imageryProvider: new Cesium.IonImageryProvider({ assetId: 3845 }), // dark earth at night
+    terrainProvider: Cesium.createWorldTerrain(),
+    skyBox: false,
+    skyAtmosphere: new Cesium.SkyAtmosphere(),
+    contextOptions: { webgl: { alpha: true } }
+  });
+
+  // Style the globe
+  const scene = cesiumViewer.scene;
+  scene.backgroundColor = Cesium.Color.fromCssColorString('#0a0f0a');
+  scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
+  scene.globe.enableLighting = false;
+  scene.fog.enabled = true;
+  scene.fog.density = 0.0002;
+
+  // Initial camera — looking at Iran
+  cesiumViewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(51, 31, 3500000),
+    orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
+    duration: 0
+  });
+
+  cesiumInitialized = true;
+}
+
+function toggleMapMode() {
+  const btn = document.getElementById('globe-toggle');
+  if (mapMode === '2d') {
+    // Switch to 3D
+    mapMode = '3d';
+    btn.textContent = '2D';
+    document.getElementById('map').style.display = 'none';
+    document.getElementById('cesium-container').style.display = 'block';
+    initCesium();
+    renderCesiumDay(currentDay);
+  } else {
+    // Switch to 2D
+    mapMode = '2d';
+    btn.textContent = '3D';
+    document.getElementById('cesium-container').style.display = 'none';
+    document.getElementById('map').style.display = 'block';
+    map.invalidateSize();
+    renderDay(currentDay);
+  }
+}
+
+// ─── Cesium Marker Colors ──────────────────────────────────────────
+const cesiumColors = {
+  strike: Cesium.Color.fromCssColorString('#1565c0'),
+  retaliation: Cesium.Color.fromCssColorString('#c62828'),
+  protest: Cesium.Color.fromCssColorString('#d84315'),
+  political: Cesium.Color.fromCssColorString('#455a64'),
+  nuclear: Cesium.Color.fromCssColorString('#6a1b9a'),
+  naval: Cesium.Color.fromCssColorString('#0277bd'),
+  hezbollah: Cesium.Color.fromCssColorString('#2e7d32'),
+  humanitarian: Cesium.Color.fromCssColorString('#b71c1c'),
+};
+
+function renderCesiumDay(day) {
+  if (!cesiumViewer) return;
+  cesiumViewer.entities.removeAll();
+
+  const pf = activePhase === 'all' ? null : activePhase;
+  const current = events.filter(e => e.day === day && (!pf || e.phase === pf));
+  const recent = events.filter(e => e.day >= day-3 && e.day < day && (!pf || e.phase === pf));
+
+  // Scar markers (past)
+  const past = events.filter(e => e.day < day && persistTypes.has(e.type) && (!pf || e.phase === pf));
+  const scarMap = new Map();
+  past.forEach(e => {
+    const key = `${e.lat.toFixed(2)},${e.lng.toFixed(2)}`;
+    if (!scarMap.has(key) || e.day > scarMap.get(key).day) scarMap.set(key, e);
+  });
+  scarMap.forEach(e => {
+    const hasActive = current.concat(recent).some(a => Math.abs(a.lat-e.lat)<0.05 && Math.abs(a.lng-e.lng)<0.05);
+    if (!hasActive) {
+      const col = cesiumColors[e.type] || Cesium.Color.RED;
+      cesiumViewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 500),
+        point: { pixelSize: 4, color: col.withAlpha(0.25), outlineColor: col.withAlpha(0.15), outlineWidth: 1 },
+        description: `<b>${e.title}</b><br>${e.desc}`
+      });
+    }
+  });
+
+  // Recent (faded)
+  recent.forEach(e => {
+    const col = cesiumColors[e.type] || Cesium.Color.RED;
+    cesiumViewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 1000),
+      point: { pixelSize: 6, color: col.withAlpha(0.35), outlineColor: col.withAlpha(0.2), outlineWidth: 1 },
+      description: `<b>${e.title}</b><br>${e.desc}`
+    });
+  });
+
+  // Current day markers — larger, glowing
+  current.forEach(e => {
+    const col = cesiumColors[e.type] || Cesium.Color.RED;
+    const size = e.size === 'large' ? 14 : 10;
+    cesiumViewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 2000),
+      point: { pixelSize: size, color: col, outlineColor: Cesium.Color.WHITE.withAlpha(0.6), outlineWidth: 2 },
+      label: {
+        text: e.title.length > 30 ? e.title.substring(0, 28) + '...' : e.title,
+        font: '11px JetBrains Mono', fillColor: Cesium.Color.WHITE.withAlpha(0.8),
+        outlineColor: Cesium.Color.BLACK, outlineWidth: 2, style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+        pixelOffset: new Cesium.Cartesian2(0, -18), showBackground: true,
+        backgroundColor: Cesium.Color.BLACK.withAlpha(0.6),
+        backgroundPadding: new Cesium.Cartesian2(6, 3),
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 3000000)
+      },
+      description: `<div style="font-family:monospace;"><span style="color:${typeColors[e.type]};font-weight:bold;text-transform:uppercase;">${e.type}</span><br><b>${e.title}</b><br>${e.desc}<br><small>${formatDate(e.day)} | ${e.lat.toFixed(3)}°N ${e.lng.toFixed(3)}°E</small></div>`
+    });
+
+    // Blast ring for large events
+    if (e.size === 'large') {
+      cesiumViewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
+        ellipse: {
+          semiMajorAxis: 40000, semiMinorAxis: 40000,
+          material: col.withAlpha(0.08),
+          outline: true, outlineColor: col.withAlpha(0.3), outlineWidth: 1
+        }
+      });
+    }
+  });
+
+  // Missile arcs — 3D great-circle polylines
+  missileArcs.filter(a => a.day === day).forEach(a => {
+    const col = Cesium.Color.fromCssColorString(a.color);
+    // Generate arc points with altitude
+    const pts = [];
+    const dist = Math.sqrt((a.to[0]-a.from[0])**2 + (a.to[1]-a.from[1])**2);
+    const maxAlt = Math.min(dist * 25000, 400000); // altitude proportional to distance
+    for (let t = 0; t <= 1; t += 0.02) {
+      const lat = a.from[0] + (a.to[0] - a.from[0]) * t;
+      const lng = a.from[1] + (a.to[1] - a.from[1]) * t;
+      const alt = Math.sin(t * Math.PI) * maxAlt; // parabolic arc
+      pts.push(lng, lat, alt);
+    }
+    cesiumViewer.entities.add({
+      polyline: {
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
+        width: 2, material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.3, color: col.withAlpha(0.7)
+        })
+      },
+      description: a.label
+    });
+
+    // Animated orb along arc
+    animateCesiumOrb(pts, col, a.label);
+  });
+
+  // Update panels (reuse 2D logic)
+  updatePanels(day);
+}
+
+// Animated orb moving along a 3D arc
+function animateCesiumOrb(degreesHeights, color, label) {
+  if (!cesiumViewer) return;
+  const positions = [];
+  for (let i = 0; i < degreesHeights.length; i += 3) {
+    positions.push(Cesium.Cartesian3.fromDegrees(degreesHeights[i], degreesHeights[i+1], degreesHeights[i+2] + 5000));
+  }
+  const orb = cesiumViewer.entities.add({
+    position: positions[0],
+    point: { pixelSize: 6, color: color, outlineColor: Cesium.Color.WHITE.withAlpha(0.5), outlineWidth: 1 }
+  });
+  let step = 0;
+  const total = positions.length;
+  const speed = 40;
+  const pause = 600;
+  function runLoop() {
+    step = 0;
+    const interval = setInterval(() => {
+      step++;
+      if (step >= total) { clearInterval(interval); setTimeout(runLoop, pause); return; }
+      try { orb.position = positions[step]; } catch(e) { clearInterval(interval); }
+    }, speed);
+  }
+  setTimeout(runLoop, Math.random() * 500);
+}
 
 // ─── UTC Clock ─────────────────────────────────────────────────────
 function updateClock() {
