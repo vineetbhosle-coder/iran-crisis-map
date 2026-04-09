@@ -723,6 +723,11 @@ const events = [
   { day: 89, lat: 24.72, lng: 46.72, title: "Second Strike on Prince Sultan Air Base", desc: "Iran attacks Prince Sultan Air Base again. 29 American soldiers injured (5 seriously). E-3 Sentry refueling aircraft further damaged.", type: "retaliation", size: "large", phase: "regional" },
   { day: 89, lat: 35.76, lng: 51.41, title: "University of Science and Technology Struck", desc: "Israeli strikes hit University of Science and Technology in Tehran. Military weapons production and ballistic missile component sites also targeted.", type: "strike", phase: "war" },
   { day: 89, lat: 35.70, lng: 51.35, title: "General Eshaqi & Ayatollah Jannati Killed", desc: "Israeli strikes kill Gen. Jamshid Eshaqi (Iranian army budget chief) and Ayatollah Mohammad Taqi Jannati. Continued decapitation strategy.", type: "strike", phase: "war" },
+  { day: 89, lat: 34.04, lng: 49.24, title: "Arak Heavy Water Reactor Struck", desc: "50+ IAF jets hit Khondab Heavy Water Research Reactor at Arak Nuclear Complex. Three nuclear sites struck simultaneously.", type: "nuclear", size: "large", phase: "war" },
+  { day: 89, lat: 32.37, lng: 54.22, title: "Ardakan Yellowcake Plant Struck", desc: "Strike hits Ardakan yellowcake production facility processing uranium ore. Iran says no radioactive release.", type: "nuclear", phase: "war" },
+  { day: 89, lat: 32.65, lng: 51.68, title: "Isfahan Mobarakeh Steel Hit", desc: "Strikes hit Mobarakeh Steel Company — partially IRGC-controlled.", type: "strike", phase: "war" },
+  { day: 89, lat: 35.69, lng: 51.39, title: "120 Heritage Sites Damaged", desc: "Iran reports 120+ museums and cultural heritage sites damaged since war start.", type: "humanitarian", phase: "war" },
+  { day: 89, lat: 45.42, lng: 2.35, title: "Rubio at G7: War May Need 2-4 More Weeks", desc: "Secretary Rubio tells G7 ministers war may need 2-4 more weeks. G7 calls for cessation of attacks on civilians.", type: "political", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
   // MARCH 28 (Day 90)
@@ -778,6 +783,11 @@ const events = [
   // ═══════════════════════════════════════════════════════════════
   { day: 94, lat: 25.20, lng: 55.27, title: "Burj Al Arab Damaged by Missile Debris", desc: "UAE intercepts 5 ballistic missiles and 35 UAVs. Fragments fall on Abu Dhabi and Dubai; iconic Burj Al Arab hotel damaged by debris.", type: "retaliation", size: "large", phase: "regional" },
   { day: 94, lat: 36.35, lng: 43.13, title: "PMF Commander Killed in Tel Afar", desc: "Shelling on Al-Hussein Brigade PMF HQ in Tel Afar kills commander and 3 fighters affiliated with Iran-linked armed groups.", type: "strike", phase: "regional" },
+  { day: 94, lat: 35.80, lng: 51.42, title: "Kharazi Home Struck — Wife Killed", desc: "Strike on Tehran home of former FM Kamal Kharazi (81). Wife killed, Kharazi gravely wounded. He was overseeing diplomatic channel with US via Pakistan.", type: "humanitarian", phase: "war" },
+  { day: 94, lat: 26.65, lng: 55.88, title: "Hengam Island Strike — 7 Injured", desc: "Airstrikes on strategically important Hengam Island in Strait of Hormuz cause 7 injuries.", type: "strike", phase: "war" },
+  { day: 94, lat: 29.55, lng: 34.95, title: "Houthi Missile Intercepted Over Israel", desc: "Third Houthi missile attack since joining war Mar 28. IDF intercepts ballistic missile from Yemen.", type: "retaliation", phase: "regional" },
+  { day: 94, lat: 33.20, lng: 35.50, title: "Hezbollah FPV Drone Strikes — S. Lebanon", desc: "Hezbollah conducts two first-person view drone strikes against IDF positions.", type: "hezbollah", phase: "regional" },
+  { day: 94, lat: 38.91, lng: -77.04, title: "Trump: Iran Requested Ceasefire", desc: "Trump claims Iran's president requested ceasefire. Iran FM calls claim 'false and baseless'.", type: "political", phase: "war" },
   { day: 94, lat: 35.69, lng: 51.42, title: "Continued Strikes on Tehran", desc: "US-Israel strikes continue targeting military infrastructure across Tehran province.", type: "strike", phase: "war" },
 
   // ═══════════════════════════════════════════════════════════════
@@ -817,6 +827,11 @@ const events = [
   { day: 97, lat: 35.75, lng: 51.35, title: "Aircraft Destroyed at 3 Tehran Airports", desc: "Strikes destroy aircraft and helicopters at Bahram, Mehrabad, and Azmayesh airports in Tehran.", type: "strike", size: "large", phase: "war" },
   { day: 97, lat: 30.32, lng: 48.30, title: "Drone Strikes Oil Facilities Near Basra", desc: "Drone strikes oil facilities near Basra, Iraq, causing fire. Escalation of attacks on regional energy infrastructure.", type: "retaliation", phase: "regional" },
   { day: 97, lat: 32.82, lng: 34.97, title: "4 Killed in Haifa Residential Building", desc: "Iranian missile direct hit on residential building in Haifa. 4 civilians killed, ~10 injured. Deadliest single strike on Haifa during war.", type: "retaliation", size: "large", phase: "war" },
+  { day: 97, lat: 28.97, lng: 50.82, title: "Bushehr — Projectile Kills 1, Russia Evacuates", desc: "4th strike near Bushehr Nuclear Plant. 1 security staff killed. Russia begins evacuating 198 workers toward Armenia.", type: "nuclear", phase: "war" },
+  { day: 97, lat: 30.56, lng: 49.20, title: "Mahshahr Petrochemical — 70% of Gasoline", desc: "Mahshahr Special Petrochemical Zone struck. Supplies 70% of Iran's gasoline. Massive fires, production shutdown.", type: "strike", size: "large", phase: "war" },
+  { day: 97, lat: 32.07, lng: 34.79, title: "Kirya HQ Near-Miss — Tel Aviv", desc: "Two cluster submunitions strike near IDF Kirya headquarters. Damage to parking lot and school; no casualties there.", type: "retaliation", phase: "war" },
+  { day: 97, lat: 32.09, lng: 34.81, title: "Cluster Bombs Wound 6 in Central Israel", desc: "Cluster munitions hit ~50 locations across Bnei Brak, Petah Tikva, Ramat Gan, Givatayim, Rosh HaAyin.", type: "humanitarian", phase: "war" },
+  { day: 97, lat: 29.24, lng: 47.97, title: "Kuwait — Oil Ministry & Power Plants Hit", desc: "Drones hit Shuwaikh Oil Sector Complex (Kuwait Petroleum HQ), 2 power stations, desalination facility.", type: "retaliation", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
   // APRIL 5 (Day 98)
@@ -836,6 +851,11 @@ const events = [
   { day: 99, lat: 32.08, lng: 34.78, title: "23 Israeli Civilians Killed, 7,035+ Injured Total", desc: "Cumulative toll: 23 civilians killed, 7,035+ injured. 455 Iranian attack waves total. 6,700 residents displaced from 42 municipalities.", type: "humanitarian", phase: "war" },
   { day: 99, lat: 33.27, lng: 35.20, title: "IDF Strikes Al-Qasmiya Bridge", desc: "Israeli strikes disable Al-Qasmiya Bridge between Tyre and Sidon, cutting key north-south route in Lebanon.", type: "strike", phase: "regional" },
   { day: 99, lat: 33.69, lng: 73.04, title: "Islamabad Accord: 45-Day Ceasefire Framework", desc: "Pakistan introduces 'Islamabad Accord' — 45-day two-phased ceasefire framework. Overnight negotiations between Army Chief Asim Munir, VP Vance, envoy Witkoff, and FM Araghchi.", type: "political", size: "large", phase: "regional" },
+  { day: 99, lat: 27.53, lng: 52.61, title: "South Pars Struck — 85% Petrochemical Offline", desc: "Israel strikes South Pars petrochemical complex. 85% of Iran's petrochemical exports now offline.", type: "strike", size: "large", phase: "war" },
+  { day: 99, lat: 30.65, lng: 50.85, title: "F-15E Crew Rescue — Kohgiluyeh Mountains", desc: "Missing weapons officer rescued after 2-day operation. Heavy firefight; 2 helicopters damaged, 2 C-130s destroyed. Commandos exfiltrate.", type: "strike", phase: "war" },
+  { day: 99, lat: 29.56, lng: 34.95, title: "Houthi Coordinated Strike on Eilat", desc: "Joint Iran-Hezbollah-Houthi operation targets Eilat with cruise missiles and UAVs. IDF intercepts several.", type: "retaliation", phase: "regional" },
+  { day: 99, lat: 38.90, lng: -77.04, title: "Trump: Iran 'Taken Out in One Night'", desc: "Trump warns 'all of Iran can be taken out in one night — might be tomorrow'. Sets Tuesday 8PM deadline for Hormuz.", type: "political", phase: "war" },
+  { day: 99, lat: 29.24, lng: 47.97, title: "Kuwait — More Power & Water Plants Hit", desc: "Iranian drones target 2 more power and water desalination plants. Electricity generating units shut down.", type: "retaliation", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
   // APRIL 7 (Day 100)
@@ -844,6 +864,12 @@ const events = [
   { day: 100, lat: 33.69, lng: 73.04, title: "Pakistan Brokers Historic Deal", desc: "PM Shehbaz Sharif announces ceasefire. Negotiations to resume in Islamabad on April 10. US team: VP Vance, envoy Witkoff, Jared Kushner.", type: "political", size: "large", phase: "regional" },
   { day: 100, lat: 26.56, lng: 56.25, title: "Hormuz to Reopen for 14 Days", desc: "Iran agrees to 'complete, immediate and safe opening' of Strait of Hormuz for 14 days. Iran and Oman to charge transit fees; proceeds fund Iran reconstruction.", type: "naval", size: "large", phase: "regional" },
   { day: 100, lat: 35.69, lng: 51.39, title: "Iran Claims 'Nearly All War Objectives Achieved'", desc: "Iran's Supreme National Security Council confirms ceasefire and claims victory. 40 days of US-Israeli attacks paused.", type: "political", phase: "war" },
+  { day: 100, lat: 29.23, lng: 50.32, title: "Kharg Island — US Restrikes Oil Hub", desc: "US strikes Kharg Island again, hub for 85-95% of Iran's crude exports. Military targets restruck, oil infra spared.", type: "strike", phase: "war" },
+  { day: 100, lat: 35.84, lng: 50.97, title: "Tehran-Karaj Bridge Segment Bombed", desc: "IAF bombs bridge segments to prevent IRGC weapons movement. 8 rail sections and bridges hit across Iran.", type: "strike", phase: "war" },
+  { day: 100, lat: 33.99, lng: 51.45, title: "Kashan Railway Bridge — 2 Killed", desc: "Strike on Yahya Abad railway bridge kills 2. Iran suspends all trains on Mashhad and Khuzestan lines.", type: "humanitarian", phase: "war" },
+  { day: 100, lat: 35.69, lng: 51.39, title: "Human Chains at Power Plants Across Iran", desc: "Iranians form human chains around power plants and bridges, responding to government call ahead of Trump's 8PM destruction deadline.", type: "political", phase: "war" },
+  { day: 100, lat: 33.88, lng: 35.50, title: "Central Beirut Struck Without Warning", desc: "5 Beirut neighborhoods hit during rush hour. 92 killed in Beirut proper, 61 in southern suburbs. 742 wounded.", type: "humanitarian", size: "large", phase: "regional" },
+  { day: 100, lat: 33.65, lng: 35.85, title: "Shmestar Funeral Bombing — Bekaa", desc: "Israeli airstrike hits cemetery during funeral in Bekaa Valley village. At least 20 mourners killed.", type: "humanitarian", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
   // APRIL 8 (Day 101) — Ceasefire Day 1
