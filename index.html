@@ -1853,22 +1853,47 @@ function getStats(day) {
   if (day >= 99) oil = 118; // Islamabad Accord hope
   if (day >= 100) oil = 108; // ceasefire announced
   if (day >= 101) oil = 112; // cracks in ceasefire
-  // Targets struck in Iran — CENTCOM reports
+  // Targets struck in Iran — CENTCOM reports (daily granular)
   let targets = 0, ships = 0, usloss = 0, airdef = 0;
-  if (day >= 62) { targets = 1250; ships = 10; usloss = 0; airdef = 15; }
-  if (day >= 63) { targets = 1800; ships = 15; }
-  if (day >= 65) { targets = 2500; ships = 25; airdef = 25; }
-  if (day >= 68) { targets = 3200; ships = 40; airdef = 35; }
-  if (day >= 72) { targets = 4100; ships = 60; airdef = 50; }
-  if (day >= 74) { targets = 4800; ships = 70; usloss = 1; airdef = 60; } // KC-135 crash
-  if (day >= 75) { targets = 5500; ships = 80; airdef = 65; } // Kharg Island 90+ targets
-  if (day >= 78) { targets = 6000; ships = 100; airdef = 75; }
-  if (day >= 80) { targets = 6500; airdef = 80; } // Bloomberg: 80% air def destroyed
-  if (day >= 83) { targets = 7000; }
-  if (day >= 85) { targets = 7800; ships = 120; airdef = 85; }
-  if (day >= 89) { usloss = 2; } // E-3 damaged at Prince Sultan
-  if (day >= 93) { targets = 8500; ships = 125; airdef = 88; }
-  if (day >= 97) { targets = 9200; }
+  if (day >= 62) { targets = 1250; ships = 10; airdef = 15; }  // Day 1: opening salvo
+  if (day >= 63) { targets = 1800; ships = 15; airdef = 18; }  // +550 targets
+  if (day >= 64) { targets = 2100; ships = 18; airdef = 22; }
+  if (day >= 65) { targets = 2500; ships = 25; airdef = 28; }
+  if (day >= 66) { targets = 2800; ships = 30; airdef = 32; }  // IRIS Dena sunk
+  if (day >= 67) { targets = 3000; ships = 35; airdef = 35; }
+  if (day >= 68) { targets = 3200; ships = 40; airdef = 38; }  // B-2 strikes
+  if (day >= 69) { targets = 3500; ships = 45; airdef = 42; }  // 400 IAF targets in 2 days
+  if (day >= 70) { targets = 3700; ships = 50; airdef = 45; }
+  if (day >= 71) { targets = 3900; ships = 55; airdef = 48; }
+  if (day >= 72) { targets = 4100; ships = 60; airdef = 50; }  // 10 day mark
+  if (day >= 73) { targets = 4400; ships = 65; airdef = 55; }  // 300+ missile launchers
+  if (day >= 74) { targets = 4800; ships = 70; usloss = 1; airdef = 60; } // KC-135 crash, 6 KIA
+  if (day >= 75) { targets = 5500; ships = 80; airdef = 65; }  // Kharg Island 90+ targets
+  if (day >= 76) { targets = 5700; ships = 85; airdef = 68; }
+  if (day >= 77) { targets = 5900; ships = 88; airdef = 70; }
+  if (day >= 78) { targets = 6000; ships = 100; airdef = 75; } // 100 ships milestone
+  if (day >= 79) { targets = 6200; ships = 102; airdef = 77; }
+  if (day >= 80) { targets = 6500; ships = 105; airdef = 80; } // Bloomberg: 80%
+  if (day >= 81) { targets = 6700; ships = 108; airdef = 82; }
+  if (day >= 82) { targets = 6800; ships = 110; airdef = 83; }
+  if (day >= 83) { targets = 7000; ships = 112; airdef = 84; }
+  if (day >= 84) { targets = 7200; ships = 115; airdef = 85; }
+  if (day >= 85) { targets = 7800; ships = 118; airdef = 85; }
+  if (day >= 86) { targets = 8000; ships = 120; airdef = 86; }
+  if (day >= 87) { targets = 8200; ships = 120; airdef = 86; }
+  if (day >= 88) { targets = 8300; ships = 120; airdef = 87; }
+  if (day >= 89) { targets = 8400; ships = 122; usloss = 2; airdef = 87; } // E-3 damaged
+  if (day >= 90) { targets = 8500; ships = 122; airdef = 88; }
+  if (day >= 91) { targets = 8600; ships = 123; airdef = 88; }
+  if (day >= 92) { targets = 8700; ships = 124; airdef = 88; }
+  if (day >= 93) { targets = 8900; ships = 125; airdef = 89; }
+  if (day >= 94) { targets = 9000; ships = 126; airdef = 89; }
+  if (day >= 95) { targets = 9100; ships = 127; airdef = 89; }
+  if (day >= 96) { targets = 9200; ships = 127; airdef = 90; }
+  if (day >= 97) { targets = 9300; ships = 128; airdef = 90; }
+  if (day >= 98) { targets = 9500; ships = 129; airdef = 90; }
+  if (day >= 99) { targets = 9600; ships = 130; airdef = 90; }
+  if (day >= 100) { targets = 9700; ships = 130; airdef = 90; }
   if (day >= 101) { targets = 9800; ships = 130; airdef = 90; }
   return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1, targets, ships, usloss, airdef };
 }
