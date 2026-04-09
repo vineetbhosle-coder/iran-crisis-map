@@ -2451,67 +2451,93 @@ let cesiumViewer = null;
 let cesiumEntities = null;
 let cesiumInitialized = false;
 
-function initCesium() {
+async function initCesium() {
   if (cesiumInitialized) return;
-  // Use default Ion token for basic imagery
   Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNGIxZjYxOC02MTA2LTQ2YmQtODUyYi1kNGVmYmFmZDYwYTEiLCJpZCI6Mzk2OTc3LCJpYXQiOjE3NzI1MDI5ODd9.49tFJJAfvoZx87nGxnrkQOJe8r3Al9TbgkTqYxarhLI';
 
-  cesiumViewer = new Cesium.Viewer('cesium-container', {
-    animation: false,
-    baseLayerPicker: false,
-    fullscreenButton: false,
-    geocoder: false,
-    homeButton: false,
-    infoBox: true,
-    sceneModePicker: false,
-    selectionIndicator: false,
-    timeline: false,
-    navigationHelpButton: false,
-    creditContainer: document.createElement('div'),
-    terrainProvider: Cesium.createWorldTerrain({ requestVertexNormals: true }),
-    skyBox: false,
-    contextOptions: { webgl: { alpha: true } }
-  });
+  try {
+    // Async terrain (required in Cesium 1.107+)
+    const terrain = await Cesium.createWorldTerrainAsync({ requestVertexNormals: true });
 
-  // Satellite imagery from Cesium Ion + dark CartoDB overlay for labels
-  cesiumViewer.imageryLayers.removeAll();
-  cesiumViewer.imageryLayers.addImageryProvider(
-    new Cesium.IonImageryProvider({ assetId: 2 }) // Bing Maps Aerial
-  );
-  // Dark label overlay on top
-  const labelLayer = cesiumViewer.imageryLayers.addImageryProvider(
-    new Cesium.UrlTemplateImageryProvider({
+    cesiumViewer = new Cesium.Viewer('cesium-container', {
+      animation: false,
+      baseLayerPicker: false,
+      fullscreenButton: false,
+      geocoder: false,
+      homeButton: false,
+      infoBox: true,
+      sceneModePicker: false,
+      selectionIndicator: false,
+      timeline: false,
+      navigationHelpButton: false,
+      creditContainer: document.createElement('div'),
+      terrainProvider: terrain,
+      skyBox: false,
+      contextOptions: { webgl: { alpha: true } }
+    });
+
+    // Async satellite imagery (required in Cesium 1.107+)
+    cesiumViewer.imageryLayers.removeAll();
+    const bingProvider = await Cesium.IonImageryProvider.fromAssetId(2);
+    cesiumViewer.imageryLayers.addImageryProvider(bingProvider);
+
+    // Dark label overlay
+    const labelProvider = new Cesium.UrlTemplateImageryProvider({
       url: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png',
       subdomains: ['a','b','c','d'],
       maximumLevel: 18,
       credit: 'CartoDB'
-    })
-  );
-  labelLayer.alpha = 0.7;
+    });
+    const labelLayer = cesiumViewer.imageryLayers.addImageryProvider(labelProvider);
+    labelLayer.alpha = 0.7;
 
-  // Style the globe
-  const scene = cesiumViewer.scene;
-  scene.backgroundColor = Cesium.Color.fromCssColorString('#050a05');
-  scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
-  scene.globe.enableLighting = true;
-  scene.fog.enabled = true;
-  scene.fog.density = 0.0003;
-  scene.globe.showGroundAtmosphere = true;
-  scene.globe.depthTestAgainstTerrain = true;
-  scene.screenSpaceCameraController.enableTilt = true;
-  scene.screenSpaceCameraController.enableZoom = true;
+    // Style the globe
+    const scene = cesiumViewer.scene;
+    scene.backgroundColor = Cesium.Color.fromCssColorString('#050a05');
+    scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
+    scene.globe.enableLighting = true;
+    scene.fog.enabled = true;
+    scene.fog.density = 0.0003;
+    scene.globe.showGroundAtmosphere = true;
+    scene.globe.depthTestAgainstTerrain = true;
 
-  // Initial camera — looking at Iran
-  cesiumViewer.camera.flyTo({
-    destination: Cesium.Cartesian3.fromDegrees(51, 31, 3500000),
-    orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
-    duration: 0
-  });
+    // Initial camera — looking at Iran
+    cesiumViewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(51, 31, 3500000),
+      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
+      duration: 0
+    });
 
-  cesiumInitialized = true;
+    cesiumInitialized = true;
+    renderCesiumDay(currentDay);
+  } catch(err) {
+    console.error('Cesium init error:', err);
+    // Fallback: no terrain, just CartoDB tiles
+    cesiumViewer = new Cesium.Viewer('cesium-container', {
+      animation: false, baseLayerPicker: false, fullscreenButton: false,
+      geocoder: false, homeButton: false, infoBox: true,
+      sceneModePicker: false, selectionIndicator: false, timeline: false,
+      navigationHelpButton: false, creditContainer: document.createElement('div'),
+      skyBox: false
+    });
+    cesiumViewer.imageryLayers.removeAll();
+    cesiumViewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
+      url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+      subdomains: ['a','b','c','d'], maximumLevel: 18
+    }));
+    cesiumViewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#050a05');
+    cesiumViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
+    cesiumViewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(51, 31, 3500000),
+      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
+      duration: 0
+    });
+    cesiumInitialized = true;
+    renderCesiumDay(currentDay);
+  }
 }
 
-function toggleMapMode() {
+async function toggleMapMode() {
   const btn = document.getElementById('globe-toggle');
   if (mapMode === '2d') {
     // Switch to 3D
@@ -2519,8 +2545,7 @@ function toggleMapMode() {
     btn.textContent = '2D';
     document.getElementById('map').style.display = 'none';
     document.getElementById('cesium-container').style.display = 'block';
-    initCesium();
-    renderCesiumDay(currentDay);
+    await initCesium();
   } else {
     // Switch to 2D
     mapMode = '2d';
