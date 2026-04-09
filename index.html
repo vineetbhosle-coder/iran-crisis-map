@@ -2454,6 +2454,8 @@ let cesiumInitialized = false;
 function initCesium() {
   if (cesiumInitialized) return;
   // Use default Ion token for basic imagery
+  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNGIxZjYxOC02MTA2LTQ2YmQtODUyYi1kNGVmYmFmZDYwYTEiLCJpZCI6Mzk2OTc3LCJpYXQiOjE3NzI1MDI5ODd9.49tFJJAfvoZx87nGxnrkQOJe8r3Al9TbgkTqYxarhLI';
+
   cesiumViewer = new Cesium.Viewer('cesium-container', {
     animation: false,
     baseLayerPicker: false,
@@ -2466,29 +2468,38 @@ function initCesium() {
     timeline: false,
     navigationHelpButton: false,
     creditContainer: document.createElement('div'),
+    terrainProvider: Cesium.createWorldTerrain({ requestVertexNormals: true }),
     skyBox: false,
     contextOptions: { webgl: { alpha: true } }
   });
 
-  // Remove default imagery and add dark CartoDB tiles
+  // Satellite imagery from Cesium Ion + dark CartoDB overlay for labels
   cesiumViewer.imageryLayers.removeAll();
   cesiumViewer.imageryLayers.addImageryProvider(
+    new Cesium.IonImageryProvider({ assetId: 2 }) // Bing Maps Aerial
+  );
+  // Dark label overlay on top
+  const labelLayer = cesiumViewer.imageryLayers.addImageryProvider(
     new Cesium.UrlTemplateImageryProvider({
-      url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+      url: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png',
       subdomains: ['a','b','c','d'],
       maximumLevel: 18,
       credit: 'CartoDB'
     })
   );
+  labelLayer.alpha = 0.7;
 
   // Style the globe
   const scene = cesiumViewer.scene;
-  scene.backgroundColor = Cesium.Color.fromCssColorString('#0a0f0a');
+  scene.backgroundColor = Cesium.Color.fromCssColorString('#050a05');
   scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
-  scene.globe.enableLighting = false;
+  scene.globe.enableLighting = true;
   scene.fog.enabled = true;
-  scene.fog.density = 0.0002;
+  scene.fog.density = 0.0003;
   scene.globe.showGroundAtmosphere = true;
+  scene.globe.depthTestAgainstTerrain = true;
+  scene.screenSpaceCameraController.enableTilt = true;
+  scene.screenSpaceCameraController.enableZoom = true;
 
   // Initial camera — looking at Iran
   cesiumViewer.camera.flyTo({
