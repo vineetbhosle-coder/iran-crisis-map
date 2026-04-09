@@ -868,6 +868,14 @@
         <div class="stat-label-sm">Day of Crisis</div>
         <div class="stat-val-xl" id="s-day">1</div>
       </div>
+      <div class="cmd-card" style="display:flex;gap:8px;">
+        <div style="flex:1;"><div class="stat-label-sm">Targets Hit</div><div class="stat-val-lg" id="s-targets" style="color:var(--blue)">0</div></div>
+        <div style="flex:1;"><div class="stat-label-sm">Ships Sunk</div><div class="stat-val-lg" id="s-ships" style="color:var(--blue)">0</div></div>
+      </div>
+      <div class="cmd-card" style="display:flex;gap:8px;">
+        <div style="flex:1;"><div class="stat-label-sm">US Aircraft Lost</div><div class="stat-val-lg" id="s-usloss" style="color:var(--orange)">0</div></div>
+        <div style="flex:1;"><div class="stat-label-sm">Iran Air Def %</div><div class="stat-val-lg" id="s-airdef" style="color:var(--blue)">0%</div></div>
+      </div>
     </div>
 
     <div class="cmd-section">
@@ -1776,9 +1784,42 @@ PLACEHOLDER END */
 // ─── Stats ──────────────────────────────────────────────────────────
 function getStats(day) {
   let pd = 0, sd = 0, ic = 0, hormuz = 'OPEN', internet = 'ONLINE', oil = 73;
-  if (day >= 3) pd = 28; if (day >= 5) pd = 50; if (day >= 11) pd = 30000; if (day >= 13) pd = 36500;
-  if (day >= 62) sd = 200; if (day >= 65) sd = 400; if (day >= 72) sd = 800; if (day >= 82) sd = 1444; if (day >= 85) sd = 1600; if (day >= 90) sd = 1800; if (day >= 92) sd = 1950; if (day >= 93) sd = 4700; if (day >= 97) sd = 5200; if (day >= 101) sd = 5500;
-  if (day >= 62) ic = 23; if (day >= 63) ic = 32; if (day >= 72) ic = 34; if (day >= 79) ic = 36; if (day >= 82) ic = 118; if (day >= 89) ic = 148; if (day >= 92) ic = 160; if (day >= 93) ic = 170; if (day >= 97) ic = 195; if (day >= 99) ic = 205; if (day >= 101) ic = 460;
+  // Protest deaths — HRANA verified counts + leaked estimates
+  if (day >= 3) pd = 28;      // initial clashes
+  if (day >= 5) pd = 50;      // Ilam shootings
+  if (day >= 9) pd = 200;     // escalating before Jan 8
+  if (day >= 11) pd = 1500;   // Jan 8 massacre — first reports
+  if (day >= 12) pd = 5000;   // Jan 9 — Mashhad, Karaj mass killings
+  if (day >= 13) pd = 7007;   // HRANA final verified named dead
+  if (day >= 18) pd = 7007;   // leaked estimates: 16,500-36,500 but unverified
+  // Strike deaths in Iran — sourced from Hengaw reports
+  if (day >= 62) sd = 200;    // Feb 28 opening strikes
+  if (day >= 64) sd = 555;    // by Mar 2 per Iran state media
+  if (day >= 65) sd = 742;    // HRANA estimate Mar 3
+  if (day >= 69) sd = 1300;   // WHO report Mar 7
+  if (day >= 72) sd = 4300;   // Hengaw 10-day report (incl military)
+  if (day >= 74) sd = 4800;   // OCHA update
+  if (day >= 76) sd = 5300;   // Hengaw 5th report (511 civilians)
+  if (day >= 83) sd = 5900;   // Hengaw 6th report (595 civilians)
+  if (day >= 84) sd = 6100;
+  if (day >= 90) sd = 6500;
+  if (day >= 93) sd = 6900;   // 4,700 security forces per Iran Intl
+  if (day >= 99) sd = 7200;
+  if (day >= 101) sd = 7500;
+  // Israeli casualties (killed + seriously wounded combined)
+  // Sourced from Alma Research daily reports
+  if (day >= 62) ic = 9;      // first strikes
+  if (day >= 63) ic = 32;     // Beit Shemesh 9 killed
+  if (day >= 66) ic = 34;
+  if (day >= 71) ic = 36;     // Yehud cluster bomb 2 killed
+  if (day >= 79) ic = 38;     // Ramat Gan 2 killed
+  if (day >= 82) ic = 40;
+  if (day >= 83) ic = 42;     // Dimona/Arad
+  if (day >= 89) ic = 45;     // Tel Aviv
+  if (day >= 93) ic = 49;     // Shefa-'Amr cluster hit
+  if (day >= 97) ic = 53;     // 4 killed Haifa building
+  if (day >= 99) ic = 56;     // 23 civilians killed per Alma
+  if (day >= 101) ic = 58;
   if (day >= 12) internet = 'BLACKOUT'; if (day >= 62) internet = 'PARTIAL';
   if (day >= 63) hormuz = 'DISRUPTED'; if (day >= 66) hormuz = 'BLOCKED';
   // Brent crude oil price trajectory (approximate)
@@ -1812,7 +1853,24 @@ function getStats(day) {
   if (day >= 99) oil = 118; // Islamabad Accord hope
   if (day >= 100) oil = 108; // ceasefire announced
   if (day >= 101) oil = 112; // cracks in ceasefire
-  return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1 };
+  // Targets struck in Iran — CENTCOM reports
+  let targets = 0, ships = 0, usloss = 0, airdef = 0;
+  if (day >= 62) { targets = 1250; ships = 10; usloss = 0; airdef = 15; }
+  if (day >= 63) { targets = 1800; ships = 15; }
+  if (day >= 65) { targets = 2500; ships = 25; airdef = 25; }
+  if (day >= 68) { targets = 3200; ships = 40; airdef = 35; }
+  if (day >= 72) { targets = 4100; ships = 60; airdef = 50; }
+  if (day >= 74) { targets = 4800; ships = 70; usloss = 1; airdef = 60; } // KC-135 crash
+  if (day >= 75) { targets = 5500; ships = 80; airdef = 65; } // Kharg Island 90+ targets
+  if (day >= 78) { targets = 6000; ships = 100; airdef = 75; }
+  if (day >= 80) { targets = 6500; airdef = 80; } // Bloomberg: 80% air def destroyed
+  if (day >= 83) { targets = 7000; }
+  if (day >= 85) { targets = 7800; ships = 120; airdef = 85; }
+  if (day >= 89) { usloss = 2; } // E-3 damaged at Prince Sultan
+  if (day >= 93) { targets = 8500; ships = 125; airdef = 88; }
+  if (day >= 97) { targets = 9200; }
+  if (day >= 101) { targets = 9800; ships = 130; airdef = 90; }
+  return { pd, sd, ic, hormuz, internet, oil, dayNum: day + 1, targets, ships, usloss, airdef };
 }
 function fmtN(n) { return n >= 1000 ? (n/1000).toFixed(n>=10000?0:1)+'K' : n.toString(); }
 
@@ -1968,6 +2026,15 @@ function renderDay(day) {
   // Flash stats on change
   document.querySelectorAll('.stat-val').forEach(el => { el.classList.remove('stat-flash'); void el.offsetWidth; el.classList.add('stat-flash'); });
   document.getElementById('s-day').textContent = s.dayNum;
+  // Military stats
+  const tEl = document.getElementById('s-targets');
+  if (tEl) tEl.textContent = s.targets ? (s.targets >= 1000 ? (s.targets/1000).toFixed(1)+'K' : s.targets) : '—';
+  const shEl = document.getElementById('s-ships');
+  if (shEl) shEl.textContent = s.ships || '—';
+  const ulEl = document.getElementById('s-usloss');
+  if (ulEl) { ulEl.textContent = s.usloss || '0'; ulEl.style.color = s.usloss > 0 ? 'var(--red)' : 'var(--green)'; }
+  const adEl = document.getElementById('s-airdef');
+  if (adEl) { adEl.textContent = s.airdef ? s.airdef + '%' : '0%'; adEl.style.color = s.airdef >= 80 ? 'var(--red)' : s.airdef >= 50 ? 'var(--orange)' : 'var(--text)'; }
   // Header stats
   const hdrOil = document.getElementById('hdr-oil');
   if (hdrOil) { hdrOil.textContent = '$' + s.oil; hdrOil.style.color = s.oil >= 100 ? 'var(--red)' : 'var(--text)'; }
