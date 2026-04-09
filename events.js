@@ -315,6 +315,16 @@ const events = [
   { day: 66, lat: 6.00, lng: 80.50, title: "IRIS Dena Torpedoed — Sri Lanka", desc: "USS Charlotte torpedoes frigate. Ship sinks in 2-3 min. ~87 killed. First US submarine kill since WWII.", type: "naval", size: "large", phase: "war" },
   { day: 66, lat: 26.26, lng: 56.41, title: "Safeen Prestige Hit — Hormuz", desc: "Malta-flagged container ship hit by missile. 24 crew rescued by Royal Oman Navy.", type: "naval", phase: "regional" },
   { day: 66, lat: 32.01, lng: 34.89, title: "Ben Gurion Airport Struck", desc: "3 private planes damaged by missile strike near airport.", type: "retaliation", phase: "war" },
+  { day: 66, lat: 35.55, lng: 51.50, title: "IRGC HQ Complex Struck — SE Tehran", desc: "Strikes hit IRGC Ground Forces HQ, Quds Force HQ, Basij HQ, Saberin Special Forces, Electronic Warfare HQ in southeastern Tehran.", type: "strike", phase: "war" },
+  { day: 66, lat: 35.85, lng: 50.96, title: "Chemical Plant Hit — Garmdareh", desc: "Missile component chemical plant in Garmdareh, Alborz Province destroyed.", type: "strike", phase: "war" },
+  { day: 66, lat: 34.35, lng: 47.07, title: "Mobile Launcher Destroyed — Kermanshah", desc: "IAF destroys mobile ballistic missile launcher in Kermanshah City.", type: "strike", phase: "war" },
+  { day: 66, lat: 29.06, lng: 48.08, title: "Ali al Salem Airbase Damaged — Kuwait", desc: "Iranian airstrikes damage aircraft shelters and equipment warehouses.", type: "retaliation", phase: "regional" },
+  { day: 66, lat: 25.29, lng: 51.53, title: "Qatar Gas Liquefaction Shutdown", desc: "Qatar announces full gas liquefaction shutdown. Estimated one month to resume exports.", type: "retaliation", phase: "regional" },
+  { day: 66, lat: 26.22, lng: 50.48, title: "US Navy 5th Fleet HQ Targeted — Bahrain", desc: "Iranian strikes damage comms and radar at Naval Support Activity Bahrain.", type: "retaliation", phase: "regional" },
+  { day: 66, lat: 25.38, lng: 56.36, title: "Gold Oak & Libra Trader Hit — UAE Coast", desc: "Panamanian cargo ship and Marshall Islands tanker struck off UAE coast.", type: "naval", phase: "regional" },
+  { day: 66, lat: 33.21, lng: 35.21, title: "2 Paramedics Killed — Bint Jbeil", desc: "Israeli airstrike kills two Lebanese paramedics.", type: "humanitarian", phase: "regional" },
+  { day: 66, lat: 29.07, lng: 48.13, title: "4 US Reservists Killed — Port Shuaiba", desc: "Iranian drone attack kills four US Army reserve soldiers at Port Shuaiba, Kuwait.", type: "retaliation", phase: "regional" },
+  { day: 66, lat: 32.41, lng: 51.67, title: "Isfahan Nuclear Site Damage Confirmed", desc: "IAEA confirms damage at two buildings near Isfahan nuclear site. No nuclear material affected.", type: "nuclear", phase: "war" },
 
   // ═══════════════════════════════════════════════════════════════
   // MARCH 5 (Day 67)
@@ -355,6 +365,14 @@ const events = [
   { day: 70, lat: 26.56, lng: 56.40, title: "Oil Hits $100/Barrel", desc: "Brent crude surpasses $100 first time in 4 years. Eventually peaks at $126.", type: "naval", phase: "regional" },
   { day: 70, lat: 29.50, lng: 48.20, title: "Sonangol Namibe — Drone Boat off Kuwait", desc: "Crude tanker struck by explosive-laden remote boat. 800km from Hormuz — major range escalation.", type: "naval", phase: "regional" },
   { day: 70, lat: 33.20, lng: 35.40, title: "50 S. Lebanon Villages Struck", desc: "Israel issues evacuation orders and strikes 50 villages.", type: "strike", phase: "regional" },
+  { day: 70, lat: 35.68, lng: 51.42, title: "Tehran Fuel Depots — 'River of Fire'", desc: "Strikes on Shahr Rey, Shahran, Nobonyad depots cause toxic black rain across Tehran.", type: "strike", phase: "war" },
+  { day: 70, lat: 35.68, lng: 51.31, title: "Mehrabad — 16 Quds Force Cargo Planes Destroyed", desc: "IAF destroys 16 cargo aircraft used for Hezbollah weapons transfers.", type: "strike", size: "large", phase: "war" },
+  { day: 70, lat: 29.54, lng: 52.59, title: "Shiraz Airbase — 5+ Aircraft Destroyed", desc: "Shahid Dastgheib Airport struck. 5+ military aircraft destroyed on ground.", type: "strike", phase: "war" },
+  { day: 70, lat: 35.39, lng: 51.66, title: "Khojir Military Complex Destroyed", desc: "Multiple structures destroyed at Khojir missile development complex east of Tehran.", type: "strike", phase: "war" },
+  { day: 70, lat: 24.89, lng: 55.10, title: "Abu Dhabi & Dubai Airports Hit", desc: "16 ballistic missiles intercepted. Strikes hit both airports, residential building, and hotel.", type: "retaliation", phase: "regional" },
+  { day: 70, lat: 33.88, lng: 35.50, title: "5 IRGC Quds Force Officers Killed — Beirut", desc: "Strike kills Majid Hassani, Ali Reza Beyaz, Ahmad Rasouli, Hossein Ahmadlou, Abu Mohammad Ali.", type: "strike", size: "large", phase: "regional" },
+  { day: 70, lat: 35.68, lng: 51.42, title: "Tehran Gasoline Rationed — 20L Limit", desc: "Max gasoline purchase cut from 30L to 20L per person amid fuel crisis.", type: "humanitarian", phase: "war" },
+  { day: 70, lat: 33.27, lng: 35.20, title: "2 IDF Soldiers Killed — Southern Lebanon", desc: "First Hezbollah-caused Israeli fatality since Fall 2024. Armored bulldozer hit.", type: "hezbollah", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
   // MARCH 9 (Day 71)
@@ -363,6 +381,14 @@ const events = [
   { day: 71, lat: 35.74, lng: 51.47, title: "IRGC Quds Force HQ Struck — Tehran", desc: "IAF strikes Quds Force HQ with 170+ munitions across Tehran, Isfahan, Shiraz.", type: "strike", phase: "war" },
   { day: 71, lat: 26.24, lng: 50.55, title: "Millennium Tower Hit — Manama", desc: "Iranian drone hits Millennium Tower in Bahrain capital. 1 killed, 8 injured.", type: "retaliation", phase: "regional" },
   { day: 71, lat: 37.07, lng: 37.38, title: "NATO Intercepts Missile Over Turkey", desc: "Second ballistic missile intercepted over Turkish airspace near Gaziantep.", type: "retaliation", phase: "regional" },
+  { day: 71, lat: 35.69, lng: 51.38, title: "Resalat Airstrike — 40-50 Killed", desc: "Strike on Resalat neighborhood destroys Basij building and 3 residential buildings. 40-50 dead.", type: "strike", size: "large", phase: "war" },
+  { day: 71, lat: 31.36, lng: 48.68, title: "Ali Akbar Drone Base Cratered — Ahvaz", desc: "IRGC drone base runway cratered. Significant damage to northeastern area.", type: "strike", phase: "war" },
+  { day: 71, lat: 36.68, lng: 48.49, title: "Hidden Launcher Found — Zanjan", desc: "Vehicle inspection center in Zanjan targeted after hidden missile launcher identified.", type: "strike", phase: "war" },
+  { day: 71, lat: 26.55, lng: 54.00, title: "Corvette Struck — Bandar Lengeh", desc: "Soleimani-class corvette struck off Bandar Lengeh. Over 30 Iranian ships sunk.", type: "naval", phase: "war" },
+  { day: 71, lat: 31.93, lng: 34.81, title: "Hezbollah Hits Ramla — 16 Injured", desc: "High-quality missiles target IDF Rehavam Camp in Ramla, 135km from border.", type: "hezbollah", phase: "regional" },
+  { day: 71, lat: 29.08, lng: 48.08, title: "Kuwait Airport Fuel Storage Hit", desc: "Iranian UAV strikes Kuwait International Airport fuel storage facility.", type: "retaliation", phase: "regional" },
+  { day: 71, lat: 26.06, lng: 50.11, title: "Bapco Refinery Hit — Bahrain", desc: "Iranian UAV strikes Bapco oil refinery.", type: "retaliation", phase: "regional" },
+  { day: 71, lat: 33.89, lng: 35.49, title: "Hezbollah Nasr Unit Commander Killed", desc: "IDF kills Abu Hussein Ragheb, Hezbollah Nasr Unit Commander. 120+ targets struck in 24hrs.", type: "strike", phase: "regional" },
 
   // ═══════════════════════════════════════════════════════════════
   // MARCH 10 (Day 72)
@@ -432,6 +458,14 @@ const events = [
   { day: 77, lat: 25.64, lng: 57.77, title: "Jask Port Strike", desc: "Extensive damage to Jask port in Hormozgan Province.", type: "strike", phase: "war" },
   { day: 77, lat: 32.08, lng: 34.78, title: "10 Missiles at Tel Aviv — 124 Injured", desc: "Iran fires 10 ballistic missiles with multiple warheads. Targets Palmachim Airbase and Shin Bet HQ.", type: "retaliation", size: "large", phase: "war" },
   { day: 77, lat: 33.89, lng: 35.50, title: "Hezbollah: Continued Fighting", desc: "Hezbollah claims 280+ attacks to date.", type: "hezbollah", phase: "regional" },
+  { day: 77, lat: 32.62, lng: 51.65, title: "Sejjil-2 Missile — First Wartime Use", desc: "Iran fires Sejjil-2 solid-fuel ballistic missile at Israel for first time. 'True Promise-4' wave 54.", type: "retaliation", phase: "war" },
+  { day: 77, lat: 35.74, lng: 51.42, title: "10,000 Homes Damaged — Tehran Governor", desc: "Tehran governor reports 10,000+ residential homes damaged or destroyed since Feb 28.", type: "humanitarian", phase: "war" },
+  { day: 77, lat: 34.66, lng: 48.51, title: "IRGC & Basij HQ Hit — Hamedan", desc: "Strikes on IRGC site, Basij HQ, and Law Enforcement HQ in Hamedan City.", type: "strike", phase: "war" },
+  { day: 77, lat: 24.35, lng: 54.50, title: "Al-Dhafra Airbase Targeted — UAE", desc: "IRGC launches 10 missiles and drones at al-Dhafra airbase. Fujairah port also hit.", type: "retaliation", phase: "regional" },
+  { day: 77, lat: 24.65, lng: 46.71, title: "Saudi Intercepts 38 Projectiles", desc: "7 UAVs over Riyadh, 6 ballistic missiles at al-Kharj. 5 US refueling aircraft damaged at Prince Sultan.", type: "retaliation", size: "large", phase: "regional" },
+  { day: 77, lat: 32.94, lng: 35.08, title: "Hezbollah Hits Rafael Defense Systems", desc: "Precision missiles target Rafael Advanced Defense Systems industrial complex in north Israel.", type: "hezbollah", phase: "regional" },
+  { day: 77, lat: 35.72, lng: 51.32, title: "Brig-Gen Jalali Nasab Killed", desc: "Senior military figure Brig-Gen Abdullah Jalali Nasab confirmed killed in Israeli strike.", type: "strike", phase: "war" },
+  { day: 77, lat: 38.90, lng: -77.04, title: "IRGC 'Calling the Shots' — US Intel", desc: "CBS: US believes IRGC making decisions because Mojtaba Khamenei may be wounded.", type: "political", phase: "war" },
 
   // ═══════════════════════════════════════════════════════════════
   // MARCH 16 (Day 78)
