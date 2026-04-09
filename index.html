@@ -2466,16 +2466,20 @@ function initCesium() {
     timeline: false,
     navigationHelpButton: false,
     creditContainer: document.createElement('div'),
-    imageryProvider: new Cesium.UrlTemplateImageryProvider({
-      url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-      subdomains: 'abcd',
-      maximumLevel: 18,
-      credit: 'CartoDB'
-    }),
     skyBox: false,
-    skyAtmosphere: new Cesium.SkyAtmosphere(),
     contextOptions: { webgl: { alpha: true } }
   });
+
+  // Remove default imagery and add dark CartoDB tiles
+  cesiumViewer.imageryLayers.removeAll();
+  cesiumViewer.imageryLayers.addImageryProvider(
+    new Cesium.UrlTemplateImageryProvider({
+      url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+      subdomains: ['a','b','c','d'],
+      maximumLevel: 18,
+      credit: 'CartoDB'
+    })
+  );
 
   // Style the globe
   const scene = cesiumViewer.scene;
@@ -2484,6 +2488,7 @@ function initCesium() {
   scene.globe.enableLighting = false;
   scene.fog.enabled = true;
   scene.fog.density = 0.0002;
+  scene.globe.showGroundAtmosphere = true;
 
   // Initial camera — looking at Iran
   cesiumViewer.camera.flyTo({
