@@ -630,6 +630,21 @@
   .radar-ring.ring3 { animation-delay: 1.4s; }
   .radar-ring.blue { border-color: var(--blue); }
 
+  /* Selected marker glow fluctuation */
+  @keyframes selectedGlow {
+    0% { filter: drop-shadow(0 0 4px currentColor) brightness(1); transform: scale(1); }
+    25% { filter: drop-shadow(0 0 14px currentColor) brightness(1.3); transform: scale(1.2); }
+    50% { filter: drop-shadow(0 0 6px currentColor) brightness(1.05); transform: scale(1.05); }
+    75% { filter: drop-shadow(0 0 18px currentColor) brightness(1.4); transform: scale(1.25); }
+    100% { filter: drop-shadow(0 0 4px currentColor) brightness(1); transform: scale(1); }
+  }
+  .marker-selected > div {
+    animation: selectedGlow 1.5s ease-in-out infinite !important;
+  }
+  .marker-selected {
+    z-index: 10000 !important;
+  }
+
   /* Click ripple effect */
   @keyframes rippleOut {
     0% { width: 0; height: 0; opacity: 0.4; }
@@ -1897,6 +1912,7 @@ function renderDay(day) {
     m.bindPopup(popupHtml(e));
     // Click ripple effect
     m.on('click', function(ev) {
+      // Ripple
       const pt = map.latLngToContainerPoint(ev.latlng);
       const rip = document.createElement('div');
       rip.className = 'ripple';
@@ -1904,8 +1920,15 @@ function renderDay(day) {
       rip.style.top = (pt.y - 40) + 'px';
       document.getElementById('map').appendChild(rip);
       setTimeout(() => rip.remove(), 700);
+      // Glow selection
+      selectMarker(m);
     });
+    currentMarkers.push(m);
   });
+
+  // Clear previous selection
+  selectedMarkerEl = null;
+  currentMarkers = [];
 
   renderArcs(day);
   renderBlasts(day);
@@ -1919,7 +1942,7 @@ function renderDay(day) {
       el.innerHTML = '<div style="color:var(--text3);font-size:0.78rem;padding:12px 0;">No major events this day.<br><span style="color:#bbb">Use arrow keys or slider to advance.</span></div>';
     } else {
       el.innerHTML = current.map(e => `
-        <div class="ev-item" onclick="map.setView([${e.lat},${e.lng}],8)">
+        <div class="ev-item" onclick="map.setView([${e.lat},${e.lng}],8);selectMarkerByLatLng(${e.lat},${e.lng})">
           <span class="ev-badge badge-${e.type}">${e.type}</span>
           <div class="ev-title">${e.title}</div>
           <div class="ev-desc">${e.desc}</div>
@@ -1985,6 +2008,34 @@ function renderDay(day) {
 
   document.getElementById('date-display').textContent = formatDate(day);
   document.getElementById('phase-label').textContent = getPhaseLabel(day);
+}
+
+// Track all current markers for selection lookup
+let currentMarkers = [];
+let selectedMarkerEl = null;
+
+function selectMarker(marker) {
+  // Clear previous selection
+  if (selectedMarkerEl) {
+    selectedMarkerEl.classList.remove('marker-selected');
+  }
+  // Apply glow to new selection
+  const el = marker._icon;
+  if (el) {
+    el.classList.add('marker-selected');
+    selectedMarkerEl = el;
+  }
+}
+
+function selectMarkerByLatLng(lat, lng) {
+  // Find the marker closest to the given coords
+  let best = null, bestDist = Infinity;
+  currentMarkers.forEach(m => {
+    const ll = m.getLatLng();
+    const d = Math.abs(ll.lat - lat) + Math.abs(ll.lng - lng);
+    if (d < bestDist) { bestDist = d; best = m; }
+  });
+  if (best && bestDist < 0.1) selectMarker(best);
 }
 
 function popupHtml(e) {
