@@ -2508,6 +2508,46 @@ async function initCesium() {
       duration: 0
     });
 
+    // Load country borders from Natural Earth GeoJSON
+    try {
+      const borderSource = await Cesium.GeoJsonDataSource.load(
+        'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson',
+        {
+          stroke: Cesium.Color.fromCssColorString('#00e5ff').withAlpha(0.25),
+          fill: Cesium.Color.TRANSPARENT,
+          strokeWidth: 1.5
+        }
+      );
+      cesiumViewer.dataSources.add(borderSource);
+      // Color key countries
+      const countryColors3d = {
+        'Iran': Cesium.Color.RED.withAlpha(0.08),
+        'Israel': Cesium.Color.fromCssColorString('#1565c0').withAlpha(0.1),
+        'Lebanon': Cesium.Color.GREEN.withAlpha(0.06),
+        'Iraq': Cesium.Color.ORANGE.withAlpha(0.04),
+        'Yemen': Cesium.Color.ORANGE.withAlpha(0.04),
+        'Bahrain': Cesium.Color.ORANGE.withAlpha(0.06),
+        'Qatar': Cesium.Color.YELLOW.withAlpha(0.04),
+        'United Arab Emirates': Cesium.Color.GRAY.withAlpha(0.03),
+        'Saudi Arabia': Cesium.Color.GRAY.withAlpha(0.03),
+        'Kuwait': Cesium.Color.GRAY.withAlpha(0.03),
+      };
+      borderSource.entities.values.forEach(entity => {
+        const name = entity.properties?.ADMIN?.getValue() || entity.properties?.NAME?.getValue() || '';
+        if (entity.polygon) {
+          const fill = countryColors3d[name];
+          if (fill) {
+            entity.polygon.material = fill;
+          } else {
+            entity.polygon.material = Cesium.Color.TRANSPARENT;
+          }
+          entity.polygon.outline = true;
+          entity.polygon.outlineColor = Cesium.Color.fromCssColorString('#00e5ff').withAlpha(0.2);
+          entity.polygon.outlineWidth = 1;
+        }
+      });
+    } catch(e) { console.warn('Country borders failed:', e); }
+
     cesiumInitialized = true;
     renderCesiumDay(currentDay);
   } catch(err) {
@@ -2606,59 +2646,137 @@ function renderCesiumDay(day) {
     });
   });
 
-  // Current day markers — larger, glowing
+  // Current day markers — spy interface: vertical beams + targeting rings + labels
   current.forEach(e => {
     const col = cesiumColors[e.type] || Cesium.Color.RED;
-    const size = e.size === 'large' ? 14 : 10;
+    const isLarge = e.size === 'large';
+    const beamHeight = isLarge ? 80000 : 40000;
+    const ringRadius = isLarge ? 50000 : 25000;
+
+    // Vertical laser beam rising from ground
     cesiumViewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 2000),
-      point: { pixelSize: size, color: col, outlineColor: Cesium.Color.WHITE.withAlpha(0.6), outlineWidth: 2 },
-      label: {
-        text: e.title.length > 30 ? e.title.substring(0, 28) + '...' : e.title,
-        font: '11px JetBrains Mono', fillColor: Cesium.Color.WHITE.withAlpha(0.8),
-        outlineColor: Cesium.Color.BLACK, outlineWidth: 2, style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-        pixelOffset: new Cesium.Cartesian2(0, -18), showBackground: true,
-        backgroundColor: Cesium.Color.BLACK.withAlpha(0.6),
-        backgroundPadding: new Cesium.Cartesian2(6, 3),
-        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 3000000)
-      },
-      description: `<div style="font-family:monospace;"><span style="color:${typeColors[e.type]};font-weight:bold;text-transform:uppercase;">${e.type}</span><br><b>${e.title}</b><br>${e.desc}<br><small>${formatDate(e.day)} | ${e.lat.toFixed(3)}°N ${e.lng.toFixed(3)}°E</small></div>`
+      polyline: {
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+          e.lng, e.lat, 0,
+          e.lng, e.lat, beamHeight
+        ]),
+        width: isLarge ? 3 : 2,
+        material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.4, color: col.withAlpha(0.6)
+        })
+      }
     });
 
-    // Blast ring for large events
-    if (e.size === 'large') {
+    // Point marker at top of beam
+    cesiumViewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, beamHeight),
+      point: { pixelSize: isLarge ? 10 : 7, color: col, outlineColor: col.withAlpha(0.3), outlineWidth: isLarge ? 4 : 2 },
+      label: {
+        text: (e.title.length > 35 ? e.title.substring(0, 33) + '...' : e.title).toUpperCase(),
+        font: isLarge ? 'bold 11px JetBrains Mono' : '10px JetBrains Mono',
+        fillColor: col.withAlpha(0.9),
+        outlineColor: Cesium.Color.BLACK, outlineWidth: 3, style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+        pixelOffset: new Cesium.Cartesian2(12, -4),
+        showBackground: true,
+        backgroundColor: Cesium.Color.BLACK.withAlpha(0.75),
+        backgroundPadding: new Cesium.Cartesian2(8, 4),
+        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 2500000),
+        horizontalOrigin: Cesium.HorizontalOrigin.LEFT
+      },
+      description: `<div style="font-family:monospace;background:#0a0a0a;color:#c8e6c0;padding:12px;border:1px solid rgba(60,200,80,0.2);"><span style="color:${typeColors[e.type]};font-weight:bold;text-transform:uppercase;letter-spacing:2px;">${e.type}</span><br><b style="font-size:14px;">${e.title}</b><br><br>${e.desc}<br><br><small style="color:#5a9a5a;">${formatDate(e.day)} | ${e.lat.toFixed(4)}°N ${e.lng.toFixed(4)}°E</small></div>`
+    });
+
+    // Targeting ring on ground (concentric)
+    cesiumViewer.entities.add({
+      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
+      ellipse: {
+        semiMajorAxis: ringRadius, semiMinorAxis: ringRadius,
+        material: Cesium.Color.TRANSPARENT,
+        outline: true, outlineColor: col.withAlpha(0.35), outlineWidth: 1.5
+      }
+    });
+    if (isLarge) {
+      // Inner ring
       cesiumViewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
         ellipse: {
-          semiMajorAxis: 40000, semiMinorAxis: 40000,
-          material: col.withAlpha(0.08),
-          outline: true, outlineColor: col.withAlpha(0.3), outlineWidth: 1
+          semiMajorAxis: ringRadius * 0.5, semiMinorAxis: ringRadius * 0.5,
+          material: col.withAlpha(0.06),
+          outline: true, outlineColor: col.withAlpha(0.5), outlineWidth: 1
+        }
+      });
+      // Outer ring
+      cesiumViewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
+        ellipse: {
+          semiMajorAxis: ringRadius * 1.5, semiMinorAxis: ringRadius * 1.5,
+          material: Cesium.Color.TRANSPARENT,
+          outline: true, outlineColor: col.withAlpha(0.15), outlineWidth: 1
+        }
+      });
+      // Ground fill
+      cesiumViewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
+        ellipse: {
+          semiMajorAxis: ringRadius, semiMinorAxis: ringRadius,
+          material: col.withAlpha(0.06)
         }
       });
     }
   });
 
-  // Missile arcs — 3D great-circle polylines
+  // Missile arcs — spy style: wide glow trails with altitude
   missileArcs.filter(a => a.day === day).forEach(a => {
     const col = Cesium.Color.fromCssColorString(a.color);
-    // Generate arc points with altitude
     const pts = [];
     const dist = Math.sqrt((a.to[0]-a.from[0])**2 + (a.to[1]-a.from[1])**2);
-    const maxAlt = Math.min(dist * 25000, 400000); // altitude proportional to distance
-    for (let t = 0; t <= 1; t += 0.02) {
+    const maxAlt = Math.min(dist * 30000, 500000);
+    for (let t = 0; t <= 1; t += 0.015) {
       const lat = a.from[0] + (a.to[0] - a.from[0]) * t;
       const lng = a.from[1] + (a.to[1] - a.from[1]) * t;
-      const alt = Math.sin(t * Math.PI) * maxAlt; // parabolic arc
+      const alt = Math.sin(t * Math.PI) * maxAlt;
       pts.push(lng, lat, alt);
     }
+    // Main glow arc
     cesiumViewer.entities.add({
       polyline: {
         positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
-        width: 2, material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.3, color: col.withAlpha(0.7)
+        width: 4, material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.5, taperPower: 0.3, color: col.withAlpha(0.8)
         })
       },
       description: a.label
+    });
+    // Thin bright core line
+    cesiumViewer.entities.add({
+      polyline: {
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
+        width: 1, material: Cesium.Color.WHITE.withAlpha(0.4)
+      }
+    });
+    // Launch beam at origin
+    cesiumViewer.entities.add({
+      polyline: {
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+          a.from[1], a.from[0], 0,
+          a.from[1], a.from[0], maxAlt * 0.15
+        ]),
+        width: 2, material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.3, color: col.withAlpha(0.5)
+        })
+      }
+    });
+    // Impact beam at target
+    cesiumViewer.entities.add({
+      polyline: {
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
+          a.to[1], a.to[0], 0,
+          a.to[1], a.to[0], maxAlt * 0.1
+        ]),
+        width: 2, material: new Cesium.PolylineGlowMaterialProperty({
+          glowPower: 0.4, color: Cesium.Color.WHITE.withAlpha(0.4)
+        })
+      }
     });
 
     // Animated orb along arc
