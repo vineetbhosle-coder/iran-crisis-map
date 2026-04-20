@@ -883,4 +883,63 @@ const events = [
   { day: 101, lat: 26.56, lng: 56.25, title: "Hormuz Oil Traffic Halted Again", desc: "Oil traffic through Strait of Hormuz halted again hours after first tankers allowed to pass. Iran cites Israeli Lebanon strikes. Trump wants Hormuz open 'without limitation, including tolls.'", type: "naval", phase: "regional" },
   { day: 101, lat: 31.32, lng: 48.69, title: "7-Year-Old Killed by Drone Debris in Khuzestan", desc: "One 7-year-old child killed in Khuzestan province by falling drone debris. Six family members injured.", type: "humanitarian", phase: "war" },
   { day: 101, lat: 33.31, lng: 44.39, title: "Baghdad Airport Diplomatic Center Struck", desc: "Baghdad International Airport diplomatic center struck by Iranian-allied groups.", type: "retaliation", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 9 (Day 102) — Ceasefire Day 2: Hormuz Still Closed
+  // ═══════════════════════════════════════════════════════════════
+  { day: 102, lat: 26.56, lng: 56.25, title: "Hormuz 'Effectively Closed' Despite Ceasefire", desc: "Only 4 dry cargo ships cross Hormuz — well below 9/day average during active conflict. Iran imposes tolls exceeding $1M per vessel.", type: "naval", size: "large", phase: "regional" },
+  { day: 102, lat: 33.10, lng: 35.58, title: "Hezbollah Strikes Kiryat Shmona, Taibe, Manara", desc: "Hezbollah claims rocket attacks on 3 northern Israeli towns. Vows to continue 'until Israel stops striking Lebanese territories.'", type: "hezbollah", phase: "regional" },
+  { day: 102, lat: 33.14, lng: 35.38, title: "IDF 98th Division Advances on Bint Jbeil", desc: "Southern Lebanon airstrikes persist. 98th Division advancing toward control of Bint Jbeil.", type: "strike", phase: "regional" },
+  { day: 102, lat: 35.69, lng: 51.39, title: "Iran: Israel Violating Ceasefire", desc: "Tehran accuses Israel of ceasefire violations through continued bombing near Tehran and Isfahan.", type: "political", phase: "war" },
+  { day: 102, lat: 35.69, lng: 51.39, title: "Parliament Speaker: 'Time Is Running Out'", desc: "Iranian Parliament Speaker Mohammad Bagher Ghalibaf warns ceasefire viability at risk.", type: "political", phase: "war" },
+  { day: 102, lat: 29.35, lng: 47.97, title: "Drones Attack Kuwait Infrastructure", desc: "Kuwait repels drone attack on infrastructure. Ceasefire visibly breaking down across Gulf.", type: "retaliation", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 10 (Day 103)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 103, lat: 33.27, lng: 35.20, title: "Early Morning Strikes on Lebanon", desc: "Israeli airstrikes target Lebanon in early morning. Ceasefire excluding Lebanon continues to enable operations.", type: "strike", phase: "regional" },
+  { day: 103, lat: 33.28, lng: 35.58, title: "Hezbollah Rockets at Metula", desc: "Hezbollah launches rockets at Metula. Sirens sound in Tel Aviv, Haifa, and Ashdod.", type: "hezbollah", phase: "regional" },
+  { day: 103, lat: 26.56, lng: 56.25, title: "Only 15 Ships Transit Hormuz Total", desc: "Cumulative Hormuz transits since ceasefire: just 15 vessels vs. hundreds per day pre-war.", type: "naval", phase: "regional" },
+  { day: 103, lat: 38.90, lng: -77.04, title: "Trump: Iran Doing 'Poor Job' on Hormuz", desc: "Trump accuses Iran of violating agreement by obstructing Hormuz oil transit.", type: "political", phase: "war" },
+  { day: 103, lat: 35.69, lng: 51.39, title: "Iran Parliament Skeptical of Talks", desc: "Deputy Speaker Hamid-Reza Haji Babaee expresses faith in military but skepticism toward negotiations.", type: "political", phase: "war" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 11 (Day 104) — Islamabad Talks Begin
+  // ═══════════════════════════════════════════════════════════════
+  { day: 104, lat: 33.69, lng: 73.04, title: "US Negotiation Team Arrives in Islamabad", desc: "VP JD Vance, Special Envoy Steve Witkoff, and Jared Kushner arrive for talks with Iran's FM Araghchi and Speaker Ghalibaf.", type: "political", size: "large", phase: "regional" },
+  { day: 104, lat: 26.56, lng: 56.25, title: "US Navy Destroyers Enter Hormuz", desc: "US Navy destroyers enter Strait of Hormuz for mine-clearing — first entry since war began. Trump announces 'clearing' operations.", type: "naval", size: "large", phase: "regional" },
+  { day: 104, lat: 26.56, lng: 56.25, title: "IRGC Warns: Severe Response if Approached", desc: "IRGC Navy warns military vessels approaching Iranian waters will face 'severe response'. Characterizes US entry as ceasefire violation.", type: "political", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 12 (Day 105) — Talks Collapse, Blockade Declared
+  // ═══════════════════════════════════════════════════════════════
+  { day: 105, lat: 33.69, lng: 73.04, title: "Islamabad Talks Collapse After 21 Hours", desc: "VP Vance announces negotiations failed. No agreement reached despite Pakistani mediation.", type: "political", size: "large", phase: "regional" },
+  { day: 105, lat: 38.90, lng: -77.04, title: "Trump Declares Full Naval Blockade", desc: "Trump announces 'full naval blockade' of Iran. CENTCOM: enforcement against Iranian-bound vessels, non-Iran transits allowed.", type: "political", size: "large", phase: "regional" },
+  { day: 105, lat: 26.56, lng: 56.25, title: "US Blockades Iranian Ports", desc: "US Navy begins blockading Iranian ports across Persian Gulf and Gulf of Oman.", type: "naval", size: "large", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 14 (Day 107)
+  // ═══════════════════════════════════════════════════════════════
+  { day: 107, lat: 35.50, lng: 45.50, title: "Komala Camp Struck in Iraqi Kurdistan", desc: "Iranian drones strike exiled Kurdish militant group Komala's camp. 3 fighters injured.", type: "strike", phase: "regional" },
+  { day: 107, lat: 36.19, lng: 44.01, title: "Iraqi Kurdistan: 16 Strikes Since Ceasefire", desc: "Iraqi Kurdistan has sustained 16 missile and drone attacks since April 8 ceasefire.", type: "strike", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 16 (Day 109) — Lebanon 10-Day Ceasefire
+  // ═══════════════════════════════════════════════════════════════
+  { day: 109, lat: 38.90, lng: -77.04, title: "Trump Announces 10-Day Lebanon Ceasefire", desc: "Trump announces 10-day truce between Israel and Hezbollah. Iran says Hormuz would be 'completely open' during that period.", type: "political", size: "large", phase: "regional" },
+  { day: 109, lat: 33.89, lng: 35.50, title: "Lebanon Ceasefire Takes Effect", desc: "10-day Israel-Hezbollah ceasefire begins. Both sides halt attacks — first pause since March 2.", type: "political", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 17 (Day 110) — Hormuz 'Open' but Ships Stay Away
+  // ═══════════════════════════════════════════════════════════════
+  { day: 110, lat: 35.69, lng: 51.39, title: "Iran FM Declares Hormuz 'Completely Open'", desc: "Iran's Foreign Minister declares Strait 'completely open' — but only a handful of vessels transit.", type: "political", size: "large", phase: "regional" },
+  { day: 110, lat: 26.56, lng: 56.25, title: "CENTCOM: 21 Ships Turned Back", desc: "CENTCOM reports 21 ships turned back toward Iran since blockade began. USS Gerald R. Ford CSG moves to Red Sea.", type: "naval", phase: "regional" },
+  { day: 110, lat: 38.90, lng: -77.04, title: "Trump: Iran Agreed to Transfer Enriched Uranium", desc: "Trump claims Iran agreed to transfer enriched uranium to US. Iranian officials reject as 'alternative facts' — call it 'a non-starter.'", type: "political", size: "large", phase: "war" },
+  { day: 110, lat: 40.71, lng: -74.01, title: "Brent Crude Drops 9% on Hormuz 'Opening'", desc: "Brent crude falls 9.07% to $90.38/barrel. S&P 500 hits record highs on ceasefire optimism.", type: "political", phase: "regional" },
+
+  // ═══════════════════════════════════════════════════════════════
+  // APRIL 18 (Day 111) — Iran Closes Hormuz Again
+  // ═══════════════════════════════════════════════════════════════
+  { day: 111, lat: 26.56, lng: 56.25, title: "Iran Re-Closes Strait of Hormuz", desc: "Iran announces closure of Strait of Hormuz in response to US refusing to lift naval blockade. Ceasefire unraveling.", type: "naval", size: "large", phase: "regional" },
+  { day: 111, lat: 38.90, lng: -77.04, title: "US Officials Travel to Pakistan for New Talks", desc: "Trump: US officials traveling to Pakistan for fresh negotiations with Tehran after Iran's Hormuz re-closure.", type: "political", phase: "regional" },
 ];

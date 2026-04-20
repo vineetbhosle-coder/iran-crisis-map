@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iran Crisis 2025-2026 — Day by Day</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"></script>
-<link href="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=anchor,orbit,person,flag,warning,add,change_history,close,radio_button_checked" />
 <style>
@@ -760,7 +758,6 @@
     .header-center { display: none; }
     .header-coord { display: none; }
     #utc-clock { display: none; }
-    #globe-toggle { display: none; }
     .hdr-divider { display: none; }
     .hdr-stat-label { font-size: 0.35rem; }
     .hdr-stat-val { font-size: 0.65rem; }
@@ -838,7 +835,6 @@
     <span id="utc-clock"></span>
     <span class="header-coord" id="grid-scale">Grid: 5° ≈ 495 km</span>
     <span class="header-coord" id="cursor-coord">35.6895°N 51.3890°E</span>
-    <button id="globe-toggle" onclick="toggleMapMode()" title="Toggle 2D/3D view" style="background:transparent;border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:4px;cursor:pointer;font-size:0.65rem;font-family:var(--mono);font-weight:700;transition:all 0.2s;">3D</button>
     <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">&#9790;</button>
   </div>
 </div>
@@ -930,7 +926,6 @@
         <div class="rf-coords" id="rf-coords"></div>
       </div>
     </div>
-    <div id="cesium-container" style="display:none;width:100%;height:100%;position:absolute;top:0;left:0;"></div>
   </div>
 
   <!-- ═══ RIGHT PANEL ═══ -->
@@ -952,7 +947,7 @@
     <div id="tick-marks"></div>
     <div id="phase-bar"></div>
     <div id="density-bar"></div>
-    <input type="range" id="timeline-slider" min="0" max="101" value="0" oninput="onSliderChange(+this.value)">
+    <input type="range" id="timeline-slider" min="0" max="111" value="0" oninput="onSliderChange(+this.value)">
     <div id="date-markers">
       <span class="month-lbl" onclick="jumpTo(0)">DEC 28</span>
       <span onclick="jumpTo(4)">JAN 1</span>
@@ -971,6 +966,8 @@
       <span onclick="jumpTo(90)">MAR 28</span>
       <span class="month-lbl" onclick="jumpTo(97)">APR 4</span>
       <span onclick="jumpTo(100)">CEASEFIRE</span>
+      <span class="month-lbl" onclick="jumpTo(105)">TALKS FAIL</span>
+      <span onclick="jumpTo(111)">APR 18</span>
     </div>
   </div>
   <div id="source-bar" style="margin-top:4px;">Sources: Al Jazeera | Britannica | Amnesty Intl | UK Parliament | Critical Threats | HRANA | Alma Research | FDD | Wikipedia</div>
@@ -1127,6 +1124,8 @@ const phases = [
   { start: 84, end: 92, label: "Houthis Enter War — 1 Month Mark", color: '#d32f2f' },
   { start: 93, end: 99, label: "Ceasefire Negotiations", color: '#ff8f00' },
   { start: 100, end: 101, label: "2-Week Ceasefire Agreed", color: '#2e7d32' },
+  { start: 102, end: 105, label: "Fragile Ceasefire — Talks Fail", color: '#ff8f00' },
+  { start: 106, end: 111, label: "US Naval Blockade of Iran", color: '#c62828' },
 ];
 function getPhaseLabel(d) { const p = phases.find(p => d >= p.start && d <= p.end); return p ? p.label : ''; }
 
@@ -1827,6 +1826,7 @@ function getStats(day) {
   if (day >= 101) ic = 58;
   if (day >= 12) internet = 'BLACKOUT'; if (day >= 62) internet = 'PARTIAL';
   if (day >= 63) hormuz = 'DISRUPTED'; if (day >= 66) hormuz = 'BLOCKED';
+  if (day >= 100) hormuz = 'LIMITED'; if (day >= 105) hormuz = 'BLOCKADED'; if (day >= 109) hormuz = 'OPEN'; if (day >= 111) hormuz = 'BLOCKED';
   // Brent crude oil price trajectory (approximate)
   if (day >= 62) oil = 80;  // war starts
   if (day >= 63) oil = 85;  // first trading day
@@ -1858,6 +1858,13 @@ function getStats(day) {
   if (day >= 99) oil = 118; // Islamabad Accord hope
   if (day >= 100) oil = 108; // ceasefire announced
   if (day >= 101) oil = 112; // cracks in ceasefire
+  if (day >= 102) oil = 108; // fragile ceasefire
+  if (day >= 104) oil = 105; // US entering Hormuz
+  if (day >= 105) oil = 118; // talks collapse
+  if (day >= 107) oil = 115;
+  if (day >= 109) oil = 100; // Lebanon ceasefire hope
+  if (day >= 110) oil = 90;  // Hormuz 'open' announcement
+  if (day >= 111) oil = 115; // Iran re-closes Hormuz
   // Targets struck in Iran — CENTCOM reports (daily granular)
   let targets = 0, ships = 0, usloss = 0, airdef = 0;
   if (day >= 62) { targets = 1250; ships = 10; airdef = 15; }  // Day 1: opening salvo
@@ -1942,7 +1949,6 @@ function animateNum(elId, target, fmt) {
 let prevMarkerLayer = null;
 
 function renderDay(day) {
-  if (mapMode === '3d') { renderCesiumDay(day); return; }
   // Crossfade: keep old markers briefly, fade them out
   if (prevMarkerLayer) { map.removeLayer(prevMarkerLayer); }
   prevMarkerLayer = markerLayer;
@@ -2189,18 +2195,10 @@ function updatePanels(day) {
   document.getElementById('phase-label').textContent = getPhaseLabel(day);
 }
 
-// Fly to event — works in both 2D and 3D
+// Fly to event — 2D map
 function flyToEvent(lat, lng) {
-  if (mapMode === '3d' && cesiumViewer) {
-    cesiumViewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(lng, lat, 500000),
-      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
-      duration: 1.5
-    });
-  } else {
-    map.setView([lat, lng], 8);
-    selectMarkerByLatLng(lat, lng);
-  }
+  map.setView([lat, lng], 8);
+  selectMarkerByLatLng(lat, lng);
 }
 
 // Track all current markers for selection lookup
@@ -2241,7 +2239,7 @@ function popupHtml(e) {
 // ─── Phase Bar & Density ────────────────────────────────────────────
 function buildPhaseBar() {
   const bar = document.getElementById('phase-bar');
-  const total = 101;
+  const total = 111;
   bar.innerHTML = phases.map(p => {
     const w = ((p.end - p.start + 1) / total * 100);
     return `<div class="phase-seg" style="width:${w}%;background:${p.color};opacity:0.2;" title="${p.label}"></div>`;
@@ -2250,8 +2248,8 @@ function buildPhaseBar() {
 
 function buildDensity() {
   const bar = document.getElementById('density-bar');
-  const counts = new Array(102).fill(0);
-  events.forEach(e => { if (e.day >= 0 && e.day <= 101) counts[e.day]++; });
+  const counts = new Array(112).fill(0);
+  events.forEach(e => { if (e.day >= 0 && e.day <= 111) counts[e.day]++; });
   const mx = Math.max(...counts, 1);
   bar.innerHTML = counts.map((c, i) => {
     const int = c / mx;
@@ -2263,7 +2261,7 @@ function buildDensity() {
 function buildTickMarks() {
   const bar = document.getElementById('tick-marks');
   // Weekly ticks (every 7 days) are major, others minor
-  bar.innerHTML = Array.from({length: 102}, (_, i) => {
+  bar.innerHTML = Array.from({length: 112}, (_, i) => {
     const isMajor = i % 7 === 0;
     return `<div class="tick"><div class="tick-line ${isMajor ? 'major' : 'minor'}"></div></div>`;
   }).join('');
@@ -2319,7 +2317,7 @@ function togglePlay() {
   const btn = document.getElementById('play-btn');
   if (playing) {
     btn.innerHTML = '&#9646;&#9646; PAUSE';
-    if (currentDay >= 101) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
+    if (currentDay >= 111) { currentDay = 0; document.getElementById('timeline-slider').value = 0; renderDay(0); }
     lastTickTime = performance.now();
     requestAnimationFrame(playTick);
   } else {
@@ -2330,7 +2328,7 @@ function playTick(now) {
   if (!playing) return;
   if (now - lastTickTime >= speed) {
     lastTickTime = now;
-    if (currentDay >= 101) { togglePlay(); return; }
+    if (currentDay >= 111) { togglePlay(); return; }
     currentDay++;
     document.getElementById('timeline-slider').value = currentDay;
     renderDay(currentDay);
@@ -2445,373 +2443,6 @@ async function init() {
 }
 init();
 
-// ─── 3D Globe (CesiumJS) ───────────────────────────────────────────
-let mapMode = '2d';
-let cesiumViewer = null;
-let cesiumEntities = null;
-let cesiumInitialized = false;
-
-async function initCesium() {
-  if (cesiumInitialized) return;
-  Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxNGIxZjYxOC02MTA2LTQ2YmQtODUyYi1kNGVmYmFmZDYwYTEiLCJpZCI6Mzk2OTc3LCJpYXQiOjE3NzI1MDI5ODd9.49tFJJAfvoZx87nGxnrkQOJe8r3Al9TbgkTqYxarhLI';
-
-  try {
-    // Async terrain (required in Cesium 1.107+)
-    const terrain = await Cesium.createWorldTerrainAsync({ requestVertexNormals: true });
-
-    cesiumViewer = new Cesium.Viewer('cesium-container', {
-      animation: false,
-      baseLayerPicker: false,
-      fullscreenButton: false,
-      geocoder: false,
-      homeButton: false,
-      infoBox: true,
-      sceneModePicker: false,
-      selectionIndicator: false,
-      timeline: false,
-      navigationHelpButton: false,
-      creditContainer: document.createElement('div'),
-      terrainProvider: terrain,
-      skyBox: false,
-      contextOptions: { webgl: { alpha: true } }
-    });
-
-    // Async satellite imagery (required in Cesium 1.107+)
-    cesiumViewer.imageryLayers.removeAll();
-    const bingProvider = await Cesium.IonImageryProvider.fromAssetId(2);
-    cesiumViewer.imageryLayers.addImageryProvider(bingProvider);
-
-    // Dark label overlay
-    const labelProvider = new Cesium.UrlTemplateImageryProvider({
-      url: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png',
-      subdomains: ['a','b','c','d'],
-      maximumLevel: 18,
-      credit: 'CartoDB'
-    });
-    const labelLayer = cesiumViewer.imageryLayers.addImageryProvider(labelProvider);
-    labelLayer.alpha = 0.7;
-
-    // Style the globe
-    const scene = cesiumViewer.scene;
-    scene.backgroundColor = Cesium.Color.fromCssColorString('#050a05');
-    scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
-    scene.globe.enableLighting = true;
-    scene.fog.enabled = true;
-    scene.fog.density = 0.0003;
-    scene.globe.showGroundAtmosphere = true;
-    scene.globe.depthTestAgainstTerrain = true;
-
-    // Initial camera — looking at Iran
-    cesiumViewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(51, 31, 3500000),
-      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
-      duration: 0
-    });
-
-    // Load country borders from Natural Earth GeoJSON
-    try {
-      const borderSource = await Cesium.GeoJsonDataSource.load(
-        'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson',
-        {
-          stroke: Cesium.Color.fromCssColorString('#00e5ff').withAlpha(0.25),
-          fill: Cesium.Color.TRANSPARENT,
-          strokeWidth: 1.5
-        }
-      );
-      cesiumViewer.dataSources.add(borderSource);
-      // Color key countries
-      const countryColors3d = {
-        'Iran': Cesium.Color.RED.withAlpha(0.08),
-        'Israel': Cesium.Color.fromCssColorString('#1565c0').withAlpha(0.1),
-        'Lebanon': Cesium.Color.GREEN.withAlpha(0.06),
-        'Iraq': Cesium.Color.ORANGE.withAlpha(0.04),
-        'Yemen': Cesium.Color.ORANGE.withAlpha(0.04),
-        'Bahrain': Cesium.Color.ORANGE.withAlpha(0.06),
-        'Qatar': Cesium.Color.YELLOW.withAlpha(0.04),
-        'United Arab Emirates': Cesium.Color.GRAY.withAlpha(0.03),
-        'Saudi Arabia': Cesium.Color.GRAY.withAlpha(0.03),
-        'Kuwait': Cesium.Color.GRAY.withAlpha(0.03),
-      };
-      borderSource.entities.values.forEach(entity => {
-        const name = entity.properties?.ADMIN?.getValue() || entity.properties?.NAME?.getValue() || '';
-        if (entity.polygon) {
-          const fill = countryColors3d[name];
-          if (fill) {
-            entity.polygon.material = fill;
-          } else {
-            entity.polygon.material = Cesium.Color.TRANSPARENT;
-          }
-          entity.polygon.outline = true;
-          entity.polygon.outlineColor = Cesium.Color.fromCssColorString('#00e5ff').withAlpha(0.2);
-          entity.polygon.outlineWidth = 1;
-        }
-      });
-    } catch(e) { console.warn('Country borders failed:', e); }
-
-    cesiumInitialized = true;
-    renderCesiumDay(currentDay);
-  } catch(err) {
-    console.error('Cesium init error:', err);
-    // Fallback: no terrain, just CartoDB tiles
-    cesiumViewer = new Cesium.Viewer('cesium-container', {
-      animation: false, baseLayerPicker: false, fullscreenButton: false,
-      geocoder: false, homeButton: false, infoBox: true,
-      sceneModePicker: false, selectionIndicator: false, timeline: false,
-      navigationHelpButton: false, creditContainer: document.createElement('div'),
-      skyBox: false
-    });
-    cesiumViewer.imageryLayers.removeAll();
-    cesiumViewer.imageryLayers.addImageryProvider(new Cesium.UrlTemplateImageryProvider({
-      url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-      subdomains: ['a','b','c','d'], maximumLevel: 18
-    }));
-    cesiumViewer.scene.backgroundColor = Cesium.Color.fromCssColorString('#050a05');
-    cesiumViewer.scene.globe.baseColor = Cesium.Color.fromCssColorString('#0a1a0a');
-    cesiumViewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(51, 31, 3500000),
-      orientation: { heading: 0, pitch: Cesium.Math.toRadians(-60), roll: 0 },
-      duration: 0
-    });
-    cesiumInitialized = true;
-    renderCesiumDay(currentDay);
-  }
-}
-
-async function toggleMapMode() {
-  const btn = document.getElementById('globe-toggle');
-  if (mapMode === '2d') {
-    // Switch to 3D
-    mapMode = '3d';
-    btn.textContent = '2D';
-    document.getElementById('map').style.display = 'none';
-    document.getElementById('cesium-container').style.display = 'block';
-    await initCesium();
-  } else {
-    // Switch to 2D
-    mapMode = '2d';
-    btn.textContent = '3D';
-    document.getElementById('cesium-container').style.display = 'none';
-    document.getElementById('map').style.display = 'block';
-    map.invalidateSize();
-    renderDay(currentDay);
-  }
-}
-
-// ─── Cesium Marker Colors ──────────────────────────────────────────
-const cesiumColors = {
-  strike: Cesium.Color.fromCssColorString('#1565c0'),
-  retaliation: Cesium.Color.fromCssColorString('#c62828'),
-  protest: Cesium.Color.fromCssColorString('#d84315'),
-  political: Cesium.Color.fromCssColorString('#455a64'),
-  nuclear: Cesium.Color.fromCssColorString('#6a1b9a'),
-  naval: Cesium.Color.fromCssColorString('#0277bd'),
-  hezbollah: Cesium.Color.fromCssColorString('#2e7d32'),
-  humanitarian: Cesium.Color.fromCssColorString('#b71c1c'),
-};
-
-function renderCesiumDay(day) {
-  if (!cesiumViewer) return;
-  cesiumViewer.entities.removeAll();
-
-  const pf = activePhase === 'all' ? null : activePhase;
-  const current = events.filter(e => e.day === day && (!pf || e.phase === pf));
-  const recent = events.filter(e => e.day >= day-3 && e.day < day && (!pf || e.phase === pf));
-
-  // Scar markers (past)
-  const past = events.filter(e => e.day < day && persistTypes.has(e.type) && (!pf || e.phase === pf));
-  const scarMap = new Map();
-  past.forEach(e => {
-    const key = `${e.lat.toFixed(2)},${e.lng.toFixed(2)}`;
-    if (!scarMap.has(key) || e.day > scarMap.get(key).day) scarMap.set(key, e);
-  });
-  scarMap.forEach(e => {
-    const hasActive = current.concat(recent).some(a => Math.abs(a.lat-e.lat)<0.05 && Math.abs(a.lng-e.lng)<0.05);
-    if (!hasActive) {
-      const col = cesiumColors[e.type] || Cesium.Color.RED;
-      cesiumViewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 500),
-        point: { pixelSize: 4, color: col.withAlpha(0.25), outlineColor: col.withAlpha(0.15), outlineWidth: 1 },
-        description: `<b>${e.title}</b><br>${e.desc}`
-      });
-    }
-  });
-
-  // Recent (faded)
-  recent.forEach(e => {
-    const col = cesiumColors[e.type] || Cesium.Color.RED;
-    cesiumViewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 1000),
-      point: { pixelSize: 6, color: col.withAlpha(0.35), outlineColor: col.withAlpha(0.2), outlineWidth: 1 },
-      description: `<b>${e.title}</b><br>${e.desc}`
-    });
-  });
-
-  // Current day markers — spy interface: vertical beams + targeting rings + labels
-  current.forEach(e => {
-    const col = cesiumColors[e.type] || Cesium.Color.RED;
-    const isLarge = e.size === 'large';
-    const beamHeight = isLarge ? 80000 : 40000;
-    const ringRadius = isLarge ? 50000 : 25000;
-
-    // Vertical laser beam rising from ground
-    cesiumViewer.entities.add({
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-          e.lng, e.lat, 0,
-          e.lng, e.lat, beamHeight
-        ]),
-        width: isLarge ? 3 : 2,
-        material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.4, color: col.withAlpha(0.6)
-        })
-      }
-    });
-
-    // Point marker at top of beam
-    cesiumViewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, beamHeight),
-      point: { pixelSize: isLarge ? 10 : 7, color: col, outlineColor: col.withAlpha(0.3), outlineWidth: isLarge ? 4 : 2 },
-      label: {
-        text: (e.title.length > 35 ? e.title.substring(0, 33) + '...' : e.title).toUpperCase(),
-        font: isLarge ? 'bold 11px JetBrains Mono' : '10px JetBrains Mono',
-        fillColor: col.withAlpha(0.9),
-        outlineColor: Cesium.Color.BLACK, outlineWidth: 3, style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-        pixelOffset: new Cesium.Cartesian2(12, -4),
-        showBackground: true,
-        backgroundColor: Cesium.Color.BLACK.withAlpha(0.75),
-        backgroundPadding: new Cesium.Cartesian2(8, 4),
-        distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 2500000),
-        horizontalOrigin: Cesium.HorizontalOrigin.LEFT
-      },
-      description: `<div style="font-family:monospace;background:#0a0a0a;color:#c8e6c0;padding:12px;border:1px solid rgba(60,200,80,0.2);"><span style="color:${typeColors[e.type]};font-weight:bold;text-transform:uppercase;letter-spacing:2px;">${e.type}</span><br><b style="font-size:14px;">${e.title}</b><br><br>${e.desc}<br><br><small style="color:#5a9a5a;">${formatDate(e.day)} | ${e.lat.toFixed(4)}°N ${e.lng.toFixed(4)}°E</small></div>`
-    });
-
-    // Targeting ring on ground (concentric)
-    cesiumViewer.entities.add({
-      position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
-      ellipse: {
-        semiMajorAxis: ringRadius, semiMinorAxis: ringRadius,
-        material: Cesium.Color.TRANSPARENT,
-        outline: true, outlineColor: col.withAlpha(0.35), outlineWidth: 1.5
-      }
-    });
-    if (isLarge) {
-      // Inner ring
-      cesiumViewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
-        ellipse: {
-          semiMajorAxis: ringRadius * 0.5, semiMinorAxis: ringRadius * 0.5,
-          material: col.withAlpha(0.06),
-          outline: true, outlineColor: col.withAlpha(0.5), outlineWidth: 1
-        }
-      });
-      // Outer ring
-      cesiumViewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
-        ellipse: {
-          semiMajorAxis: ringRadius * 1.5, semiMinorAxis: ringRadius * 1.5,
-          material: Cesium.Color.TRANSPARENT,
-          outline: true, outlineColor: col.withAlpha(0.15), outlineWidth: 1
-        }
-      });
-      // Ground fill
-      cesiumViewer.entities.add({
-        position: Cesium.Cartesian3.fromDegrees(e.lng, e.lat),
-        ellipse: {
-          semiMajorAxis: ringRadius, semiMinorAxis: ringRadius,
-          material: col.withAlpha(0.06)
-        }
-      });
-    }
-  });
-
-  // Missile arcs — spy style: wide glow trails with altitude
-  missileArcs.filter(a => a.day === day).forEach(a => {
-    const col = Cesium.Color.fromCssColorString(a.color);
-    const pts = [];
-    const dist = Math.sqrt((a.to[0]-a.from[0])**2 + (a.to[1]-a.from[1])**2);
-    const maxAlt = Math.min(dist * 30000, 500000);
-    for (let t = 0; t <= 1; t += 0.015) {
-      const lat = a.from[0] + (a.to[0] - a.from[0]) * t;
-      const lng = a.from[1] + (a.to[1] - a.from[1]) * t;
-      const alt = Math.sin(t * Math.PI) * maxAlt;
-      pts.push(lng, lat, alt);
-    }
-    // Main glow arc
-    cesiumViewer.entities.add({
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
-        width: 4, material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.5, taperPower: 0.3, color: col.withAlpha(0.8)
-        })
-      },
-      description: a.label
-    });
-    // Thin bright core line
-    cesiumViewer.entities.add({
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights(pts),
-        width: 1, material: Cesium.Color.WHITE.withAlpha(0.4)
-      }
-    });
-    // Launch beam at origin
-    cesiumViewer.entities.add({
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-          a.from[1], a.from[0], 0,
-          a.from[1], a.from[0], maxAlt * 0.15
-        ]),
-        width: 2, material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.3, color: col.withAlpha(0.5)
-        })
-      }
-    });
-    // Impact beam at target
-    cesiumViewer.entities.add({
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArrayHeights([
-          a.to[1], a.to[0], 0,
-          a.to[1], a.to[0], maxAlt * 0.1
-        ]),
-        width: 2, material: new Cesium.PolylineGlowMaterialProperty({
-          glowPower: 0.4, color: Cesium.Color.WHITE.withAlpha(0.4)
-        })
-      }
-    });
-
-    // Animated orb along arc
-    animateCesiumOrb(pts, col, a.label);
-  });
-
-  // Update panels (reuse 2D logic)
-  updatePanels(day);
-}
-
-// Animated orb moving along a 3D arc
-function animateCesiumOrb(degreesHeights, color, label) {
-  if (!cesiumViewer) return;
-  const positions = [];
-  for (let i = 0; i < degreesHeights.length; i += 3) {
-    positions.push(Cesium.Cartesian3.fromDegrees(degreesHeights[i], degreesHeights[i+1], degreesHeights[i+2] + 5000));
-  }
-  const orb = cesiumViewer.entities.add({
-    position: positions[0],
-    point: { pixelSize: 6, color: color, outlineColor: Cesium.Color.WHITE.withAlpha(0.5), outlineWidth: 1 }
-  });
-  let step = 0;
-  const total = positions.length;
-  const speed = 40;
-  const pause = 600;
-  function runLoop() {
-    step = 0;
-    const interval = setInterval(() => {
-      step++;
-      if (step >= total) { clearInterval(interval); setTimeout(runLoop, pause); return; }
-      try { orb.position = positions[step]; } catch(e) { clearInterval(interval); }
-    }, speed);
-  }
-  setTimeout(runLoop, Math.random() * 500);
-}
 
 // ─── UTC Clock ─────────────────────────────────────────────────────
 function updateClock() {
@@ -2824,7 +2455,7 @@ setInterval(updateClock, 1000);
 updateClock();
 
 // ─── Oil Price Sparkline ───────────────────────────────────────────
-const oilPrices = [73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,80,85,85,92,100,96,96,96,100,119,108,108,105,105,105,110,110,110,112,112,126,120,128,125,118,120,122,124,128,126,128,125,122,122,120,118,122,118,108,112];
+const oilPrices = [73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,73,80,85,85,92,100,96,96,96,100,119,108,108,105,105,105,110,110,110,112,112,126,120,128,125,118,120,122,124,128,126,128,125,122,122,120,118,122,118,108,112,108,108,105,118,118,115,115,100,90,115];
 function updateOilSparkline(day) {
   const svg = document.getElementById('oil-spark');
   if (!svg) return;
